@@ -12,13 +12,13 @@ public class Figure {
 	/*
 	 * color of the figure
 	 */
-	Color figureColor;
+	private Color figureColor;
 	
 	/*
 	 * -1 = Figur ist im Start
 	 * 0 - X = Anzahl der Felder die die Figure zurückgelegt hat
 	 */
-	int iSteps;
+	private int iSteps;
 
 	/*
 	 * creates a figure with a specific color

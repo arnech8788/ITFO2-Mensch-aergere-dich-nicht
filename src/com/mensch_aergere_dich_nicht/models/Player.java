@@ -4,11 +4,11 @@ import java.awt.Color;
 
 public class Player {
 	
-	Color playerColor;
-	int offset;
-	boolean isComputer;
-	String playerName;
-	Figure figures[] = new Figure[4];
+	private Color playerColor;
+	private int offset;
+	private boolean isComputer;
+	private String playerName;
+	private Figure figures[] = new Figure[4];
 	
 	/*
 	 * Creates a player with a color, offset and name
