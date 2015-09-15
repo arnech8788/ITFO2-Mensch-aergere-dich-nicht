@@ -9,6 +9,7 @@ public class Player {
 	private boolean isComputer;
 	private String playerName;
 	private Figure figures[] = new Figure[4];
+	private House houses[] = new House[4];
 	
 	/*
 	 * Creates a player with a color, offset and name
@@ -27,6 +28,8 @@ public class Player {
 		for(int i = 0 ; i < 4 ; i++){
 			Figure f = new Figure(playerColor);
 			figures[i] = f;
+			House h = new House(i);
+			houses[i] = h;
 		}
 	}
 	

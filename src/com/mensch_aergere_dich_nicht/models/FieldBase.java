@@ -1,10 +1,15 @@
 package com.mensch_aergere_dich_nicht.models;
 
-public class FieldBase {
+public  class FieldBase {
 	
 	private Figure figure;
 	private int number;
 
+	protected FieldBase()
+	{
+		
+	}
+	
 	public Figure getFigure() {
 		return figure;
 	}
