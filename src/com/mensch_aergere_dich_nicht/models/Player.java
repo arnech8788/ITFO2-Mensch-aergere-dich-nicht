@@ -28,7 +28,22 @@ public class Player {
 			Figure f = new Figure(playerColor);
 			figures[i] = f;
 		}
-		
+	}
+	
+	public int throwCube(){
+		return (int)((Math.random())*6+1);
+	}
+	
+	public void setPlayerFigure(Figure f, int steps){
+		f.setSteps(steps);
+	}
+	
+	public void setFigureOut(Figure f){
+		f.setSteps(0);
+	}
+	
+	public void setFigureBack(Figure f){
+		f.setSteps(-1);
 	}
 	
 	public Color getPlayerColor(){
