@@ -71,7 +71,8 @@ public class Gamehandler {
 	public static void main(String args[])
 	{
 		Gamehandler gh = new Gamehandler();
-		gh.createFields();		
+		gh.createFields();
+		gh.createPlayers();
 	}
 	
 	 
