@@ -28,7 +28,7 @@ public class Player {
 		for(int i = 0 ; i < 4 ; i++){
 			Figure f = new Figure(playerColor);
 			figures[i] = f;
-			House h = new House(i);
+			House h = new House(i + 1);
 			houses[i] = h;
 		}
 	}

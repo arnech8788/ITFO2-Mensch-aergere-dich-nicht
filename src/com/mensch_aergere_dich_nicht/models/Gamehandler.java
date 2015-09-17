@@ -1,57 +1,77 @@
 package com.mensch_aergere_dich_nicht.models;
 
-import java.util.HashMap;
-import java.util.Map; 
-import java.awt.Color;
+import java.util.*;
+import java.awt.*;
 
-import com.mensch_aergere_dich_nicht.models.Field.Type;
+import javax.swing.*;
 
-public class Gamehandler {
+import com.mensch_aergere_dich_nicht.models.Field.*;
+import com.mensch_aergere_dich_nicht.view.*;
+
+public class Gamehandler extends Observable {
 	
 	Map<String,Field> Fields;
 	Map<String,Player> Players;
 	
 	
-	public Gamehandler(){
-		Fields = new HashMap<String,Field>();
-		Players = new HashMap<String,Player>();
+	private Options options;
+	
+	
+	public Gamehandler(Gameboard gameboard,
+					   String[] playerNames)
+	{
+		this.addObserver(gameboard);
+		this.options = gameboard.getOptions();
+		this.createFields();
+		this.createPlayers(playerNames);
 	}
 	
 	public Map<String, Field> getFields() {
 		return Fields;
 	}
 
-	public void setFields(Map<String, Field> fields) {
+	/**public void setFields(Map<String, Field> fields) {
 		Fields = fields;
-	}
+	}**/
 
 	public Map<String, Player> getPlayers() {
 		return Players;
 	}
 
-	public void setPlayers(Map<String, Player> players) {
+	/**public void setPlayers(Map<String, Player> players) {
 		Players = players;
-	}
+	}**/
 
 	
-	public void createPlayers(){
-		int iPlayerCount = 4;//Count of Players
+	
+	public void startGame()
+	{
+		// ersten Spielzug...
+		
+	}
+	
+	
+	private void createPlayers(String[] playerNames)
+	{
+		Players = new HashMap<String,Player>();
+		
 		int iOffset = 0;// Offset of Fieldposition
 		boolean bIsComputer = false; // Is Computer?
-		String[] sPlayerName = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
+		//String[] sPlayerName = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
 		Color[] colorArray = {Color.RED,Color.BLUE,Color.GREEN,Color.YELLOW };//Color of Players
 				
-		for (int i = 0; i < iPlayerCount; i++)
+		for (int i = 0; i < playerNames.length; i++)
 		{
-			Player player = new Player(colorArray[i],bIsComputer,iOffset,sPlayerName[i]);
+			Player player = new Player(colorArray[i],bIsComputer,iOffset,playerNames[i]);
 			Players.put(player.getPlayerColor().toString(), player);  // = new Player();
 			iOffset += 10;
 		}
 	}
 	
-	public void createFields(){
+	private void createFields(){
+		Fields = new HashMap<String,Field>();
 		int iFieldCount = 40; //Number of Fields ( without House )
-		Type type = Type.START;
+		Type type;
 		
 		for (Integer i = 0; i < iFieldCount; i++)
 		{
@@ -63,18 +83,11 @@ public class Gamehandler {
 			{
 				type = Type.NORMAL;
 			}
-			Field field = new Field(type,i);
-			Fields.put(i.toString(), field);
+			Fields.put(i.toString(), new Field(type,i));
 		}
 	}
 	
-	public static void main(String args[])
-	{
-		Gamehandler gh = new Gamehandler();
-		gh.createFields();
-		gh.createPlayers();
-	}
-	
+
 	 
 
 }
