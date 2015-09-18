@@ -10,10 +10,9 @@ public class Options {
 	
 	public Options()
 	{
-		
+	
 	}
-	
-	
+		
 	public boolean isCloseGameWhenPlayerWins() {
 		return closeGameWhenPlayerWins;
 	}
@@ -51,10 +50,5 @@ public class Options {
 
 	public void setSixFigureOut(boolean sixFigureOut) {
 		this.sixFigureOut = sixFigureOut;
-	}
-
-
-	
-
-	
+	}	
 }
