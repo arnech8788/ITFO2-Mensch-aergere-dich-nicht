@@ -57,14 +57,14 @@ public class Option extends JFrame implements ActionListener
 		this.add(cbPanel);
 				
 		//Frame
-		this.setSize(300, 300);
+		this.setSize(300, 170);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		this.options = options;
 	}
-	
-	
 	public Options getOptions()
 	{
 		return options;
@@ -73,9 +73,11 @@ public class Option extends JFrame implements ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		boolean isChecked = false;
 		if(e.getSource() == cbCloseGameWhenPlayerWins)
 		{
-			this.options.setCloseGameWhenPlayerWins(cbCloseGameWhenPlayerWins.isSelected());
+			isChecked = cbCloseGameWhenPlayerWins.isSelected();
+			options.setCloseGameWhenPlayerWins(isChecked);
 		}
 		else if(e.getSource() == cbJumpInHouse)
 		{
