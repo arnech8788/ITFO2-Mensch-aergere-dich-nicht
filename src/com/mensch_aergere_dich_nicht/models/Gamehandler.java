@@ -17,7 +17,7 @@ public class Gamehandler extends Observable {
 	private Options options;
 	
 	
-	public Gamehandler(Gameboard gameboard,
+	public Gamehandler(MainGui gameboard,
 					   String[] playerNames)
 	{
 		this.addObserver(gameboard);
