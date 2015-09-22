@@ -2,13 +2,14 @@ package com.mensch_aergere_dich_nicht.view;
 
 
 import com.mensch_aergere_dich_nicht.models.Options;
+
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class Option extends JFrame implements ActionListener 
-{
-	
+{	
 	//Option view controls
 	JCheckBox cbCloseGameWhenPlayerWins;
 	JCheckBox cbJumpInHouse;
@@ -16,6 +17,7 @@ public class Option extends JFrame implements ActionListener
 	JCheckBox cbSixFigureOut;
 	JButton btnOk;
 	//JButton btnClose;
+	
 	JPanel cbPanel;
 	Options options;
 	
@@ -42,6 +44,7 @@ public class Option extends JFrame implements ActionListener
 		//btnClose.addActionListener(this);
 		
 		cbPanel = new JPanel();
+		cbPanel.setLayout(new BoxLayout(cbPanel, BoxLayout.Y_AXIS));
 		
 		//Put checkboxes on panel control
 		cbPanel.add(cbCloseGameWhenPlayerWins);
@@ -50,22 +53,18 @@ public class Option extends JFrame implements ActionListener
 		cbPanel.add(cbSixFigureOut);
 		
 		cbPanel.add(btnOk);
-		//cbPanel.add(btnClose);
 		
 		this.add(cbPanel);
-		
-		
-		
+				
 		//Frame
-		this.setSize(300, 300);
+		this.setSize(300, 170);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setResizable(false);
-		//this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		this.options = options;
 	}
-	
-	
 	public Options getOptions()
 	{
 		return options;
@@ -74,9 +73,11 @@ public class Option extends JFrame implements ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		boolean isChecked = false;
 		if(e.getSource() == cbCloseGameWhenPlayerWins)
 		{
-			this.options.setCloseGameWhenPlayerWins(cbCloseGameWhenPlayerWins.isSelected());
+			isChecked = cbCloseGameWhenPlayerWins.isSelected();
+			options.setCloseGameWhenPlayerWins(isChecked);
 		}
 		else if(e.getSource() == cbJumpInHouse)
 		{
@@ -92,12 +93,7 @@ public class Option extends JFrame implements ActionListener
 		}
 		else if(e.getSource() == btnOk)
 		{
-			this.dispose();;
-		}
-		/**else if(e.getSource() == btnClose)
-		{
 			this.dispose();
-		}**/
-	}
-	
+		}
+	}	
 }
