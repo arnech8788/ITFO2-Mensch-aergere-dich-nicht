@@ -8,7 +8,9 @@ import javax.swing.*;
 import com.mensch_aergere_dich_nicht.models.Field.*;
 import com.mensch_aergere_dich_nicht.view.*;
 
-public class Gamehandler extends Observable {
+public class Gamehandler  {
+	
+	// extends Observable
 	
 	Map<String,Field> Fields;
 	Map<String,Player> Players;
@@ -20,7 +22,7 @@ public class Gamehandler extends Observable {
 	public Gamehandler(MainGui gameboard,
 					   String[] playerNames)
 	{
-		this.addObserver(gameboard);
+		//this.addObserver(gameboard);
 		this.options = gameboard.getOptions();
 		this.createFields();
 		this.createPlayers(playerNames);
@@ -47,6 +49,9 @@ public class Gamehandler extends Observable {
 	public void startGame()
 	{
 		// ersten Spielzug...
+		
+		
+		
 		
 	}
 	
