@@ -47,4 +47,9 @@ public class Figure {
 	{
 		this.iSteps = iSteps;
 	}
+	
+	public void resetSteps()
+	{
+		this.iSteps = -1;
+	}
 }
