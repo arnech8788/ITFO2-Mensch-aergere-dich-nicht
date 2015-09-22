@@ -19,11 +19,11 @@ public class Gamehandler  {
 	private Options options;
 	
 	
-	public Gamehandler(MainGui gameboard,
+	public Gamehandler(Options options,
 					   String[] playerNames)
 	{
 		//this.addObserver(gameboard);
-		this.options = gameboard.getOptions();
+		this.options = options;
 		this.createFields();
 		this.createPlayers(playerNames);
 	}
