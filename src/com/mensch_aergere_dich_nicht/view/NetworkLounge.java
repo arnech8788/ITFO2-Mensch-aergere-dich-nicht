@@ -3,7 +3,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class NetworkLounge {
-	
+	/**
+	 * Wozu die extra Variable?
+	 * schaue mal in die anderen Gui-Klassen
+	 */
 	JFrame NetworkLounge;
 	JButton btnShutdown;
 	JButton btnHostGame;

@@ -1,6 +1,7 @@
 package com.mensch_aergere_dich_nicht.models;
 
-import java.awt.Color;
+import java.awt.*;
+import java.util.*;
 
 public class Player {
 	
@@ -8,8 +9,8 @@ public class Player {
 	private int offset;
 	private boolean isComputer;
 	private String playerName;
-	private Figure figures[] = new Figure[4];
-	private House houses[] = new House[4];
+	private Map<Integer, Figure> figures;
+	private Map<Integer, House> houses;
 	
 	/*
 	 * Creates a player with a color, offset and name
@@ -23,18 +24,17 @@ public class Player {
 		this.offset = offset;
 		this.playerName = playerName;
 		
-		
+		this.figures = new HashMap<Integer, Figure>();
+		this.houses = new HashMap<Integer, House>();
 		//create 4 figures
-		for(int i = 0 ; i < 4 ; i++){
-			Figure f = new Figure(playerColor);
-			figures[i] = f;
-			House h = new House(i + 1);
-			houses[i] = h;
+		for(int i = 1 ; i <= 4 ; i++){
+			figures.put(i, new Figure(playerColor, i));
+			houses.put(i, new House(i));
 		}
 	}
 	
 	public int throwCube(){
-		return (int)((Math.random())*6+1);
+		return (int)((Math.random()) * 6 + 1);
 	}
 	
 	public void setPlayerFigure(Figure f, int steps){
@@ -42,20 +42,26 @@ public class Player {
 	}
 	
 	public void setFigureOut(Figure f){
-		f.setSteps(0);
+		f.setSteps(Figure.startField);
 	}
 	
 	public void setFigureBack(Figure f){
-		f.setSteps(-1);
+		f.setSteps(Figure.startPosition);
+	}
+	public void setFiguresBack(){
+		for(Figure f : figures.values())
+		{
+			setFigureBack(f);
+		}
 	}
 	
 	public Color getPlayerColor(){
 		return playerColor;
 	}
 	
-	public void setPlayerName(String name){
+	/**public void setPlayerName(String name){
 		playerName = name;
-	}
+	}**/
 	
 	public String getPlayerName(){
 		return playerName;
@@ -69,16 +75,84 @@ public class Player {
 		return offset;
 	}
 	
-	public Figure[] getFigures(){
+	public Map<Integer, Figure> getFigures(){
 		return figures;
 	}
-	/**
-	 * setting figures back in house
-	 */
-	public void resetFigures() {
-		for(Figure f : figures)
+	
+	public Map<Integer, House> getHouses() {
+		return houses;
+	}
+
+	
+	
+	public boolean canDriveThreeTimes()
+	{
+		// prüfen ob Spieler dreimal würfenl darf
+		// darf nur 3x würfeln, wenn
+		// - alle Figuren noch im Start sind
+		// - keine Figur auf Spielbrett und im Haus ganz am Ende sind
+		//   (also nicht erst erstes Feld im Haus...)
+		
+		
+		// Prüfen ob alle Figuren am Start sind
+		if(figuresAtStart())
 		{
-			f.resetSteps();
+			return true;
+		}
+		
+		if(figuresAtHome())
+		{
+			
 		}
 	}
+
+	/**
+	 * Gibt true zurück, wenn mindestens eine Figur noch in der Startposition ist
+	 * @return
+	 */
+	private boolean figuresAtStart()
+	{
+		for(Figure f : figures.values())
+		{
+			if(f.getSteps() != Figure.startPosition)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Gibt true zurück, wenn mindestens eine Figur im Haus ist
+	 * @return
+	 */
+	/**
+	private boolean figuresAtHome()
+	{
+		for(House h : houses.values())
+		{
+			if(!h.isFree())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	**/
+	
+	/**
+	private Figure[] getHouseFigures()
+	{
+		/**Figure[] homeFigures = new Figure[];
+		for(Figure f : figures)
+		{
+			if(f.getSteps() >= Figure.firstHousePosition)
+			{
+				
+			}
+		}**/
+		
+	}**/
+	
 }

@@ -62,7 +62,7 @@ public class Gamehandler  {
 		
 	}
 	
-	
+	/**
 	public void startGame()
 	{
 		// alle Figuren an Anfang setzen
@@ -83,6 +83,18 @@ public class Gamehandler  {
 		
 		
 		
+	}**/
+	
+	
+	public boolean setNextMove()
+	{
+		// als Parameter figur?
+	}
+	
+	
+	public MoveOptions getNextMoveOptions()
+	{
+		// analyse und möglichkeiten ausgeben
 	}
 	
 	public MoveResult nextMove()
@@ -101,7 +113,7 @@ public class Gamehandler  {
 		
 		// ACHTUNG: bei 6 gleicher Spieler nochmal
 		// analysiere ob mind eine Figur draußen ist
-		if(canDriveThreeTimes(player))
+		if(player.canDriveThreeTimes())
 		{
 			// 3x würfen 
 			// -> bei sechs kann man die nächste Figur ziehen
@@ -117,18 +129,11 @@ public class Gamehandler  {
 		
 		
 		// was ist, wenn der Spieler nochmal dran ist?
+		// also immer wieder eine sechs würfelt
 	}
 	
 	
-	private boolean canDriveThreeTimes(Player player)
-	{
-		// prüfen ob Spieler dreimal würfenl darf
-		// darf nur 3x würfeln, wenn
-		// - alle Figuren noch im Start sind
-		// - keine Figur auf Spielbrett und im Haus ganz am Ende sind
-		//   (also nicht erst erstes Feld im Haus...)
-		
-	}
+
 	
 	
 	private Player getNextPlayer(MoveResult lastMoveResult)
@@ -165,11 +170,14 @@ public class Gamehandler  {
 		
 		if(startingPlayer.size() == 1)
 		{
-			// return first
-			//return startingPlayer.entrySet().
+			return (Player) startingPlayer.values().toArray()[0];
 		}
-		
-		sonst methode nochmal...
+		else
+		{
+			// es gab mehrere mit selber größter augenzahl
+			// -> also dürfen die Spieler nochmal würfeln
+			return getStartingPlayer(startingPlayer);
+		}
 	}
 	
 	
@@ -177,11 +185,11 @@ public class Gamehandler  {
 	/**
 	 * setting player figures back in house
 	 */
-	private void resetPlayers()
+	public void setAllFiguresBack()
 	{
-		for(Map.Entry<String, Player> p : this.Players.entrySet())
+		for(Player p : this.Players.values())
 		{
-			p.getValue().resetFigures();
+			p.setFiguresBack();
 		}
 	}
 	
