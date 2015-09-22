@@ -11,9 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.Graphics;
 
 public class Board extends JFrame implements MouseListener{
 	JButton btnClose;
@@ -95,10 +95,6 @@ public class Board extends JFrame implements MouseListener{
       this.msgBox.setCaretPosition(this.msgBox.getDocument().getLength());
     }
     
-    public static void main(String[] args) {
-        Board board = new Board();
-    }
-
     private void setupFieldCoordinates(int fieldnumber, String position){
       String[] gridpos = position.split("-");
       
@@ -204,6 +200,15 @@ public class Board extends JFrame implements MouseListener{
       return "-";
     }
     
+    
+    private void drawPiece(Color color, int field){
+    	int[] coordinates = this.getFieldCoordinates(field);
+    	int posX = coordinates[0];
+    	int posY = coordinates[1];
+    	
+    	// Draw piece.
+    }
+    
     @Override
     public void mousePressed(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -237,4 +242,9 @@ public class Board extends JFrame implements MouseListener{
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public static void main(String[] args) {
+        Board board = new Board();
+    }
 }
+
