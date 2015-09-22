@@ -59,7 +59,7 @@ public class Gamehandler  {
 		gh.startGame();
 		
 		MoveResult result = gh.nextMove();
-				
+		
 	}
 	
 	
@@ -116,7 +116,7 @@ public class Gamehandler  {
 		}
 		
 		
-		
+		// was ist, wenn der Spieler nochmal dran ist?
 	}
 	
 	
