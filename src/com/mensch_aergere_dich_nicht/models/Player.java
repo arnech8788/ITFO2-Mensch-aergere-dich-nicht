@@ -72,4 +72,13 @@ public class Player {
 	public Figure[] getFigures(){
 		return figures;
 	}
+	/**
+	 * setting figures back in house
+	 */
+	public void resetFigures() {
+		for(Figure f : figures)
+		{
+			f.resetSteps();
+		}
+	}
 }
