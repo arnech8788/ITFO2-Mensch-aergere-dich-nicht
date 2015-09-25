@@ -41,9 +41,32 @@ public class Player {
 		f.setSteps(steps);
 	}
 	
-	public void setFigureOut(Figure f){
+	public Figure setFigureOut(){
+		// Prüfen ob es noch Figuren am Start gibt, falls nicht Fehler
+		if (!this.figuresAtStartPosition())
+		{
+			throw new RuntimeException("In der Startposition gibt es keine Figuren mehr!");
+		}
+		
+		// ansonsten erste Fogur aus start holen
+		Figure f = getFirstFigureFromStartPosition();
 		f.setSteps(Figure.startField);
+		return f;
 	}
+	
+	private Figure getFirstFigureFromStartPosition()
+	{
+		for(Figure f : this.figures.values())
+		{
+			if(f.getSteps() == Figure.startPosition)
+			{
+				return f;
+			}
+		}
+		
+		throw new RuntimeException("Es konnte keine Figure an der Startposition gefunden werden!");
+	}
+	
 	
 	public void setFigureBack(Figure f){
 		f.setSteps(Figure.startPosition);
@@ -95,22 +118,56 @@ public class Player {
 		
 		
 		// Prüfen ob alle Figuren am Start sind
-		if(figuresAtStart())
+		if(figuresAtStartPosition())
 		{
 			return true;
 		}
 		
+		/**
 		if(figuresAtHome())
 		{
 			
-		}
+		}**/
+		return false;
 	}
 
+
+	/**
+	 * Gibt true zurück, wenn mindestens eine Figur im Haus ist
+	 * @return
+	 */
+	private boolean figuresAtHome()
+	{
+		for(House h : houses.values())
+		{
+			if(!h.isFree())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	private Figure[] getHouseFigures()
+	{
+		Figure[] homeFigures = new Figure[];
+		for(Figure f : figures)
+		{
+			if(f.getSteps() >= Figure.firstHousePosition)
+			{
+				
+			}
+		}
+	}**/	
+	
+	
+	
 	/**
 	 * Gibt true zurück, wenn mindestens eine Figur noch in der Startposition ist
 	 * @return
 	 */
-	private boolean figuresAtStart()
+	private boolean figuresAtStartPosition()
 	{
 		for(Figure f : figures.values())
 		{
@@ -123,36 +180,5 @@ public class Player {
 	}
 	
 	
-	/**
-	 * Gibt true zurück, wenn mindestens eine Figur im Haus ist
-	 * @return
-	 */
-	/**
-	private boolean figuresAtHome()
-	{
-		for(House h : houses.values())
-		{
-			if(!h.isFree())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	**/
-	
-	/**
-	private Figure[] getHouseFigures()
-	{
-		/**Figure[] homeFigures = new Figure[];
-		for(Figure f : figures)
-		{
-			if(f.getSteps() >= Figure.firstHousePosition)
-			{
-				
-			}
-		}**/
-		
-	}**/
 	
 }
