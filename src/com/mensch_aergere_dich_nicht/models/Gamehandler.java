@@ -56,9 +56,42 @@ public class Gamehandler  {
 				  "Timo Beil",
 				  "Anne Theke"});
 		
-		gh.startGame();
+		//gh.startGame();
 		
-		MoveResult result = gh.nextMove();
+		// Player getStartingPlayer (durch Würfeln ermitteln)
+		Player startPlayer = gh.getStartingPlayer(gh.getPlayers());
+		System.out.println(startPlayer.getPlayerName() + " hat die höchste Zahl gewürfelt und fängt an.");
+		
+		// 3x würfeln bis er eine sechs hat
+		for(int i = 0; i < 3; i++)
+		{
+			int number = startPlayer.throwCube();
+			System.out.println(startPlayer.getPlayerName() + " würfelt eine " + String.valueOf(number));
+			
+			if(number == 6)
+			{
+				System.out.println("Er darf eine Figur raussetzen.");
+				
+				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+				Figure f = startPlayer.setFigureOut();
+				System.out.println("Figur " + String.valueOf(f.getNumber()) + " wird auf das Startfeld gesetzt.");
+				
+				
+			}
+			
+		}
+		
+		
+		// moveOption getMoveOptions(Player) (welche Spieloptionen)
+		
+		// boolean setMove(moveOption) (setze Spieler)
+		
+		// getNextPlayer
+		
+		
+		
+		
+		//MoveResult result = gh.nextMove();
 		
 	}
 	
@@ -89,14 +122,17 @@ public class Gamehandler  {
 	public boolean setNextMove()
 	{
 		// als Parameter figur?
+		return false;
 	}
 	
-	
+	/**
 	public MoveOptions getNextMoveOptions()
 	{
 		// analyse und möglichkeiten ausgeben
 	}
+	**/
 	
+	/**
 	public MoveResult nextMove()
 	{
 		// checking last move
@@ -131,19 +167,19 @@ public class Gamehandler  {
 		// was ist, wenn der Spieler nochmal dran ist?
 		// also immer wieder eine sechs würfelt
 	}
-	
+	**/
 	
 
 	
-	
-	private Player getNextPlayer(MoveResult lastMoveResult)
+	/**
+	public Player getNextPlayer(Player lastPlayer)
 	{
 		// anhand des letzten Spielzugs den nächsten Spieler ermitteln
 		
 		// option 'isCloseGameWhenPlayerWins' beachten
 		
 		
-	}
+	}**/
 	
 	private Player getStartingPlayer(Map<String, Player> players)
 	{
@@ -160,11 +196,11 @@ public class Gamehandler  {
 			if(threwCube > highestThrew) {
 				highestThrew = threwCube;
 				startingPlayer.clear();
-				startingPlayer.put(player.getKey(), player.getValue())
+				startingPlayer.put(player.getKey(), player.getValue());
 			}
 			else if(threwCube == highestThrew)
 			{
-				startingPlayer.put(player.getKey(), player.getValue())
+				startingPlayer.put(player.getKey(), player.getValue());
 			}
 		}
 		
