@@ -17,13 +17,13 @@ public class Gamehandler  {
 	
 	
 	private Options options;
+	private MoveResult lastMoveResult;
 	
-	
-	public Gamehandler(MainGui gameboard,
+	public Gamehandler(Options options,
 					   String[] playerNames)
 	{
 		//this.addObserver(gameboard);
-		this.options = gameboard.getOptions();
+		this.options = options;
 		this.createFields();
 		this.createPlayers(playerNames);
 	}
@@ -45,16 +45,153 @@ public class Gamehandler  {
 	}**/
 
 	
+	public static void main(String[] args)
+	{
+		// only testing methods
+		Options op = new Options();
+		
+		Gamehandler gh = new Gamehandler(op, 
+				new String[] {"Gernhart Reinholzen",
+				  "Lassmiranda den si Villia",
+				  "Timo Beil",
+				  "Anne Theke"});
+		
+		gh.startGame();
+		
+		MoveResult result = gh.nextMove();
+		
+	}
 	
+	/**
 	public void startGame()
 	{
+		// alle Figuren an Anfang setzen
+		resetPlayers();
+		
+		
+		
+		
 		// ersten Spielzug...
 		
 		
+		// solange Würfeln bis einer eine sechs hat
+		
+		// bis zu drei mal würfeln 
+		
+		// evtl spieler raussetzen
+		
+		
+		
+		
+	}**/
+	
+	
+	public boolean setNextMove()
+	{
+		// als Parameter figur?
+	}
+	
+	
+	public MoveOptions getNextMoveOptions()
+	{
+		// analyse und möglichkeiten ausgeben
+	}
+	
+	public MoveResult nextMove()
+	{
+		// checking last move
+		Player player = null;
+		if (lastMoveResult == null)
+		{
+			player = getStartingPlayer(this.Players);
+		}
+		else
+		{
+			player = getNextPlayer(lastMoveResult);
+		}
+		
+		
+		// ACHTUNG: bei 6 gleicher Spieler nochmal
+		// analysiere ob mind eine Figur draußen ist
+		if(player.canDriveThreeTimes())
+		{
+			// 3x würfen 
+			// -> bei sechs kann man die nächste Figur ziehen
+			
+		}
+		else
+		{
+			// 1x würfeln
+			// analyse was man machen kann
+			// ergebnis an Gui zurück
+			
+		}
+		
+		
+		// was ist, wenn der Spieler nochmal dran ist?
+		// also immer wieder eine sechs würfelt
+	}
+	
+	
+
+	
+	
+	private Player getNextPlayer(MoveResult lastMoveResult)
+	{
+		// anhand des letzten Spielzugs den nächsten Spieler ermitteln
+		
+		// option 'isCloseGameWhenPlayerWins' beachten
 		
 		
 	}
 	
+	private Player getStartingPlayer(Map<String, Player> players)
+	{
+		// jeder einmal würfeln
+		// mit höchster zahl darf anfangen
+		// bei gleicher Augenzahl dürfen die beiden nochmal würfeln
+		
+		Map<String, Player> startingPlayer = new HashMap<String, Player>();
+		int highestThrew = 0;
+		
+		for(Map.Entry<String, Player> player : players.entrySet())
+		{
+			int threwCube = player.getValue().throwCube();
+			if(threwCube > highestThrew) {
+				highestThrew = threwCube;
+				startingPlayer.clear();
+				startingPlayer.put(player.getKey(), player.getValue())
+			}
+			else if(threwCube == highestThrew)
+			{
+				startingPlayer.put(player.getKey(), player.getValue())
+			}
+		}
+		
+		if(startingPlayer.size() == 1)
+		{
+			return (Player) startingPlayer.values().toArray()[0];
+		}
+		else
+		{
+			// es gab mehrere mit selber größter augenzahl
+			// -> also dürfen die Spieler nochmal würfeln
+			return getStartingPlayer(startingPlayer);
+		}
+	}
+	
+	
+	
+	/**
+	 * setting player figures back in house
+	 */
+	public void setAllFiguresBack()
+	{
+		for(Player p : this.Players.values())
+		{
+			p.setFiguresBack();
+		}
+	}
 	
 	private void createPlayers(String[] playerNames)
 	{

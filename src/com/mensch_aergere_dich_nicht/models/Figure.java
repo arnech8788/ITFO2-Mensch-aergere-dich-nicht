@@ -9,6 +9,13 @@ import java.awt.Color;
  */
 public class Figure {
 
+	public static final int startPosition = -1;
+	public static final int startField = 0;
+	public static final int firstHousePosition = 40;
+	
+	private int number;
+	
+
 	/*
 	 * color of the figure
 	 */
@@ -24,15 +31,23 @@ public class Figure {
 	 * creates a figure with a specific color
 	 * sets iSteps to -1 --> home position
 	 */
-	public Figure(Color figureColor)
+	public Figure(Color figureColor,
+				  int number)
 	{
-		iSteps = -1;
+		this.iSteps = startPosition;
+		this.number = number;
 		this.figureColor = figureColor; 
 	}
 	
+	
+	public int getNumber() {
+		return number;
+	}
+
+	/**
 	public void setFigureColor(Color c){
 		this.figureColor = c;
-	}
+	}**/
 	
 	public Color getFigureColor() {
 		return figureColor;
@@ -47,4 +62,5 @@ public class Figure {
 	{
 		this.iSteps = iSteps;
 	}
+	
 }

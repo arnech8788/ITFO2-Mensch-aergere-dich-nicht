@@ -8,10 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class MainGui extends JFrame implements ActionListener, Observer {
-
-	JButton btnOptions;
-	JLabel lblWelcome;
+public class MainGui extends JFrame implements ActionListener{
 	
 	JCheckBox cbPlayerOneIsEnabled; 
 	JCheckBox cbPlayerTwoIsEnabled; 
@@ -32,104 +29,97 @@ public class MainGui extends JFrame implements ActionListener, Observer {
 	JCheckBox cbPlayerTwoIsComputer; 
 	JCheckBox cbPlayerThreeIsComputer; 
 	JCheckBox cbPlayerFourIsComputer; 
-	
-	
+		
 	JButton btnStart;
 	JButton btnClose;
-	JPanel ctrlPanel;
+	JButton btnOptions;
+//	JPanel ctrlPanel;
 	
 	private Options options;
+	private Option optionFrame;
 	private Gamehandler handler;
 
 	public MainGui(){
 		super("Mensch ärgere dich nicht");
-		ctrlPanel = new JPanel();
-
-		btnOptions = new JButton("Optionen");
-		btnOptions.addActionListener(this);
-		ctrlPanel.add(btnOptions);
 		
-		lblWelcome = new JLabel("Herzlich Willkommen!");
-		ctrlPanel.add(lblWelcome);
+		this.options = new Options();
+		optionFrame = new Option(options);
+		optionFrame.hide();
 		
+		//Setting Control Panel
+//		ctrlPanel = new JPanel();
+//		ctrlPanel.setLayout(new BoxLayout(ctrlPanel, BoxLayout.Y_AXIS));
+	
 		
 		// Player One
+		lblPlayerOneNameInfo = new JLabel("Spieler Eins:");
+		lblPlayerOneNameInfo.setLocation(200,200);
+		lblPlayerOneNameInfo.setSize(20, 5);
+		this.add(lblPlayerOneNameInfo);
 		cbPlayerOneIsEnabled = new JCheckBox("aktivieren");
 		cbPlayerOneIsEnabled.addActionListener(this);
-		ctrlPanel.add(cbPlayerOneIsEnabled);
-		lblPlayerOneNameInfo = new JLabel("Spieler Eins:");
-		ctrlPanel.add(lblPlayerOneNameInfo);
-		txtPlayerOneName = new JTextField("");
-		ctrlPanel.add(txtPlayerOneName);
-		cbPlayerOneIsComputer = new JCheckBox("KI");
-		ctrlPanel.add(cbPlayerOneIsComputer);
+//		ctrlPanel.add(cbPlayerOneIsEnabled);
 		
-		// Player Two
-		cbPlayerTwoIsEnabled = new JCheckBox("aktivieren");
-		cbPlayerTwoIsEnabled.addActionListener(this);
-		ctrlPanel.add(cbPlayerTwoIsEnabled);
-		lblPlayerOneNameInfo = new JLabel("Spieler Zwei:");
-		ctrlPanel.add(lblPlayerTwoNameInfo);
-		txtPlayerTwoName = new JTextField("");
-		ctrlPanel.add(txtPlayerTwoName);
-		cbPlayerTwoIsComputer = new JCheckBox("KI");
-		ctrlPanel.add(cbPlayerTwoIsComputer);
+//		ctrlPanel.add(lblPlayerOneNameInfo);
+		txtPlayerOneName = new JTextField(20);
+//		ctrlPanel.add(txtPlayerOneName);
+		cbPlayerOneIsComputer = new JCheckBox("KI");
+//		ctrlPanel.add(cbPlayerOneIsComputer);
+		
+//		// Player Two
+//		cbPlayerTwoIsEnabled = new JCheckBox("aktivieren");
+//		cbPlayerTwoIsEnabled.addActionListener(this);
+//		ctrlPanel.add(cbPlayerTwoIsEnabled);
+//		lblPlayerTwoNameInfo = new JLabel("Spieler Zwei:");
+//		ctrlPanel.add(lblPlayerTwoNameInfo);
+//		txtPlayerTwoName = new JTextField("");
+//		ctrlPanel.add(txtPlayerTwoName);
+//		cbPlayerTwoIsComputer = new JCheckBox("KI");
+//		ctrlPanel.add(cbPlayerTwoIsComputer);
+//
+//		// Player Three
+//		cbPlayerThreeIsEnabled = new JCheckBox("aktivieren");
+//		cbPlayerThreeIsEnabled.addActionListener(this);
+//		ctrlPanel.add(cbPlayerThreeIsEnabled);
+//		lblPlayerThreeNameInfo = new JLabel("Spieler Drei:");
+//		ctrlPanel.add(lblPlayerThreeNameInfo);
+//		txtPlayerThreeName = new JTextField("");
+//		ctrlPanel.add(txtPlayerThreeName);
+//		cbPlayerThreeIsComputer = new JCheckBox("KI");
+//		ctrlPanel.add(cbPlayerThreeIsComputer);
+//
+//		// Player Four
+//		cbPlayerFourIsEnabled = new JCheckBox("aktivieren");
+//		cbPlayerFourIsEnabled.addActionListener(this);
+//		ctrlPanel.add(cbPlayerFourIsEnabled);
+//		lblPlayerFourNameInfo = new JLabel("Spieler Vier:");
+//		ctrlPanel.add(lblPlayerFourNameInfo);
+//		txtPlayerFourName = new JTextField("");
+//		ctrlPanel.add(txtPlayerFourName);
+//		cbPlayerFourIsComputer = new JCheckBox("KI");
+//		ctrlPanel.add(cbPlayerFourIsComputer);
 
-		// Player Three
-		cbPlayerThreeIsEnabled = new JCheckBox("aktivieren");
-		cbPlayerThreeIsEnabled.addActionListener(this);
-		ctrlPanel.add(cbPlayerThreeIsEnabled);
-		lblPlayerThreeNameInfo = new JLabel("Spieler Drei:");
-		ctrlPanel.add(lblPlayerThreeNameInfo);
-		txtPlayerThreeName = new JTextField("");
-		ctrlPanel.add(txtPlayerThreeName);
-		cbPlayerThreeIsComputer = new JCheckBox("KI");
-		ctrlPanel.add(cbPlayerThreeIsComputer);
-
-		// Player Four
-		cbPlayerFourIsEnabled = new JCheckBox("aktivieren");
-		cbPlayerFourIsEnabled.addActionListener(this);
-		ctrlPanel.add(cbPlayerFourIsEnabled);
-		lblPlayerFourNameInfo = new JLabel("Spieler Vier:");
-		ctrlPanel.add(lblPlayerFourNameInfo);
-		txtPlayerFourName = new JTextField("");
-		ctrlPanel.add(txtPlayerFourName);
-		cbPlayerFourIsComputer = new JCheckBox("KI");
-		ctrlPanel.add(cbPlayerFourIsComputer);
-
+		//Buttons
 		btnStart = new JButton("Spiel starten");
 		btnStart.addActionListener(this);
-		ctrlPanel.add(btnStart);
+//		ctrlPanel.add(btnStart);
+		
+		btnOptions = new JButton("Optionen");
+		btnOptions.addActionListener(this);
+//		ctrlPanel.add(btnOptions);
 		
 		btnClose = new JButton("Beenden");
 		btnClose.addActionListener(this);
-		this.add(ctrlPanel);
-
-		ctrlPanel.add(btnClose);
-		
+//		ctrlPanel.add(btnClose);
 		
 		//Frame
 		this.setSize(500, 500);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setResizable(false);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
-		
-		this.options = new Options();
-		//String[] sPlayerName = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
-
-		this.handler = new Gamehandler(this, 
-				new String[] {"Gernhart Reinholzen",
-							  "Lassmiranda den si Villia",
-							  "Timo Beil",
-							  "Anne Theke"});
-	}
-	
-	
-	public Options getOptions()
-	{
-		return this.options;
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+//		this.add(ctrlPanel);		
 	}
 	
 	public static void main(String args[])
@@ -142,29 +132,19 @@ public class MainGui extends JFrame implements ActionListener, Observer {
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == btnOptions)
 		{
-			Option options = new Option(this.options);
-
+			optionFrame.show();
 		}
 		else if(arg0.getSource() == btnStart)
 		{
+			handler = new Gamehandler(options,new String[] {txtPlayerOneName.getText(),
+					txtPlayerTwoName.getText(),
+					txtPlayerThreeName.getText(),
+					txtPlayerOneName.getText()});
 			handler.startGame();
-
 		}
 		else if(arg0.getSource() == btnClose)
 		{
-			this.dispose();
-
-		}
-		
+			System.exit(0);
+		}		
 	}
-
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		// hier die Gui updaten
-		
-	}
-	
-	
 }
