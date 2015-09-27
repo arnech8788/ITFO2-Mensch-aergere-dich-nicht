@@ -7,15 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
-import java.io.File;
+//import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import java.awt.Graphics;
 
 public class Board extends JFrame implements MouseListener{
+	JLayeredPane boardPane;
 	JButton btnClose;
     JPanel mainPanel;
     JPanel boardPanel;
@@ -31,6 +31,9 @@ public class Board extends JFrame implements MouseListener{
     
     public Board(){
       super("Mensch ärgere dich nicht");
+      
+      // Setup field grid.
+      this.setupFieldGrid();
       
       try {                
           image = ImageIO.read(getClass().getResource("board600.jpg"));
@@ -53,12 +56,29 @@ public class Board extends JFrame implements MouseListener{
       scrollPane = new JScrollPane(msgBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       
+      // New boardPane.
+      boardPane = new JLayeredPane();
+      boardPane.setPreferredSize(new Dimension(600,600));
+                  
       // New boardPanel.
       boardPanel = new JPanel();
       boardPanel.add(new JLabel(new ImageIcon(image)));
       
       boardPanel.addMouseListener(this);
       this.addMouseListener(this);
+      
+      // TEST new piecePanel.
+      PiecePanel playerRed = new PiecePanel(Color.RED, 40,40);
+      
+      // Add panels to boardPane.
+      boardPanel.setBounds(0,0,600,600);
+      boardPane.add(boardPanel, new Integer(0));
+      int[] coordinates = this.getFieldCoordinates(25);
+  	  int x = coordinates[0];
+  	  int y = coordinates[1];
+      playerRed.setBounds(x-25,y-21,80,80);
+      playerRed.setOpaque(false);
+      boardPane.add(playerRed, new Integer(1));
       
       // New main panel.
       mainPanel = new JPanel();
@@ -67,10 +87,11 @@ public class Board extends JFrame implements MouseListener{
       mainPanel.add(scrollPane);
       
       // Add components to Gameboard.
-      this.add(boardPanel, BorderLayout.WEST);
+      this.add(boardPane, BorderLayout.WEST);
+      //this.add(boardPanel, BorderLayout.WEST);
       this.add(mainPanel, BorderLayout.EAST);
       this.add(btnClose, BorderLayout.SOUTH);
-      
+
       // Frame configuration.
       //this.setLayout(new GridLayout());
       this.setSize(850, 650);
@@ -78,8 +99,6 @@ public class Board extends JFrame implements MouseListener{
       this.setVisible(true);
       this.setResizable(false);
       this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-      
-      this.setupFieldGrid();
     }
     
     private int getOffsetX(){
@@ -246,5 +265,23 @@ public class Board extends JFrame implements MouseListener{
     public static void main(String[] args) {
         Board board = new Board();
     }
-}
 
+	class PiecePanel extends JPanel {
+		Color color;
+		int posX;
+		int posY;
+		
+		public PiecePanel(Color c, int x, int y){
+			this.color = c;
+			this.posX = x;
+			this.posY = y;
+		}
+		
+		@Override
+		protected void paintComponent(Graphics g) { 
+			super.paintComponent(g);
+			g.setColor(this.color);
+			g.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
+		} 
+	}
+}
