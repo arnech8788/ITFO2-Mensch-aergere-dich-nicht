@@ -61,24 +61,28 @@ public class Board extends JFrame implements MouseListener{
       boardPane.setPreferredSize(new Dimension(600,600));
                   
       // New boardPanel.
-      boardPanel = new JPanel();
-      boardPanel.add(new JLabel(new ImageIcon(image)));
+      //boardPanel = new JPanel();
+      //boardPanel.add(new JLabel(new ImageIcon(image)));
       
-      boardPanel.addMouseListener(this);
+      this.drawBoard(boardPane);
+      boardPane.addMouseListener(this);
       this.addMouseListener(this);
       
+      //boardPanel.addMouseListener(this);
+      //this.addMouseListener(this);
+      
       // TEST new piecePanel.
-      PiecePanel playerRed = new PiecePanel(Color.RED, 40,40);
+      //PiecePanel playerRed = new PiecePanel(Color.RED, 40,40);
       
       // Add panels to boardPane.
-      boardPanel.setBounds(0,0,600,600);
-      boardPane.add(boardPanel, new Integer(0));
-      int[] coordinates = this.getFieldCoordinates(25);
-  	  int x = coordinates[0];
-  	  int y = coordinates[1];
-      playerRed.setBounds(x-25,y-21,80,80);
-      playerRed.setOpaque(false);
-      boardPane.add(playerRed, new Integer(1));
+      //boardPanel.setBounds(0,0,600,600);
+      //boardPane.add(boardPanel, new Integer(0));
+      //int[] coordinates = this.getFieldCoordinates(25);
+  	  //int x = coordinates[0];
+  	  //int y = coordinates[1];
+      //playerRed.setBounds(x-25,y-21,80,80);
+      //playerRed.setOpaque(false);
+      //boardPane.add(playerRed, new Integer(1));
       
       // New main panel.
       mainPanel = new JPanel();
@@ -99,6 +103,88 @@ public class Board extends JFrame implements MouseListener{
       this.setVisible(true);
       this.setResizable(false);
       this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    /*
+     * Draw single field on gameboard.
+     */
+    private void drawField(JLayeredPane pane, int fieldnumber, Color color){
+    	int[] coordinates = this.getFieldCoordinates(fieldnumber);
+    	int x = coordinates[0];
+    	int y = coordinates[1];
+    	FieldPanel field = new FieldPanel(color, 40,40); field.setBounds(x,y,100,100); field.setOpaque(false); pane.add(field, new Integer(1));
+    }
+    
+    /*
+     * Draw gameboard.
+     */
+    private void drawBoard(JLayeredPane pane){
+    	// Board.
+    	for(int i=0; i<=39; i++){
+    	  Color color;
+    	  
+    	  switch(i){
+    	    case 0:
+    		  color = Color.BLACK;
+    		  break;
+    	    case 10:
+      		  color = Color.YELLOW;
+      		  break;
+    	    case 20:
+      		  color = Color.GREEN;
+      		  break;
+    	    case 30:
+      		  color = Color.RED;
+      		  break;
+      		default:
+      		  color = Color.WHITE;
+      		  break;
+    	  }
+    	  
+    	  this.drawField(pane, i, color);
+    	}
+    	
+    	// Houses.
+    	this.drawField(pane, 101, Color.BLACK);
+    	this.drawField(pane, 102, Color.BLACK);
+    	this.drawField(pane, 103, Color.BLACK);
+    	this.drawField(pane, 104, Color.BLACK);
+    	
+    	this.drawField(pane, 201, Color.YELLOW);
+    	this.drawField(pane, 202, Color.YELLOW);
+    	this.drawField(pane, 203, Color.YELLOW);
+    	this.drawField(pane, 204, Color.YELLOW);
+    	
+    	this.drawField(pane, 301, Color.GREEN);
+    	this.drawField(pane, 302, Color.GREEN);
+    	this.drawField(pane, 303, Color.GREEN);
+    	this.drawField(pane, 304, Color.GREEN);
+    	
+    	this.drawField(pane, 401, Color.RED);
+    	this.drawField(pane, 402, Color.RED);
+    	this.drawField(pane, 403, Color.RED);
+    	this.drawField(pane, 404, Color.RED);
+    	
+    	// Start.
+    	this.drawField(pane, 1001, Color.BLACK);
+    	this.drawField(pane, 1002, Color.BLACK);
+    	this.drawField(pane, 1003, Color.BLACK);
+    	this.drawField(pane, 1004, Color.BLACK);
+    	
+    	this.drawField(pane, 2001, Color.YELLOW);
+    	this.drawField(pane, 2002, Color.YELLOW);
+    	this.drawField(pane, 2003, Color.YELLOW);
+    	this.drawField(pane, 2004, Color.YELLOW);
+    	
+    	this.drawField(pane, 3001, Color.GREEN);
+    	this.drawField(pane, 3002, Color.GREEN);
+    	this.drawField(pane, 3003, Color.GREEN);
+    	this.drawField(pane, 3004, Color.GREEN);
+    	
+    	this.drawField(pane, 4001, Color.RED);
+    	this.drawField(pane, 4002, Color.RED);
+    	this.drawField(pane, 4003, Color.RED);
+    	this.drawField(pane, 4004, Color.RED);
     }
     
     private int getOffsetX(){
@@ -195,6 +281,27 @@ public class Board extends JFrame implements MouseListener{
       this.setupFieldOnGrid("8-5", 402);
       this.setupFieldOnGrid("7-5", 403);
       this.setupFieldOnGrid("6-5", 404);
+      
+      // Start of player 1.
+      this.setupFieldOnGrid("0-9", 1001);
+      this.setupFieldOnGrid("1-9", 1002);
+      this.setupFieldOnGrid("0-10", 1003);
+      this.setupFieldOnGrid("1-10", 1004);
+      // Start of player 2.
+      this.setupFieldOnGrid("0-0", 2001);
+      this.setupFieldOnGrid("1-0", 2002);
+      this.setupFieldOnGrid("0-1", 2003);
+      this.setupFieldOnGrid("1-1", 2004);
+      // Start of player 3.
+      this.setupFieldOnGrid("9-0", 3001);
+      this.setupFieldOnGrid("10-0", 3002);
+      this.setupFieldOnGrid("9-1", 3003);
+      this.setupFieldOnGrid("10-1", 3004);
+      // Start of player 4.
+      this.setupFieldOnGrid("9-9", 4001);
+      this.setupFieldOnGrid("9-10", 4002);
+      this.setupFieldOnGrid("10-9", 4003);
+      this.setupFieldOnGrid("10-10", 4004);
     }
     
     private String getClickedField(int x, int y){
@@ -211,7 +318,7 @@ public class Board extends JFrame implements MouseListener{
           fieldnumber = -1;
         }
         
-        if(fieldnumber != -1) {
+        if(fieldnumber != -1 && fieldnumber < 1000) {
           return "" + fieldnumber;
         }
       }
@@ -256,7 +363,8 @@ public class Board extends JFrame implements MouseListener{
         String clickedField = this.getClickedField(posX, posY);
         
         // Ignore clicks beyond gameboard limits.
-        if(posX >= this.getOffsetX() && posX < 570 && posY >= this.getOffsetY() && posY < 575){
+        //if(posX >= this.getOffsetX() && posX < 570 && posY >= this.getOffsetY() && posY < 575){
+        if(posX >= this.getOffsetX() && posX < 600 && posY >= this.getOffsetY() && posY < 600){
           this.displayMessage("Mouse clicked at x=" + posX + " y=" + posY +". Feld " + clickedField);
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -282,6 +390,27 @@ public class Board extends JFrame implements MouseListener{
 			super.paintComponent(g);
 			g.setColor(this.color);
 			g.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
+		} 
+	}
+	
+	class FieldPanel extends JPanel {
+		Color color;
+		int posX;
+		int posY;
+		
+		public FieldPanel(Color c, int x, int y){
+			this.color = c;
+			this.posX = x;
+			this.posY = y;
+		}
+		
+		@Override
+		protected void paintComponent(Graphics g) { 
+			super.paintComponent(g);
+			g.setColor(this.color);
+			g.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
+			g.setColor(Color.BLACK);
+			g.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
 		} 
 	}
 }
