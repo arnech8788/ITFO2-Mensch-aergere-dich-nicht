@@ -26,8 +26,8 @@ public class Board extends JFrame implements MouseListener{
     Map<String, Integer> fieldGrid = new HashMap<String, Integer>();
     Map<Integer, int[]> fieldCoordinates= new HashMap<Integer, int[]>();
     // Panel offset for top left corner of grid area.
-    int offsetX = 35;
-    int offsetY = 35;
+    int offsetX = 0; //35
+    int offsetY = 0;
     
     public Board(){
       super("Mensch ärgere dich nicht");
@@ -112,6 +112,7 @@ public class Board extends JFrame implements MouseListener{
     	int[] coordinates = this.getFieldCoordinates(fieldnumber);
     	int x = coordinates[0];
     	int y = coordinates[1];
+
     	FieldPanel field = new FieldPanel(color, 40,40); field.setBounds(x,y,100,100); field.setOpaque(false); pane.add(field, new Integer(1));
     }
     
@@ -313,8 +314,16 @@ public class Board extends JFrame implements MouseListener{
       if(this.fieldGrid.containsKey(position) == true){
         int fieldnumber = this.fieldGrid.get(position);
         
+        int[] pos = this.getFieldCoordinates(fieldnumber);
+        System.out.println(""+pos[0]+"/"+pos[1]);
+        
         // Ignore click if clicked too far beyond field limits.
-        if((x - this.getOffsetX()) % 50 > 44 || (y - this.getOffsetY()) % 50 > 44){ 
+        //if((x - this.getOffsetX()) % 50 > 44 || (y - this.getOffsetY()) % 50 > 44){ 
+        // TODO:
+        // 1. Über Klick das Feld bestimmen.
+        // 2. Position von Feld holen.
+        // Folgenden Vergleich erweitern: && x >= posx <= posx+50 && y >= posy <= posy+50
+        if((x - this.getOffsetX()) % 50 < 20 || (y - this.getOffsetY()) % 50 < 20){
           fieldnumber = -1;
         }
         
