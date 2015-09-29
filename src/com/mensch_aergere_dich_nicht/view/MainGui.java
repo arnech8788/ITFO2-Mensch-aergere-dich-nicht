@@ -36,6 +36,7 @@ public class MainGui extends JFrame implements ActionListener{
 	JButton btnClose;
 	JButton btnOptions;
 	
+	private JCheckBox [] cbBoxes = new JCheckBox[4];
 	private Options options;
 	private Option optionFrame;
 	private Gamehandler handler;
@@ -147,6 +148,15 @@ public class MainGui extends JFrame implements ActionListener{
 		cbPlayerTwoIsComputer.setEnabled(false);
 		cbPlayerThreeIsComputer.setEnabled(false);
 		cbPlayerFourIsComputer.setEnabled(false);
+		
+		/*
+		 * Put player checkbox controls in cbBoxes
+		 * for checking if min 2 players are selected for starting game
+		 */
+		cbBoxes[0] = cbPlayerOneIsEnabled;
+		cbBoxes[1] = cbPlayerTwoIsEnabled;
+		cbBoxes[2] = cbPlayerThreeIsEnabled;
+		cbBoxes[3] = cbPlayerFourIsEnabled;
 //-----------------------------------------------------------			
 		//Frame
 		this.setSize(350,350);
@@ -161,6 +171,21 @@ public class MainGui extends JFrame implements ActionListener{
 	{
 			MainGui gb = new MainGui();
 	}
+	
+	//Check if min two players are selected
+	private boolean isGameRunnable(){
+		int countOfSelectedPlayers = 0; 
+		
+		for(int i = 0; i<4; i++){
+			if(cbBoxes[i].isSelected()== true){
+				countOfSelectedPlayers++;
+			}
+		}
+		if(countOfSelectedPlayers<2){
+			return false;
+		}
+		return true;
+	}
 
 
 	@Override
@@ -173,11 +198,16 @@ public class MainGui extends JFrame implements ActionListener{
 		}
 		else if(arg0.getSource() == btnStart)
 		{
-			handler = new Gamehandler(options,new String[] {txtPlayerOneName.getText(),
-					txtPlayerTwoName.getText(),
-					txtPlayerThreeName.getText(),
-					txtPlayerOneName.getText()});
-//			handler.startGame();
+			if(isGameRunnable()){
+				handler = new Gamehandler(options,new String[] {txtPlayerOneName.getText(),
+						txtPlayerTwoName.getText(),
+						txtPlayerThreeName.getText(),
+						txtPlayerOneName.getText()});
+//				handler.startGame();
+			}
+			else{
+				JOptionPane.showMessageDialog(new JFrame(),"Es muss mindestens 2 Spieler geben","Fehler Spielstart",JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 		//CheckBox events
