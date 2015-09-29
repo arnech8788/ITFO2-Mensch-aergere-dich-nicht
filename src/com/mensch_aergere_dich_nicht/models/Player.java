@@ -1,6 +1,7 @@
 package com.mensch_aergere_dich_nicht.models;
 
 import java.awt.*;
+import java.awt.List;
 import java.util.*;
 
 public class Player {
@@ -12,11 +13,10 @@ public class Player {
 	private Map<Integer, Figure> figures;
 	private Map<Integer, House> houses;
 	
-	/*
+	/**
 	 * Creates a player with a color, offset and name
 	 * Creates 4 figures with player color
-	 */
-	
+	 **/
 	public Player(Color playerColor, boolean isComputer, int offset, String playerName){
 		
 		this.playerColor = playerColor;
@@ -43,7 +43,7 @@ public class Player {
 	
 	public Figure setFigureOut(){
 		// Prüfen ob es noch Figuren am Start gibt, falls nicht Fehler
-		if (!this.figuresAtStartPosition())
+		if (!this.allFiguresAtStartPosition())
 		{
 			throw new RuntimeException("In der Startposition gibt es keine Figuren mehr!");
 		}
@@ -116,27 +116,70 @@ public class Player {
 		// - keine Figur auf Spielbrett und im Haus ganz am Ende sind
 		//   (also nicht erst erstes Feld im Haus...)
 		
+		// Sobald eine Figur auf dem Spielbrett ist,
+		// darf man nur noch 1x würfeln
+		if(anyFigureAtBoard())
+		{
+			return false;
+		}
+		
 		
 		// Prüfen ob alle Figuren am Start sind
-		if(figuresAtStartPosition())
+		if(allFiguresAtStartPosition())
 		{
 			return true;
 		}
 		
-		/**
-		if(figuresAtHome())
+		// Wenn keine Figur auf dem Spielbrett ist
+		// und nicht alle Figuren an der Startposition sind,
+		// muss mindestens eine Figur im Haus sein
+		
+		if(!anyFigureAtStartPosition())
 		{
-			
-		}**/
-		return false;
+			throw new RuntimeException("Fehler bei der Prüfung der Anzahl der möglichen Würfe: Es wurde keine Figur an der Startposition gefunden!");
+		}
+		
+		// Prüfe ob Figuren im Haus hintereinander sind
+		Figure[] homeFigures = this.getHouseFigures();
+		Arrays.sort(homeFigures);
+		
+		
+		for (int i = 0; i < homeFigures.length - 1; i ++)
+		{
+			if(homeFigures[i].getSteps() -1 != homeFigures[i + 1].getSteps())
+			{
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
+	/**
+	 * Gibt true zurück, wenn mindestens eine Figur auf dem Spielbrett ist
+	 * (Figuren im Haus gehören nicht dazu)
+	 * @return
+	 */
+	private boolean anyFigureAtBoard()
+	{
+		for(Figure f : this.getFigures().values())
+		{
+			if(f.isOnGameboard())
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 
 	/**
 	 * Gibt true zurück, wenn mindestens eine Figur im Haus ist
 	 * @return
 	 */
-	private boolean figuresAtHome()
+	/**
+	private boolean anyFiguresAtHome()
 	{
 		for(House h : houses.values())
 		{
@@ -146,28 +189,30 @@ public class Player {
 			}
 		}
 		return false;
-	}
+	}**/
 
-	/**
+	
 	private Figure[] getHouseFigures()
 	{
-		Figure[] homeFigures = new Figure[];
-		for(Figure f : figures)
+		ArrayList<Figure> homeFigures = new ArrayList<Figure>();
+		for(Figure f : this.getFigures().values())
 		{
 			if(f.getSteps() >= Figure.firstHousePosition)
 			{
-				
+				homeFigures.add(f);
 			}
 		}
-	}**/	
+		
+		return (Figure[]) homeFigures.toArray();
+	}	
 	
 	
 	
 	/**
-	 * Gibt true zurück, wenn mindestens eine Figur noch in der Startposition ist
+	 * Gibt true zurück, wenn alle Figuren in der Startposition sind
 	 * @return
 	 */
-	private boolean figuresAtStartPosition()
+	private boolean allFiguresAtStartPosition()
 	{
 		for(Figure f : figures.values())
 		{
@@ -179,6 +224,20 @@ public class Player {
 		return true;
 	}
 	
-	
+	/**
+	 * Gibt true zurück, wenn mindestens eine Figur noch in der Startposition ist
+	 * @return
+	 */
+	private boolean anyFigureAtStartPosition()
+	{
+		for(Figure f : figures.values())
+		{
+			if(f.getSteps() == Figure.startPosition)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

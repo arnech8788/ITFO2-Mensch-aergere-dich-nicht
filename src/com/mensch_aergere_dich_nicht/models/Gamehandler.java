@@ -9,10 +9,11 @@ import com.mensch_aergere_dich_nicht.models.Field.*;
 import com.mensch_aergere_dich_nicht.view.*;
 
 public class Gamehandler  {
+	public static final int fieldCount = 40;
 	
 	// extends Observable
 	
-	Map<String,Field> Fields;
+	Map<Integer,Field> Fields;
 	Map<String,Player> Players;
 	
 	
@@ -28,7 +29,7 @@ public class Gamehandler  {
 		this.createPlayers(playerNames);
 	}
 	
-	public Map<String, Field> getFields() {
+	public Map<Integer, Field> getFields() {
 		return Fields;
 	}
 
@@ -55,31 +56,67 @@ public class Gamehandler  {
 				  "Lassmiranda den si Villia",
 				  "Timo Beil",
 				  "Anne Theke"});
+		// AddPlayer()
+		
 		
 		//gh.startGame();
 		
 		// Player getStartingPlayer (durch Würfeln ermitteln)
-		Player startPlayer = gh.getStartingPlayer(gh.getPlayers());
-		System.out.println(startPlayer.getPlayerName() + " hat die höchste Zahl gewürfelt und fängt an.");
+		Player player = gh.getStartingPlayer(gh.getPlayers());
 		
-		// 3x würfeln bis er eine sechs hat
-		for(int i = 0; i < 3; i++)
-		{
-			int number = startPlayer.throwCube();
-			System.out.println(startPlayer.getPlayerName() + " würfelt eine " + String.valueOf(number));
+		
+		// TODO: bei 6 darf der Spieler nochmal würfeln
+		
+		do {
+			System.out.println(player.getPlayerName() + " ist am Spielzug.");
 			
-			if(number == 6)
+			if (player.canDriveThreeTimes())
 			{
-				System.out.println("Er darf eine Figur raussetzen.");
+				for(int i = 0; i < 3; i++)
+				{
+					int number = player.throwCube();
+					System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
 				
-				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
-				Figure f = startPlayer.setFigureOut();
-				System.out.println("Figur " + String.valueOf(f.getNumber()) + " wird auf das Startfeld gesetzt.");
-				
+					if(number == 6)
+					{
+						System.out.println("Er darf eine Figur raussetzen.");
+					
+						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+						Figure f = player.setFigureOut();
+						gh.setFigure2Field(f, player.getOffset());
+						
+						// bei einer sechs darf er nochmal
+						
+						break;
+					}
+				}
 				
 			}
 			
-		}
+			else{
+				int number = player.throwCube();
+				System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
+			
+				// TODO: ermitteln welche Spielzugmöglichkeiten der Spieler hat
+				
+				
+					
+				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+				//Figure f = player.setFigureOut();
+				int steps = 0;
+				Figure f= null;
+				player.setPlayerFigure(f, steps);;
+				gh.setFigure2Field(f, player.getOffset());
+			}
+			
+			// nächsten Spieler holen
+			player = gh.getNextPlayer(player);
+
+			
+		}while(player != null);
+		
+		
+		// 	3x würfeln bis er eine sechs hat
 		
 		
 		// moveOption getMoveOptions(Player) (welche Spieloptionen)
@@ -94,6 +131,23 @@ public class Gamehandler  {
 		//MoveResult result = gh.nextMove();
 		
 	}
+	
+	private int getFieldNumber(int playerOffSet,
+							   int figureSteps)
+	{
+		int temp = playerOffSet + figureSteps;
+		if (temp >= fieldCount){
+			temp -= fieldCount;
+		}
+		return temp;
+	}
+	
+	public void addPlayer(String name,
+						  boolean isKI)
+	{
+		throw new RuntimeException("function is not implemented!");
+	}
+	
 	
 	/**
 	public void startGame()
@@ -171,15 +225,29 @@ public class Gamehandler  {
 	
 
 	
-	/**
 	public Player getNextPlayer(Player lastPlayer)
 	{
 		// anhand des letzten Spielzugs den nächsten Spieler ermitteln
+		for(int i = 0; i < this.getPlayers().size(); i++)
+		{
+			Player temp = (Player) this.getPlayers().values().toArray()[i]; 
+			if(temp.getPlayerColor() == lastPlayer.getPlayerColor())
+			{
+				if(i == getPlayers().size() - 1)
+				{
+					return (Player) this.getPlayers().values().toArray()[0];
+				}
+				else
+				{
+					return (Player) this.getPlayers().values().toArray()[i + 1];
+				}
+			}
+		}
 		
 		// option 'isCloseGameWhenPlayerWins' beachten
 		
-		
-	}**/
+		throw new RuntimeException("Es wurde kein Spieler für den nächsten Spielzug gefunden!");
+	}
 	
 	private Player getStartingPlayer(Map<String, Player> players)
 	{
@@ -246,9 +314,11 @@ public class Gamehandler  {
 		}
 	}
 	
+
+	
 	private void createFields(){
-		Fields = new HashMap<String,Field>();
-		int iFieldCount = 40; //Number of Fields ( without House )
+		Fields = new HashMap<Integer,Field>();
+		int iFieldCount = fieldCount; //Number of Fields ( without House )
 		Type type;
 		
 		for (Integer i = 0; i < iFieldCount; i++)
@@ -261,10 +331,26 @@ public class Gamehandler  {
 			{
 				type = Type.NORMAL;
 			}
-			Fields.put(i.toString(), new Field(type,i));
+			Fields.put(i, new Field(type,i));
 		}
 	}
 	
+	private void setFigure2Field(Figure figure,
+								 int playerOffSet)
+	{
+		int fieldNumber = getFieldNumber(playerOffSet, figure.getSteps());
+		Field field = this.getFields().get(fieldNumber);
+		field.setFigure(figure);
+		
+		if(field.getType() == Field.Type.START)
+		{
+			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt.");
+		}
+		else
+		{
+			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
+		}
+	}
 
 	 
 

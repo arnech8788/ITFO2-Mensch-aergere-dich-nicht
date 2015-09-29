@@ -7,7 +7,8 @@ import java.awt.Color;
  * Datum: 11.09.2015
  * Beschreibung: Klasse Figure
  */
-public class Figure {
+public class Figure implements Comparable<Figure>
+{
 
 	public static final int startPosition = -1;
 	public static final int startField = 0;
@@ -61,6 +62,27 @@ public class Figure {
 	public void setSteps(int iSteps)
 	{
 		this.iSteps = iSteps;
+	}
+	
+	public boolean isOnGameboard()
+	{
+		if(getSteps() >= Figure.firstHousePosition)
+		{
+			return false;
+		}
+		
+		if(getSteps() == Figure.startPosition)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
+
+	@Override
+	public int compareTo(Figure arg0) {
+		return this.getSteps() - arg0.getSteps();
 	}
 	
 }
