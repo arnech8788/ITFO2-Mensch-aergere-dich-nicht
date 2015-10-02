@@ -36,6 +36,11 @@ public class MainGui extends JFrame implements ActionListener{
 	JButton btnClose;
 	JButton btnOptions;
 	
+	JLabel lblColorPlayerOne;
+	JLabel lblColorPlayerTwo;
+	JLabel lblColorPlayerThree;
+	JLabel lblColorPlayerFour;
+	
 	private JCheckBox [] cbBoxes = new JCheckBox[4];
 	private Options options;
 	private Option optionFrame;
@@ -64,10 +69,14 @@ public class MainGui extends JFrame implements ActionListener{
 		txtPlayerOneName = new JTextField();
 		txtPlayerOneName.setLocation(85, 50);
 		txtPlayerOneName.setSize(220,20);
+		lblColorPlayerOne = new JLabel("");
+		lblColorPlayerOne.setOpaque(true);
+		lblColorPlayerOne.setBackground(Color.blue);
 		this.add(lblPlayerOneNameInfo);
 		this.add(cbPlayerOneIsEnabled);
 		this.add(cbPlayerOneIsComputer);
 		this.add(txtPlayerOneName);
+		this.add(lblColorPlayerOne);
 		
 		// Player Two
 		lblPlayerTwoNameInfo = new JLabel("Spieler Zwei:");
@@ -163,8 +172,7 @@ public class MainGui extends JFrame implements ActionListener{
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setResizable(false);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);		
 	}
 	
 	public static void main(String args[])
@@ -203,13 +211,11 @@ public class MainGui extends JFrame implements ActionListener{
 						txtPlayerTwoName.getText(),
 						txtPlayerThreeName.getText(),
 						txtPlayerOneName.getText()});
-//				handler.startGame();
 			}
 			else{
 				JOptionPane.showMessageDialog(new JFrame(),"Es muss mindestens 2 Spieler geben","Fehler Spielstart",JOptionPane.ERROR_MESSAGE);
 			}
-		}
-		
+		}		
 		//CheckBox events
 		else if(arg0.getSource() == cbPlayerOneIsEnabled){	
 			if(cbPlayerOneIsEnabled.isSelected()== true){
@@ -223,7 +229,7 @@ public class MainGui extends JFrame implements ActionListener{
 		}	
 		else if(arg0.getSource() == cbPlayerTwoIsEnabled){
 			if(cbPlayerTwoIsEnabled.isSelected()== true){
-				txtPlayerTwoName.setEditable(true);
+				txtPlayerTwoName.setEnabled(true);
 				cbPlayerTwoIsComputer.setEnabled(true);
 			}
 			else{
@@ -233,7 +239,7 @@ public class MainGui extends JFrame implements ActionListener{
 		}
 		else if(arg0.getSource() == cbPlayerThreeIsEnabled){
 			if(cbPlayerThreeIsEnabled.isSelected()== true){
-				txtPlayerThreeName.setEditable(true);
+				txtPlayerThreeName.setEnabled(true);
 				cbPlayerThreeIsComputer.setEnabled(true);
 			}
 			else{
@@ -243,7 +249,7 @@ public class MainGui extends JFrame implements ActionListener{
 		}
 		else if(arg0.getSource() == cbPlayerFourIsEnabled){
 			if(cbPlayerFourIsEnabled.isSelected()== true){
-				txtPlayerFourName.setEditable(true);
+				txtPlayerFourName.setEnabled(true);
 				cbPlayerFourIsComputer.setEnabled(true);
 			}
 			else{
