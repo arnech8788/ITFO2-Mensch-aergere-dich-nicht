@@ -82,8 +82,32 @@ public class Gamehandler  {
 						System.out.println("Er darf eine Figur raussetzen.");
 					
 						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+						int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
+						if(gh.isFieldFree(fieldNumber))
+						{
+							// dann setze die Figur
+							
+						}
+						else
+						{
+							// prüfen ob man die figur schlagen kann
+							if(gh.canBeatFigure(fieldNumber, player))
+							{
+								// Figur schlagen
+								gh.beatFigure(fieldNumber, figure);
+							}
+							else
+							{
+								// es ist die eigene Figur!
+								
+								
+							}
+								
+						}
+
+						
 						Figure f = player.setFigureOut();
-						gh.setFigure2Field(f, player.getOffset());
+						gh.setFigure2Field(f, fieldNumber);
 						
 						// bei einer sechs darf er nochmal
 						
@@ -100,13 +124,24 @@ public class Gamehandler  {
 				// TODO: ermitteln welche Spielzugmöglichkeiten der Spieler hat
 				
 				
+				// möglichkeiten an gui?
+				
 					
 				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+				int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
+				if(gh.isFieldFree(fieldNumber))
+				{
+					// figur kann gesetzt werden
+					
+				}
+				
 				//Figure f = player.setFigureOut();
 				int steps = 0;
-				Figure f= null;
-				player.setPlayerFigure(f, steps);;
-				gh.setFigure2Field(f, player.getOffset());
+				Figure f = null;
+				player.setPlayerFigure(f, steps);
+				
+				
+				gh.setFigure2Field(f, fieldNumber);
 			}
 			
 			// nächsten Spieler holen
@@ -129,6 +164,39 @@ public class Gamehandler  {
 		
 		
 		//MoveResult result = gh.nextMove();
+		
+	}
+	
+	private void beatFigure(int fieldNumber,
+					   		Figure figure)
+	{
+		if (!canBeatFigure(fieldNumber, figure))
+		{
+			throw new RuntimeException("Die Figur kann nicht geschlagen werden!");
+		}
+		// TODO: implementieren
+		
+	}
+	
+	private boolean canBeatFigure(int fieldNumber,
+								  Player player)
+	{
+		return this.getFields().get(fieldNumber).getFigure().getFigureColor() != player.getPlayerColor();
+	}
+	private boolean canBeatFigure(int fieldNumber,
+			  Color playerColor)
+	{
+		return this.getFields().get(fieldNumber).getFigure().getFigureColor() != playerColor;
+	}
+	private boolean canBeatFigure(int fieldNumber,
+			  Figure figure)
+	{
+		return this.getFields().get(fieldNumber).getFigure().getFigureColor() != figure.getFigureColor();
+	}
+	
+	private boolean isFieldFree(int fieldNumber)
+	{
+		return this.getFields().get(fieldNumber).isFree();
 		
 	}
 	
@@ -336,10 +404,14 @@ public class Gamehandler  {
 	}
 	
 	private void setFigure2Field(Figure figure,
-								 int playerOffSet)
+			 					 int fieldNumber)
 	{
-		int fieldNumber = getFieldNumber(playerOffSet, figure.getSteps());
 		Field field = this.getFields().get(fieldNumber);
+		if(! field.isFree())
+		{
+			throw new RuntimeException("Die Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() + " kann nicht auf das Feld " + field.getNumber() + " setzen, da es von der Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() +  "  besetzt ist.")));
+		}
+		
 		field.setFigure(figure);
 		
 		if(field.getType() == Field.Type.START)
@@ -350,7 +422,15 @@ public class Gamehandler  {
 		{
 			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
 		}
+		
 	}
+	
+	/**
+	private void setFigure2Field(Figure figure,
+								 int playerOffSet)
+	{
+		this.setFigure2Field(figure, getFieldNumber(playerOffSet, figure.getSteps()););
+	}**/
 
 	 
 
