@@ -322,8 +322,12 @@ public class Board extends JFrame implements MouseListener{
         // TODO:
         // 1. Über Klick das Feld bestimmen.
         // 2. Position von Feld holen.
+        int posx = pos[0];
+        int posy = pos[1];
         // Folgenden Vergleich erweitern: && x >= posx <= posx+50 && y >= posy <= posy+50
-        if((x - this.getOffsetX()) % 50 < 20 || (y - this.getOffsetY()) % 50 < 20){
+        
+        //if((x - this.getOffsetX()) % 50 < 20 || (y - this.getOffsetY()) % 50 < 20){
+        if(x < posx+20 || x > posx+70 || y < posy+20 || y > posy+70){
           fieldnumber = -1;
         }
         
