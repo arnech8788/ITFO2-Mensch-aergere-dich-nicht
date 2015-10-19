@@ -1,5 +1,5 @@
 /*
- * Gameboard with image backgound.
+ * Gameboard.
  */
 package com.mensch_aergere_dich_nicht.view;
 
@@ -35,11 +35,13 @@ public class Board extends JFrame implements MouseListener{
       // Setup field grid.
       this.setupFieldGrid();
       
+      /*
       try {                
           image = ImageIO.read(getClass().getResource("board600.jpg"));
        } catch (IOException ex) {
             // Exception...
        }  
+      */
       
       btnClose = new JButton("Spiel benden");
       btnClose.setPreferredSize(new Dimension(40, 20));
@@ -113,7 +115,10 @@ public class Board extends JFrame implements MouseListener{
     	int x = coordinates[0];
     	int y = coordinates[1];
 
-    	FieldPanel field = new FieldPanel(color, 40,40); field.setBounds(x,y,100,100); field.setOpaque(false); pane.add(field, new Integer(1));
+    	FieldPanel field = new FieldPanel(color, 40,40); 
+    	field.setBounds(x,y,100,100); 
+    	field.setOpaque(false); 
+    	pane.add(field, new Integer(1));
     }
     
     /*
@@ -308,9 +313,19 @@ public class Board extends JFrame implements MouseListener{
     private String getClickedField(int x, int y){
       int fieldX = (x - this.getOffsetX()) / 50;
       int fieldY = (y - this.getOffsetY()) / 50;
-      //System.out.println(((x - this.getOffsetX()) % 50) + "/" + (y - this.getOffsetY()) % 50);
+      
+      if((x - this.getOffsetX()) % 50 <= 20) {
+    	  fieldX -= 1;
+      }
+      
+      if((y - this.getOffsetX()) % 50 <= 20) {
+    	  fieldY -= 1;
+      }
+      
+      //System.out.println(((x - this.getOffsetX()) / 50) + "/" + (y - this.getOffsetY()) / 50);
+      System.out.println(((x - this.getOffsetX()) % 50) + "/" + (y - this.getOffsetY()) % 50);
       String position = fieldX + "-" + fieldY;
-            
+      
       if(this.fieldGrid.containsKey(position) == true){
         int fieldnumber = this.fieldGrid.get(position);
         
@@ -327,7 +342,7 @@ public class Board extends JFrame implements MouseListener{
         // Folgenden Vergleich erweitern: && x >= posx <= posx+50 && y >= posy <= posy+50
         
         //if((x - this.getOffsetX()) % 50 < 20 || (y - this.getOffsetY()) % 50 < 20){
-        if(x < posx+20 || x > posx+70 || y < posy+20 || y > posy+70){
+        if(x < posx || x > posx+60 || y < posy || y > posy+60){
           fieldnumber = -1;
         }
         
