@@ -174,9 +174,48 @@ public class Gamehandler  {
 		{
 			throw new RuntimeException("Die Figur kann nicht geschlagen werden!");
 		}
+		
+		// TODO: testen
+		
+		// setze Figur des anderen Spielers wieder zurück
 		// TODO: implementieren
 		
+		
+		
+		// setze Figur auf das Feld
+		this.setFigure2Field(figure, fieldNumber);
+		figure.setSteps(this.getSteps(this.getPlayer(figure).getOffset(),fieldNumber));
+		
 	}
+	
+	
+	
+	private int getSteps(int playerOffset,
+						 int fieldNumber)
+	{
+		int temp = fieldNumber - playerOffset;
+		if (temp < 0)
+		{
+			temp+= Gamehandler.fieldCount;
+		}
+		return temp;
+	}
+	
+	
+	
+	private Player getPlayer(Figure figure)
+	{
+		for(Player player : this.getPlayers().values())
+		{
+			if(player.getPlayerColor() == figure.getFigureColor())
+			{
+				return player;
+			}
+		}
+		
+		throw new RuntimeException("Es wurde kein Spieler mit der Figur gefunden!");
+	}
+	
 	
 	private boolean canBeatFigure(int fieldNumber,
 								  Player player)
@@ -406,11 +445,18 @@ public class Gamehandler  {
 	private void setFigure2Field(Figure figure,
 			 					 int fieldNumber)
 	{
+		// TODO: wenn Flednummer ein Haus ist,
+		// anders reagieren...
+		
+		
 		Field field = this.getFields().get(fieldNumber);
 		if(! field.isFree())
 		{
 			throw new RuntimeException("Die Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() + " kann nicht auf das Feld " + field.getNumber() + " setzen, da es von der Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() +  "  besetzt ist.")));
 		}
+		
+		//TODO: Figur von aktuellen Feld entfernen
+		
 		
 		field.setFigure(figure);
 		
