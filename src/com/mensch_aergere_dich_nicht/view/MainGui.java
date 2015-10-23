@@ -72,6 +72,8 @@ public class MainGui extends JFrame implements ActionListener{
 		lblColorPlayerOne = new JLabel("");
 		lblColorPlayerOne.setOpaque(true);
 		lblColorPlayerOne.setBackground(Color.blue);
+		lblColorPlayerOne.setSize(15,15);
+		lblColorPlayerOne.setLocation(52,52);
 		this.add(lblPlayerOneNameInfo);
 		this.add(cbPlayerOneIsEnabled);
 		this.add(cbPlayerOneIsComputer);
@@ -92,10 +94,16 @@ public class MainGui extends JFrame implements ActionListener{
 		txtPlayerTwoName = new JTextField();
 		txtPlayerTwoName.setLocation(85, 110);
 		txtPlayerTwoName.setSize(220,20);
+		lblColorPlayerTwo = new JLabel("");
+		lblColorPlayerTwo.setSize(15,15);
+		lblColorPlayerTwo.setLocation(52,110);
+		lblColorPlayerTwo.setOpaque(true);
+		lblColorPlayerTwo.setBackground(Color.green);
 		this.add(lblPlayerTwoNameInfo);
 		this.add(cbPlayerTwoIsEnabled);
 		this.add(cbPlayerTwoIsComputer);
 		this.add(txtPlayerTwoName);
+		this.add(lblColorPlayerTwo);
 
 		// Player Three
 		lblPlayerThreeNameInfo = new JLabel("Spieler Drei:");
@@ -111,10 +119,16 @@ public class MainGui extends JFrame implements ActionListener{
 		txtPlayerThreeName = new JTextField();
 		txtPlayerThreeName.setSize(220,20);
 		txtPlayerThreeName.setLocation(85,170);
+		lblColorPlayerThree = new JLabel("");
+		lblColorPlayerThree.setSize(15,15);
+		lblColorPlayerThree.setLocation(52,170);
+		lblColorPlayerThree.setOpaque(true);
+		lblColorPlayerThree.setBackground(Color.red);
 		this.add(lblPlayerThreeNameInfo);
 		this.add(cbPlayerThreeIsEnabled);
 		this.add(cbPlayerThreeIsComputer);
 		this.add(txtPlayerThreeName);
+		this.add(lblColorPlayerThree);
 		
 		lblPlayerFourNameInfo = new JLabel("Spieler Vier:");
 		lblPlayerFourNameInfo.setLocation(10,200);
@@ -129,10 +143,16 @@ public class MainGui extends JFrame implements ActionListener{
 		txtPlayerFourName = new JTextField();
 		txtPlayerFourName.setSize(220,20);
 		txtPlayerFourName.setLocation(85,230);
+		lblColorPlayerFour = new JLabel("");
+		lblColorPlayerFour.setSize(15,15);
+		lblColorPlayerFour.setLocation(52, 230);
+		lblColorPlayerFour.setOpaque(true);
+		lblColorPlayerFour.setBackground(Color.yellow);
 		this.add(lblPlayerFourNameInfo);
 		this.add(cbPlayerFourIsEnabled);
 		this.add(cbPlayerFourIsComputer);
 		this.add(txtPlayerFourName);
+		this.add(lblColorPlayerFour);
 		
 		//Button
 		btnStart = new JButton("Spiel starten");
