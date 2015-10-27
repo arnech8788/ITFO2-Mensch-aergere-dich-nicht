@@ -59,7 +59,8 @@ public class Gamehandler  {
 		// AddPlayer()
 		
 		Board board = new Board();
-		board.
+		
+		board.drawBoard();
 		
 		//gh.startGame();
 		
