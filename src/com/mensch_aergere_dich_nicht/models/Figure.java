@@ -79,6 +79,10 @@ public class Figure implements Comparable<Figure>
 		return true;
 	}
 
+	public void set2StartPosition()
+	{
+		this.setSteps(Figure.startPosition);
+	}
 
 	@Override
 	public int compareTo(Figure arg0) {
