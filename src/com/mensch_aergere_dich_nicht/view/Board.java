@@ -31,10 +31,14 @@ public class Board extends JFrame implements MouseListener{
     // Panel offset for top left corner of grid area.
     int offsetX = 0; //35
     int offsetY = 0;
+    Map<Integer, Field> fields;
+    Map<String, Player> players;
     
-    public Board(){
+    public Board(Map<Integer, Field> f, Map<String, Player> p){
       super("Mensch ärgere dich nicht");
-      
+      this.fields = f;
+      this.players = p;
+            
       // Setup field grid.
       this.setupFieldGrid();
       
@@ -131,7 +135,7 @@ public class Board extends JFrame implements MouseListener{
     /*
      * Draw gameboard.
      */
-    public void drawBoard(Map<Integer, Field> fields, Map<String, Player> players){
+    public void drawBoard(){
     	JLayeredPane pane = this.getBoardPane();
     	 
     	// Board.
