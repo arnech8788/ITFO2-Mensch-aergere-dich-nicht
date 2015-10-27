@@ -13,12 +13,13 @@ public class Gamehandler  {
 	
 	// extends Observable
 	
-	Map<Integer,Field> Fields;
-	Map<String,Player> Players;
+	Map<Integer,Field> fields;
+	Map<String,Player> players;
 	
 	
 	private Options options;
-	private MoveResult lastMoveResult;
+	//private MoveResult lastMoveResult;
+	private Board board;
 	
 	public Gamehandler(Options options,
 					   String[] playerNames)
@@ -27,10 +28,13 @@ public class Gamehandler  {
 		this.options = options;
 		this.createFields();
 		this.createPlayers(playerNames);
+		this.board = new Board(fields, players);
+		this.board.drawBoard();
+		
 	}
 	
 	public Map<Integer, Field> getFields() {
-		return Fields;
+		return fields;
 	}
 
 	/**public void setFields(Map<String, Field> fields) {
@@ -38,7 +42,7 @@ public class Gamehandler  {
 	}**/
 
 	public Map<String, Player> getPlayers() {
-		return Players;
+		return players;
 	}
 
 	/**public void setPlayers(Map<String, Player> players) {
@@ -58,9 +62,6 @@ public class Gamehandler  {
 				  "Anne Theke"});
 		// AddPlayer()
 		
-		Board board = new Board();
-		
-		board.drawBoard();
 		
 		//gh.startGame();
 		
@@ -71,18 +72,18 @@ public class Gamehandler  {
 		// TODO: bei 6 darf der Spieler nochmal würfeln
 		
 		do {
-			System.out.println(player.getPlayerName() + " ist am Spielzug.");
+			gh.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
 			
 			if (player.canDriveThreeTimes())
 			{
 				for(int i = 0; i < 3; i++)
 				{
 					int number = player.throwCube();
-					System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
-				
+					gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
+					
 					if(number == 6)
 					{
-						System.out.println("Er darf eine Figur raussetzen.");
+						gh.board.displayMessage("Er darf eine Figur raussetzen.");
 					
 						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
 						int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
@@ -123,7 +124,7 @@ public class Gamehandler  {
 			
 			else{
 				int number = player.throwCube();
-				System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
+				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
 			
 				// TODO: ermitteln welche Spielzugmöglichkeiten der Spieler hat
 				
@@ -404,7 +405,7 @@ public class Gamehandler  {
 	 */
 	public void setAllFiguresBack()
 	{
-		for(Player p : this.Players.values())
+		for(Player p : this.players.values())
 		{
 			p.setFiguresBack();
 		}
@@ -412,7 +413,7 @@ public class Gamehandler  {
 	
 	private void createPlayers(String[] playerNames)
 	{
-		Players = new HashMap<String,Player>();
+		players = new HashMap<String,Player>();
 		
 		int iOffset = 0;// Offset of Fieldposition
 		boolean bIsComputer = false; // Is Computer?
@@ -422,7 +423,7 @@ public class Gamehandler  {
 		for (int i = 0; i < playerNames.length; i++)
 		{
 			Player player = new Player(colorArray[i],bIsComputer,iOffset,playerNames[i]);
-			Players.put(player.getPlayerColor().toString(), player);  // = new Player();
+			players.put(player.getPlayerColor().toString(), player);  // = new Player();
 			iOffset += 10;
 		}
 	}
@@ -430,7 +431,7 @@ public class Gamehandler  {
 
 	
 	private void createFields(){
-		Fields = new HashMap<Integer,Field>();
+		fields = new HashMap<Integer,Field>();
 		int iFieldCount = fieldCount; //Number of Fields ( without House )
 		Type type;
 		
@@ -444,7 +445,7 @@ public class Gamehandler  {
 			{
 				type = Type.NORMAL;
 			}
-			Fields.put(i, new Field(type,i));
+			fields.put(i, new Field(type,i));
 		}
 	}
 	
@@ -468,11 +469,11 @@ public class Gamehandler  {
 		
 		if(field.getType() == Field.Type.START)
 		{
-			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+			board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
 		}
 		else
 		{
-			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
+			board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
 		}
 		
 	}
