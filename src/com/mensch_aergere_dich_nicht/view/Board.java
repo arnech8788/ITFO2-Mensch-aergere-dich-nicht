@@ -133,7 +133,7 @@ public class Board extends JFrame implements MouseListener{
      */
     public void drawBoard(Map<Integer, Field> fields, Map<String, Player> players){
     	JLayeredPane pane = this.getBoardPane();
-    	
+    	 
     	// Board.
     	for(int i=0; i<=39; i++){
     	  Color color;
