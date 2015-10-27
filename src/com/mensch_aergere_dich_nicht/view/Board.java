@@ -4,6 +4,9 @@
 package com.mensch_aergere_dich_nicht.view;
 
 import javax.swing.*;
+
+import com.mensch_aergere_dich_nicht.models.*;
+
 import java.awt.*;
 import java.util.*;
 
@@ -66,7 +69,7 @@ public class Board extends JFrame implements MouseListener{
       //boardPanel = new JPanel();
       //boardPanel.add(new JLabel(new ImageIcon(image)));
       
-      this.drawBoard();
+      //this.drawBoard();
       boardPane.addMouseListener(this);
       this.addMouseListener(this);
       
@@ -128,7 +131,7 @@ public class Board extends JFrame implements MouseListener{
     /*
      * Draw gameboard.
      */
-    public void drawBoard(){
+    public void drawBoard(Map<Integer, Field> fields, Map<String, Player> players){
     	JLayeredPane pane = this.getBoardPane();
     	
     	// Board.
@@ -407,7 +410,7 @@ public class Board extends JFrame implements MouseListener{
     }
     
     public static void main(String[] args) {
-        Board board = new Board();
+        //Board board = new Board();
     }
 
 	class PiecePanel extends JPanel {
