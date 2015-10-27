@@ -61,12 +61,12 @@ public class Board extends JFrame implements MouseListener{
       // New boardPane.
       boardPane = new JLayeredPane();
       boardPane.setPreferredSize(new Dimension(600,600));
-                  
+                        
       // New boardPanel.
       //boardPanel = new JPanel();
       //boardPanel.add(new JLabel(new ImageIcon(image)));
       
-      this.drawBoard(boardPane);
+      this.drawBoard();
       boardPane.addMouseListener(this);
       this.addMouseListener(this);
       
@@ -107,6 +107,10 @@ public class Board extends JFrame implements MouseListener{
       this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
+    private JLayeredPane getBoardPane(){
+    	return this.boardPane;
+    }
+    
     /*
      * Draw single field on gameboard.
      */
@@ -124,7 +128,9 @@ public class Board extends JFrame implements MouseListener{
     /*
      * Draw gameboard.
      */
-    private void drawBoard(JLayeredPane pane){
+    public void drawBoard(){
+    	JLayeredPane pane = this.getBoardPane();
+    	
     	// Board.
     	for(int i=0; i<=39; i++){
     	  Color color;
@@ -314,6 +320,7 @@ public class Board extends JFrame implements MouseListener{
       int fieldX = (x - this.getOffsetX()) / 50;
       int fieldY = (y - this.getOffsetY()) / 50;
       
+      
       if((x - this.getOffsetX()) % 50 <= 20) {
     	  fieldX -= 1;
       }
@@ -323,7 +330,7 @@ public class Board extends JFrame implements MouseListener{
       }
       
       //System.out.println(((x - this.getOffsetX()) / 50) + "/" + (y - this.getOffsetY()) / 50);
-      System.out.println(((x - this.getOffsetX()) % 50) + "/" + (y - this.getOffsetY()) % 50);
+      //System.out.println(((x - this.getOffsetX()) % 50) + "/" + (y - this.getOffsetY()) % 50);
       String position = fieldX + "-" + fieldY;
       
       if(this.fieldGrid.containsKey(position) == true){
@@ -361,6 +368,7 @@ public class Board extends JFrame implements MouseListener{
     	int posY = coordinates[1];
     	
     	// Draw piece.
+    	this.drawField(boardPane, field, color);
     }
     
     @Override
