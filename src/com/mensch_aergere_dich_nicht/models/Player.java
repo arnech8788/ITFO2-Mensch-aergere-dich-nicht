@@ -173,7 +173,25 @@ public class Player {
 		return false;
 	}
 	
-
+	public Figure getAnyFigureFromStartPosition()
+	{
+		if(!anyFigureAtStartPosition())
+		{
+			throw new RuntimeException("Es wurde keine Figur an der Startposition gefunden!");
+		}
+		
+		for(Figure figure : figures.values())
+		{
+			if(figure.getSteps() == Figure.startPosition)
+			{
+				return figure;
+			}
+		}
+		
+		throw new RuntimeException("Es wurde keine Figur an der Startposition gefunden! (method 'anyFigureAtStartPosition' has any error)");
+	}
+	
+	
 	/**
 	 * Gibt true zurück, wenn mindestens eine Figur im Haus ist
 	 * @return

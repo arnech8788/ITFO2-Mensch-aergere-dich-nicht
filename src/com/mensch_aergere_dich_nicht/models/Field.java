@@ -14,13 +14,7 @@ public class Field extends FieldBase {
 				 int number)
 	{
 		this.type = type;
-		if(type == Type.START)
-		{
-			super.setNumber(0);
-		}
-		else{
-			super.setNumber(number);
-		}
+		super.setNumber(number);
 	}
 	
 	

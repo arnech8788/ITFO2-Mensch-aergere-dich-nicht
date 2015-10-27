@@ -58,6 +58,9 @@ public class Gamehandler  {
 				  "Anne Theke"});
 		// AddPlayer()
 		
+		Board board = new Board();
+		
+		board.drawBoard();
 		
 		//gh.startGame();
 		
@@ -86,15 +89,18 @@ public class Gamehandler  {
 						if(gh.isFieldFree(fieldNumber))
 						{
 							// dann setze die Figur
-							
+							Figure f = player.setFigureOut();
+							gh.setFigure2Field(f, fieldNumber);
+	
 						}
 						else
 						{
 							// prüfen ob man die figur schlagen kann
 							if(gh.canBeatFigure(fieldNumber, player))
 							{
-								// Figur schlagen
-								gh.beatFigure(fieldNumber, figure);
+								// Figur schlagen mit
+								// erster Figur aus Startposition
+								gh.beatFigure(fieldNumber, player.getAnyFigureFromStartPosition());
 							}
 							else
 							{
@@ -106,8 +112,6 @@ public class Gamehandler  {
 						}
 
 						
-						Figure f = player.setFigureOut();
-						gh.setFigure2Field(f, fieldNumber);
 						
 						// bei einer sechs darf er nochmal
 						
@@ -180,7 +184,9 @@ public class Gamehandler  {
 		// setze Figur des anderen Spielers wieder zurück
 		// TODO: implementieren
 		
-		
+		Figure fieldFigure = this.getFields().get(fieldNumber).getFigure();
+		this.setFigure2Field(fieldFigure, fieldNumber);
+		figure.set2StartPosition();
 		
 		// setze Figur auf das Feld
 		this.setFigure2Field(figure, fieldNumber);
@@ -462,11 +468,11 @@ public class Gamehandler  {
 		
 		if(field.getType() == Field.Type.START)
 		{
-			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt.");
+			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
 		}
 		else
 		{
-			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
+			System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
 		}
 		
 	}
