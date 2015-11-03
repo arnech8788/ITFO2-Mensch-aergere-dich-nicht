@@ -56,7 +56,7 @@ public class Board extends JFrame implements MouseListener{
       
       // Message box (10 rows, 40 columns).
       msgBox = new JTextArea(30,20);
-      msgBox.setText("Mensch ärgere dich nicht!\n");
+      msgBox.setText("");
       // Use line wrap (wrap at word boundries).
       msgBox.setLineWrap(true);
       msgBox.setWrapStyleWord(true);
@@ -417,6 +417,26 @@ public class Board extends JFrame implements MouseListener{
         //Board board = new Board();
     }
 
+    class TextPanel extends JPanel {
+    	String text;
+    	int posX;
+    	int posY;
+    	
+    	public TextPanel(String s, int x, int y){
+    	  this.text	= s;
+    	  this.posX = x;
+    	  this.y = y;
+    	}
+    	
+    	@Override
+		protected void paintComponent(Graphics g) {
+    		super.paintComponent(g);
+    		Graphics2D g2d = (Graphics2D)g;
+    	    g2d.setPaint(Color.black);
+    	    g2d.drawString(this.text, this.posX, this.posY);
+    	}
+    }
+    
 	class PiecePanel extends JPanel {
 		Color color;
 		int posX;
