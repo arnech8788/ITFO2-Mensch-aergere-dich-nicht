@@ -118,7 +118,8 @@ public class Player {
 		
 		// Sobald eine Figur auf dem Spielbrett ist,
 		// darf man nur noch 1x würfeln
-		if(anyFigureAtBoard())
+		// ignoriere dabei Spieler im Haus
+		if(anyFigureAtBoard(false))
 		{
 			return false;
 		}
@@ -160,11 +161,11 @@ public class Player {
 	 * (Figuren im Haus gehören nicht dazu)
 	 * @return
 	 */
-	private boolean anyFigureAtBoard()
+	private boolean anyFigureAtBoard(boolean includeHouse)
 	{
 		for(Figure f : this.getFigures().values())
 		{
-			if(f.isOnGameboard())
+			if(f.isOnGameboard(includeHouse))
 			{
 				return true;
 			}
@@ -223,6 +224,7 @@ public class Player {
 		
 		return (Figure[]) homeFigures.toArray();
 	}	
+	
 	
 	
 	

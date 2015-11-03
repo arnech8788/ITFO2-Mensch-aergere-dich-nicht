@@ -1,6 +1,7 @@
 package com.mensch_aergere_dich_nicht.models;
 
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 
 import javax.swing.*;
@@ -127,9 +128,39 @@ public class Gamehandler  {
 				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
 			
 				// TODO: ermitteln welche Spielzugmöglichkeiten der Spieler hat
+				List<MoveOption> moveOptions = new  ArrayList<MoveOption>();
+				
+				// alle Figuren die draußen sind ermitteln
+				for(Figure f : player.getFigures().values())
+				{
+					if(f.isOnGameboard(true))
+					{
+						//-> Figur ist auf dem Spielfeld (auch Haus)
+						
+						// Prüfen wo die Figur bei setzen der geworfenen Würfel zahl stehen würde
+						int fieldNumber = gh.getFieldNumber(player.getOffset(), f.getSteps() + number);
+						Field field = gh.getFields().get(fieldNumber);
+						
+						if(!field.isFree())
+						{
+							if(gh.canBeatFigure(fieldNumber, f))
+							{
+								moveOptions.add(new MoveOption(f, MoveOption.Type.CanBeat));
+							}
+							break;
+						}
+						
+						//-> Feld ist noch frei
+						moveOptions.add(new MoveOption(f, MoveOption.Type.Set));					}
++				}
+				
+				
+				// Möglichkeiten der einzelnen Figuren prüfen
+				// - MoveOptions
 				
 				
 				// möglichkeiten an gui?
+				
 				
 					
 				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
@@ -142,7 +173,7 @@ public class Gamehandler  {
 				
 				//Figure f = player.setFigureOut();
 				int steps = 0;
-				Figure f = null;
+				//Figure f = null;
 				player.setPlayerFigure(f, steps);
 				
 				

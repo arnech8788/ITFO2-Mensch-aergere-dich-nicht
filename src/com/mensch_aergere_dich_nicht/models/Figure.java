@@ -64,9 +64,9 @@ public class Figure implements Comparable<Figure>
 		this.iSteps = iSteps;
 	}
 	
-	public boolean isOnGameboard()
+	public boolean isOnGameboard(boolean includeHouse)
 	{
-		if(getSteps() >= Figure.firstHousePosition)
+		if(getSteps() >= Figure.firstHousePosition && !includeHouse)
 		{
 			return false;
 		}

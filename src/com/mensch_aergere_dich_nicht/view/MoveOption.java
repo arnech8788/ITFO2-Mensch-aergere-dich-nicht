@@ -1,26 +1,23 @@
 package com.mensch_aergere_dich_nicht.view;
+import com.mensch_aergere_dich_nicht.models.*;
 
-import javax.swing.*;
 
-import java.awt.*;
-import java.awt.event.*;
-
-public class MoveOption extends JFrame {
+public class MoveOption {
 	
-	JPanel ctrlPanel;
-
-	public MoveOption() {
-		
-		ctrlPanel = new JPanel();
-		this.add(ctrlPanel);
-
-		//Frame
-		this.setSize(300, 300);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
-		this.setResizable(false);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	private Figure figure;
+	private Type type;
+	
+	public enum Type{
+		CanBeat, Set;
 	}
+	
+	public MoveOption(Figure f,
+					  Type type)
+	{
+		this.figure = f;
+		this.type = type;
+	}
+	
 	
 	
 }

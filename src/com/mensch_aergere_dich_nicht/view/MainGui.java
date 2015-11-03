@@ -51,7 +51,7 @@ public class MainGui extends JFrame implements ActionListener{
 		
 		this.options = new Options();
 		optionFrame = new Option(options);
-		optionFrame.hide();
+		optionFrame.setVisible(false);
 		this.setLayout(null);
 
 //------------------ Player controls -------------------------
