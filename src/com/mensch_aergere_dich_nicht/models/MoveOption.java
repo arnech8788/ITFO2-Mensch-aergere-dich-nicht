@@ -5,16 +5,16 @@ import com.mensch_aergere_dich_nicht.models.*;
 public class MoveOption {
 	
 	private Figure figure;
-	private Type type;
+	private eType type;
 	
 	
 	
-	public enum Type{
+	public enum eType{
 		CanBeat, Set;
 	}
 	
 	public MoveOption(Figure f,
-					  Type type)
+			eType type)
 	{
 		this.figure = f;
 		this.type = type;
@@ -25,7 +25,7 @@ public class MoveOption {
 		return figure;
 	}
 
-	public Type getType() {
+	public eType getType() {
 		return type;
 	}
 

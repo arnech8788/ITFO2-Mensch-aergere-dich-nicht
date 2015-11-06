@@ -145,13 +145,13 @@ public class Gamehandler  {
 						{
 							if(gh.canBeatFigure(fieldNumber, f))
 							{
-								moveOptions.add(new MoveOption(f, MoveOption.Type.CanBeat));
+								moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat));
 							}
 							break;
 						}
 						
 						//-> Feld ist noch frei
-						moveOptions.add(new MoveOption(f, MoveOption.Type.Set));					}
+						moveOptions.add(new MoveOption(f, MoveOption.eType.Set));					}
 				}
 				
 				
@@ -166,11 +166,12 @@ public class Gamehandler  {
 					// Führe den Spielzug aus
 					switch(moveOptions.get(0).getType())
 					{
-						case MoveOption.Type.CanBeat:
+					
+						case MoveOption.eType.:
 							gh.beatFigure(fieldNumber, figure);
 							break;
 							
-						case MoveOption.Type.Set:
+						case MoveOption.eType.Set:
 							gh.setFigure2Field(figure, fieldNumber);
 							break;
 						
