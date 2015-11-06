@@ -1,4 +1,4 @@
-package com.mensch_aergere_dich_nicht.view;
+package com.mensch_aergere_dich_nicht.models;
 import com.mensch_aergere_dich_nicht.models.*;
 
 
