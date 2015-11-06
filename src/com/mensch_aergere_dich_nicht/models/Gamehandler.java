@@ -6,7 +6,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import com.mensch_aergere_dich_nicht.models.Field.*;
+import com.mensch_aergere_dich_nicht.models.*;
 import com.mensch_aergere_dich_nicht.view.*;
 
 public class Gamehandler  {
@@ -152,17 +152,40 @@ public class Gamehandler  {
 						
 						//-> Feld ist noch frei
 						moveOptions.add(new MoveOption(f, MoveOption.Type.Set));					}
-+				}
+				}
 				
 				
 				// Möglichkeiten der einzelnen Figuren prüfen
 				// - MoveOptions
-				
-				
-				// möglichkeiten an gui?
-				
-				
+				// wenn es nur eine Spielzugmöglichkeit gibt,
+				// führe diese aus
+				if(moveOptions.size() == 1)
+				{
+					Figure figure = moveOptions.get(0).getFigure();
+					int fieldNumber = gh.getFieldNumber(player.getOffset(), figure.getSteps() + number);
+					// Führe den Spielzug aus
+					switch(moveOptions.get(0).getType())
+					{
+						case MoveOption.Type.CanBeat:
+							gh.beatFigure(fieldNumber, figure);
+							break;
+							
+						case MoveOption.Type.Set:
+							gh.setFigure2Field(figure, fieldNumber);
+							break;
+						
+						default:
+							throw new RuntimeException("Unbekannte Spielzugoption: " + moveOptions.get(0).getType().toString());
+					}
+				}
+				else
+				{
+					// möglichkeiten an gui?
 					
+				}
+				
+				
+				/**	
 				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
 				int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
 				if(gh.isFieldFree(fieldNumber))
@@ -178,6 +201,8 @@ public class Gamehandler  {
 				
 				
 				gh.setFigure2Field(f, fieldNumber);
+			}
+			**/
 			}
 			
 			// nächsten Spieler holen
@@ -464,17 +489,17 @@ public class Gamehandler  {
 	private void createFields(){
 		fields = new HashMap<Integer,Field>();
 		int iFieldCount = fieldCount; //Number of Fields ( without House )
-		Type type;
+		Field.Type type;
 		
 		for (Integer i = 0; i < iFieldCount; i++)
 		{
 			if (i % 10 == 0) 
 			{ 
-				type = Type.START; 
+				type = Field.Type.START; 
 			}
 			else
 			{
-				type = Type.NORMAL;
+				type = Field.Type.NORMAL;
 			}
 			fields.put(i, new Field(type,i));
 		}

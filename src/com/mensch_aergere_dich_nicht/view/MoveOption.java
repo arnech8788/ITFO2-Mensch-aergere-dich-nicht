@@ -7,6 +7,8 @@ public class MoveOption {
 	private Figure figure;
 	private Type type;
 	
+	
+	
 	public enum Type{
 		CanBeat, Set;
 	}
@@ -17,7 +19,16 @@ public class MoveOption {
 		this.figure = f;
 		this.type = type;
 	}
+
 	
-	
+	public Figure getFigure() {
+		return figure;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+
 	
 }
