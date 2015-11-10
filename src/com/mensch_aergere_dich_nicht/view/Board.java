@@ -135,6 +135,13 @@ public class Board extends JFrame implements MouseListener{
     }
     
     /*
+     * Draw text on gameboard.
+     */
+    private void drawText(JLayeredPane pane, String text, int x, int y){
+    	
+    }
+    
+    /*
      * Draw gameboard.
      */
     public void drawBoard(){
@@ -206,8 +213,6 @@ public class Board extends JFrame implements MouseListener{
     	this.drawField(pane, 4002, Color.RED);
     	this.drawField(pane, 4003, Color.RED);
     	this.drawField(pane, 4004, Color.RED);
-    	
-    	
     }
     
     private int getOffsetX(){
@@ -466,10 +471,11 @@ public class Board extends JFrame implements MouseListener{
 				new String[] {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"});
 		
 		// Board
-        //Board board = new Board(fields, players);
+        Board board = new Board(fields, players, gh);
         
         // Draw.
-        //Board b = gh.board;
+        board.drawBoard();
+        
     }
     
     class TextPanel extends JPanel {
