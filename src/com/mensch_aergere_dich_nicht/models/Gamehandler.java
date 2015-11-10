@@ -21,6 +21,9 @@ public class Gamehandler implements Listener  {
 	//private MoveResult lastMoveResult;
 	private Board board;
 	
+	private boolean waitForUserInput;
+	private List<MoveOption> moveOptions;
+	
 	public Gamehandler(Options options,
 					   String[] playerNames)
 	{
@@ -28,6 +31,7 @@ public class Gamehandler implements Listener  {
 		this.options = options;
 		this.createFields();
 		this.createPlayers(playerNames);
+		this.moveOptions = new  ArrayList<MoveOption>();
 		this.board = new Board(fields, players, this);
 		this.board.drawBoard();
 		
@@ -128,7 +132,7 @@ public class Gamehandler implements Listener  {
 				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
 			
 				// TODO: ermitteln welche Spielzugmöglichkeiten der Spieler hat
-				List<MoveOption> moveOptions = new  ArrayList<MoveOption>();
+				gh.moveOptions.clear();;
 				
 				// alle Figuren die draußen sind ermitteln
 				for(Figure f : player.getFigures().values())
@@ -145,13 +149,13 @@ public class Gamehandler implements Listener  {
 						{
 							if(gh.canBeatFigure(fieldNumber, f))
 							{
-								moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat));
+								gh.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, fieldNumber));
 							}
 							break;
 						}
 						
 						//-> Feld ist noch frei
-						moveOptions.add(new MoveOption(f, MoveOption.eType.Set));					}
+						gh.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber));					}
 				}
 				
 				
@@ -159,12 +163,12 @@ public class Gamehandler implements Listener  {
 				// - MoveOptions
 				// wenn es nur eine Spielzugmöglichkeit gibt,
 				// führe diese aus
-				if(moveOptions.size() == 1)
+				if(gh.moveOptions.size() == 1)
 				{
-					Figure figure = moveOptions.get(0).getFigure();
+					Figure figure = gh.moveOptions.get(0).getFigure();
 					int fieldNumber = gh.getFieldNumber(player.getOffset(), figure.getSteps() + number);
 					// Führe den Spielzug aus
-					switch(moveOptions.get(0).getType())
+					switch(gh.moveOptions.get(0).getType())
 					{
 					
 						case CanBeat:
@@ -176,7 +180,7 @@ public class Gamehandler implements Listener  {
 							break;
 						
 						default:
-							throw new RuntimeException("Unbekannte Spielzugoption: " + moveOptions.get(0).getType().toString());
+							throw new RuntimeException("Unbekannte Spielzugoption: " + gh.moveOptions.get(0).getType().toString());
 					}
 					gh.board.drawBoard();
 
@@ -184,6 +188,7 @@ public class Gamehandler implements Listener  {
 				else
 				{
 					// möglichkeiten an gui?
+					gh.waitForUserInput = true;
 					
 				}
 				
@@ -533,7 +538,14 @@ public class Gamehandler implements Listener  {
 	@Override
 	public void fieldClicked(int fieldNumber) {
 		// TODO Auto-generated method stub
-		
+		if(this.waitForUserInput)
+		{
+			// Prüfen ob gültige Benutzereingabe
+			for(MoveOption mo : this.moveOptions)
+			{
+				// TODO: implementieren
+			}
+		}
 		
 	}
 	
