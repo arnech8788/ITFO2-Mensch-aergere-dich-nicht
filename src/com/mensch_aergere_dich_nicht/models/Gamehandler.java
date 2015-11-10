@@ -28,7 +28,7 @@ public class Gamehandler implements Listener  {
 		this.options = options;
 		this.createFields();
 		this.createPlayers(playerNames);
-		this.board = new Board(fields, players);
+		this.board = new Board(fields, players, this);
 		this.board.drawBoard();
 		
 	}
