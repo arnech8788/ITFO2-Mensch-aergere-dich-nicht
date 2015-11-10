@@ -4,12 +4,11 @@ import java.util.*;
 import java.util.List;
 import java.awt.*;
 
-import javax.swing.*;
 
 import com.mensch_aergere_dich_nicht.models.*;
 import com.mensch_aergere_dich_nicht.view.*;
 
-public class Gamehandler  {
+public class Gamehandler implements Listener  {
 	public static final int fieldCount = 40;
 	
 	// extends Observable
@@ -93,7 +92,6 @@ public class Gamehandler  {
 							// dann setze die Figur
 							Figure f = player.setFigureOut();
 							gh.setFigure2Field(f, fieldNumber);
-	
 						}
 						else
 						{
@@ -101,21 +99,23 @@ public class Gamehandler  {
 							if(gh.canBeatFigure(fieldNumber, player))
 							{
 								// Figur schlagen mit
-								// erster Figur aus Startposition
+								// erste Figur aus Startposition
 								gh.beatFigure(fieldNumber, player.getAnyFigureFromStartPosition());
 							}
 							else
 							{
 								// es ist die eigene Figur!
-								
-								
+								gh.setFigure2Field(player.getAnyFigureFromStartPosition(), fieldNumber);
 							}
 								
 						}
+						gh.board.drawBoard();
 
 						
 						
 						// bei einer sechs darf er nochmal
+						// teil von unten hier auch durchführen...
+						
 						
 						break;
 					}
@@ -167,17 +167,19 @@ public class Gamehandler  {
 					switch(moveOptions.get(0).getType())
 					{
 					
-						case MoveOption.eType.:
+						case CanBeat:
 							gh.beatFigure(fieldNumber, figure);
 							break;
 							
-						case MoveOption.eType.Set:
+						case Set:
 							gh.setFigure2Field(figure, fieldNumber);
 							break;
 						
 						default:
 							throw new RuntimeException("Unbekannte Spielzugoption: " + moveOptions.get(0).getType().toString());
 					}
+					gh.board.drawBoard();
+
 				}
 				else
 				{
@@ -240,8 +242,6 @@ public class Gamehandler  {
 		// TODO: testen
 		
 		// setze Figur des anderen Spielers wieder zurück
-		// TODO: implementieren
-		
 		Figure fieldFigure = this.getFields().get(fieldNumber).getFigure();
 		this.setFigure2Field(fieldFigure, fieldNumber);
 		figure.set2StartPosition();
@@ -285,11 +285,6 @@ public class Gamehandler  {
 								  Player player)
 	{
 		return this.getFields().get(fieldNumber).getFigure().getFigureColor() != player.getPlayerColor();
-	}
-	private boolean canBeatFigure(int fieldNumber,
-			  Color playerColor)
-	{
-		return this.getFields().get(fieldNumber).getFigure().getFigureColor() != playerColor;
 	}
 	private boolean canBeatFigure(int fieldNumber,
 			  Figure figure)
@@ -532,6 +527,13 @@ public class Gamehandler  {
 		{
 			board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
 		}
+		
+	}
+
+	@Override
+	public void fieldClicked(int fieldNumber) {
+		// TODO Auto-generated method stub
+		
 		
 	}
 	
