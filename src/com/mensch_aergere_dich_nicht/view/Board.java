@@ -459,11 +459,17 @@ public class Board extends JFrame implements MouseListener{
 			fields.put(i, new Field(type,i));
 		}
 		
+		// Gamehandler
+		Options op = new Options();
+		
+		Gamehandler gh = new Gamehandler(op, 
+				new String[] {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"});
+		
 		// Board
-        Board board = new Board(fields, players);
+        //Board board = new Board(fields, players);
         
         // Draw.
-        //this.drawBoard();
+        //Board b = gh.board;
     }
     
     class TextPanel extends JPanel {
