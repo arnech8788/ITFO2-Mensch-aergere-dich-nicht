@@ -480,7 +480,7 @@ public class Board extends JFrame implements MouseListener{
     	public TextPanel(String s, int x, int y){
     	  this.text	= s;
     	  this.posX = x;
-    	  this.y = y;
+    	  this.posY = y;
     	}
     	
     	@Override
