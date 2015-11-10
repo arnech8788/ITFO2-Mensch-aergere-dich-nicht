@@ -33,12 +33,14 @@ public class Board extends JFrame implements MouseListener{
     int offsetY = 0;
     Map<Integer, Field> fields;
     Map<String, Player> players;
+    Listener clickListener;
     
-    public Board(Map<Integer, Field> f, Map<String, Player> p){
+    public Board(Map<Integer, Field> f, Map<String, Player> p, Listener l){
       super("Mensch ärgere dich nicht");
       this.fields = f;
       this.players = p;
-            
+      this.clickListener = l;
+      
       // Setup field grid.
       this.setupFieldGrid();
       
@@ -204,6 +206,8 @@ public class Board extends JFrame implements MouseListener{
     	this.drawField(pane, 4002, Color.RED);
     	this.drawField(pane, 4003, Color.RED);
     	this.drawField(pane, 4004, Color.RED);
+    	
+    	
     }
     
     private int getOffsetX(){
@@ -409,14 +413,59 @@ public class Board extends JFrame implements MouseListener{
         //if(posX >= this.getOffsetX() && posX < 570 && posY >= this.getOffsetY() && posY < 575){
         if(posX >= this.getOffsetX() && posX < 600 && posY >= this.getOffsetY() && posY < 600){
           this.displayMessage("Mouse clicked at x=" + posX + " y=" + posY +". Feld " + clickedField);
+          this.clickListener.fieldClicked(Integer.valueOf(clickedField));
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public static void main(String[] args) {
-        //Board board = new Board();
+    	test();
     }
 
+    private static void test(){
+    	// Players
+    	String[] playerNames = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
+    	
+    	Map<String, Player> players = new HashMap<String, Player>();
+        
+        int iOffset = 0;// Offset of Fieldposition.
+		boolean bIsComputer = false; // Is Computer?
+        
+		Color[] colorArray = {Color.RED,Color.BLUE,Color.GREEN,Color.YELLOW };//Color of Players
+				
+		for (int i = 0; i < playerNames.length; i++)
+		{
+			Player player = new Player(colorArray[i],bIsComputer,iOffset,playerNames[i]);
+			players.put(player.getPlayerColor().toString(), player);  // = new Player();
+			iOffset += 10;
+		}
+        
+		// Fields
+		int fieldCount = 40;
+		HashMap<Integer,Field> fields = new HashMap<Integer,Field>();
+		int iFieldCount = fieldCount; //Number of Fields ( without House )
+		Field.Type type;
+		
+		for (Integer i = 0; i < iFieldCount; i++)
+		{
+			if (i % 10 == 0) 
+			{ 
+				type = Field.Type.START; 
+			}
+			else
+			{
+				type = Field.Type.NORMAL;
+			}
+			fields.put(i, new Field(type,i));
+		}
+		
+		// Board
+        Board board = new Board(fields, players);
+        
+        // Draw.
+        //this.drawBoard();
+    }
+    
     class TextPanel extends JPanel {
     	String text;
     	int posX;
