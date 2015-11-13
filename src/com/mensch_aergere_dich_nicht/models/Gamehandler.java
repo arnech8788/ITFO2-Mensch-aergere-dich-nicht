@@ -82,19 +82,19 @@ public class Gamehandler implements Listener  {
 			{
 				for(int i = 0; i < 3; i++)
 				{
-					int number = player.throwCube();
-					gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
+					int thrownCubeNumber = player.throwCube();
+					gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 					
-					if(number == 6)
+					if(thrownCubeNumber == 6)
 					{
 						gh.handleCubeNumberSix(player);
 						break;
 					}
 				}
-				
 			}
 			
-			else{
+			else
+			{
 				int thrownCubeNumber = player.throwCube();
 				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 				gh.setMoveOptions(player, thrownCubeNumber);
@@ -113,7 +113,7 @@ public class Gamehandler implements Listener  {
 				{
 					// möglichkeiten an gui?
 					gh.waitForUserInput = true;
-					
+					break;
 				}
 				
 				
