@@ -58,7 +58,7 @@ public class Board extends JFrame implements MouseListener{
       
       // Message box (10 rows, 40 columns).
       msgBox = new JTextArea(30,20);
-      msgBox.setText("");
+      //msgBox.setText("");
       // Use line wrap (wrap at word boundries).
       msgBox.setLineWrap(true);
       msgBox.setWrapStyleWord(true);
@@ -137,8 +137,15 @@ public class Board extends JFrame implements MouseListener{
     /*
      * Draw text on gameboard.
      */
-    private void drawText(JLayeredPane pane, String text, int x, int y){
-    	
+    private void drawText(JLayeredPane pane, String text, int x, int y, int h, int w, Color c){
+    	TextPanel text_panel = new TextPanel(text, x, y, c);
+    	text_panel.setBounds(x,y,h,w); 
+    	text_panel.setOpaque(false);
+    	pane.add(text_panel, new Integer(1));
+//    	JLabel test = new JLabel(text);
+//		test.setLocation(x,y);
+//		test.setSize(w,h);
+//		pane.add(test);
     }
     
     /*
@@ -149,7 +156,10 @@ public class Board extends JFrame implements MouseListener{
     	 
     	// Board.
     	for(int i=0; i<=39; i++){
-    	  Color color;
+    	  Color color = Color.WHITE;
+    	  Field field = this.fields.get(i);
+    	  Figure figure = field.getFigure();
+    	  Color figureColor = figure.getFigureColor();
     	  
     	  switch(i){
     	    case 0:
@@ -168,6 +178,10 @@ public class Board extends JFrame implements MouseListener{
       		  color = Color.WHITE;
       		  break;
     	  }
+    	  
+    	  if(figureColor != null){
+        	color = figureColor;
+          }  
     	  
     	  this.drawField(pane, i, color);
     	}
@@ -213,6 +227,9 @@ public class Board extends JFrame implements MouseListener{
     	this.drawField(pane, 4002, Color.RED);
     	this.drawField(pane, 4003, Color.RED);
     	this.drawField(pane, 4004, Color.RED);
+    	
+    	// Player names.
+    	//this.drawText(pane, "XXX", 400, 250, 100, 100, Color.BLACK);
     }
     
     private int getOffsetX(){
@@ -353,13 +370,10 @@ public class Board extends JFrame implements MouseListener{
         int fieldnumber = this.fieldGrid.get(position);
         
         int[] pos = this.getFieldCoordinates(fieldnumber);
-        System.out.println(""+pos[0]+"/"+pos[1]);
+        //System.out.println(""+pos[0]+"/"+pos[1]);
         
         // Ignore click if clicked too far beyond field limits.
         //if((x - this.getOffsetX()) % 50 > 44 || (y - this.getOffsetY()) % 50 > 44){ 
-        // TODO:
-        // 1. Über Klick das Feld bestimmen.
-        // 2. Position von Feld holen.
         int posx = pos[0];
         int posy = pos[1];
         // Folgenden Vergleich erweitern: && x >= posx <= posx+50 && y >= posy <= posy+50
@@ -374,7 +388,7 @@ public class Board extends JFrame implements MouseListener{
         }
       }
       
-      return "-";
+      return "-1";
     }
     
     
@@ -417,14 +431,15 @@ public class Board extends JFrame implements MouseListener{
         // Ignore clicks beyond gameboard limits.
         //if(posX >= this.getOffsetX() && posX < 570 && posY >= this.getOffsetY() && posY < 575){
         if(posX >= this.getOffsetX() && posX < 600 && posY >= this.getOffsetY() && posY < 600){
-          this.displayMessage("Mouse clicked at x=" + posX + " y=" + posY +". Feld " + clickedField);
+          //this.displayMessage("Mouse clicked at x=" + posX + " y=" + posY +". Feld " + clickedField);
+          this.displayMessage("Feld " + clickedField);
           this.clickListener.fieldClicked(Integer.valueOf(clickedField));
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public static void main(String[] args) {
-    	test();
+    	//test();
     }
 
     private static void test(){
@@ -482,11 +497,13 @@ public class Board extends JFrame implements MouseListener{
     	String text;
     	int posX;
     	int posY;
+    	Color textColor;
     	
-    	public TextPanel(String s, int x, int y){
+    	public TextPanel(String s, int x, int y, Color c){
     	  this.text	= s;
     	  this.posX = x;
     	  this.posY = y;
+    	  this.textColor = c;
     	}
     	
     	@Override
@@ -495,6 +512,8 @@ public class Board extends JFrame implements MouseListener{
     		Graphics2D g2d = (Graphics2D)g;
     	    g2d.setPaint(Color.black);
     	    g2d.drawString(this.text, this.posX, this.posY);
+    		//g.setColor(this.textColor);
+    	    //g.drawString(this.text, this.posX, this.posY);
     	}
     }
     
