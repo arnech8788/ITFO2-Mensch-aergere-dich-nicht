@@ -87,40 +87,7 @@ public class Gamehandler implements Listener  {
 					
 					if(number == 6)
 					{
-						gh.board.displayMessage("Er darf eine Figur raussetzen.");
-					
-						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
-						int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
-						if(gh.isFieldFree(fieldNumber))
-						{
-							// dann setze die Figur
-							Figure f = player.setFigureOut();
-							gh.setFigure2Field(f, fieldNumber);
-						}
-						else
-						{
-							// prüfen ob man die figur schlagen kann
-							if(gh.canBeatFigure(fieldNumber, player))
-							{
-								// Figur schlagen mit
-								// erste Figur aus Startposition
-								gh.beatFigure(fieldNumber, player.getAnyFigureFromStartPosition());
-							}
-							else
-							{
-								// es ist die eigene Figur!
-								gh.setFigure2Field(player.getAnyFigureFromStartPosition(), fieldNumber);
-							}
-								
-						}
-						gh.board.drawBoard();
-
-						
-						
-						// bei einer sechs darf er nochmal
-						// teil von unten hier auch durchführen...
-						
-						
+						gh.handleCubeNumberSix(player);
 						break;
 					}
 				}
@@ -128,35 +95,9 @@ public class Gamehandler implements Listener  {
 			}
 			
 			else{
-				int number = player.throwCube();
-				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(number));
-			
-				// TODO: ermitteln welche Spielzugmöglichkeiten der Spieler hat
-				gh.moveOptions.clear();;
-				
-				// alle Figuren die draußen sind ermitteln
-				for(Figure f : player.getFigures().values())
-				{
-					if(f.isOnGameboard(true))
-					{
-						//-> Figur ist auf dem Spielfeld (auch Haus)
-						
-						// Prüfen wo die Figur bei setzen der geworfenen Würfel zahl stehen würde
-						int fieldNumber = gh.getFieldNumber(player.getOffset(), f.getSteps() + number);
-						Field field = gh.getFields().get(fieldNumber);
-						
-						if(!field.isFree())
-						{
-							if(gh.canBeatFigure(fieldNumber, f))
-							{
-								gh.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, fieldNumber));
-							}
-							break;
-						}
-						
-						//-> Feld ist noch frei
-						gh.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber));					}
-				}
+				int thrownCubeNumber = player.throwCube();
+				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				gh.setMoveOptions(player, thrownCubeNumber);
 				
 				
 				// Möglichkeiten der einzelnen Figuren prüfen
@@ -165,25 +106,8 @@ public class Gamehandler implements Listener  {
 				// führe diese aus
 				if(gh.moveOptions.size() == 1)
 				{
-					Figure figure = gh.moveOptions.get(0).getFigure();
-					int fieldNumber = gh.getFieldNumber(player.getOffset(), figure.getSteps() + number);
 					// Führe den Spielzug aus
-					switch(gh.moveOptions.get(0).getType())
-					{
-					
-						case CanBeat:
-							gh.beatFigure(fieldNumber, figure);
-							break;
-							
-						case Set:
-							gh.setFigure2Field(figure, fieldNumber);
-							break;
-						
-						default:
-							throw new RuntimeException("Unbekannte Spielzugoption: " + gh.moveOptions.get(0).getType().toString());
-					}
-					gh.board.drawBoard();
-
+					gh.handleMoveOption(gh.moveOptions.get(0));
 				}
 				else
 				{
@@ -233,6 +157,101 @@ public class Gamehandler implements Listener  {
 		
 		
 		//MoveResult result = gh.nextMove();
+		
+	}
+	
+	private void handleThrownCube(Player player)
+	{
+		
+	}
+	
+	private void setMoveOptions(Player player,
+			int thrownCubeNumber)
+	{
+		this.moveOptions.clear();
+		
+		// alle Figuren die draußen sind ermitteln
+		for(Figure f : player.getFigures().values())
+		{
+			if(f.isOnGameboard(true))
+			{
+				//-> Figur ist auf dem Spielfeld (auch Haus)
+				
+				// Prüfen wo die Figur bei setzen der geworfenen Würfel zahl stehen würde
+				int fieldNumber = this.getFieldNumber(player.getOffset(), f.getSteps() + thrownCubeNumber);
+				Field field = this.getFields().get(fieldNumber);
+				
+				if(!field.isFree())
+				{
+					if(this.canBeatFigure(fieldNumber, f))
+					{
+						this.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, fieldNumber, thrownCubeNumber));
+					}
+					break;
+				}
+				
+				//-> Feld ist noch frei
+				this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));					}
+		}
+	}
+	
+	private void handleCubeNumberSix(Player player)
+	{
+		this.board.displayMessage("Er darf eine Figur raussetzen.");
+		
+		// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+		int fieldNumber = this.getFieldNumber(player.getOffset(), Figure.startField);
+		if(this.isFieldFree(fieldNumber))
+		{
+			// dann setze die Figur
+			Figure f = player.setFigureOut();
+			this.setFigure2Field(f, fieldNumber);
+		}
+		else
+		{
+			// prüfen ob man die figur schlagen kann
+			if(this.canBeatFigure(fieldNumber, player))
+			{
+				// Figur schlagen mit
+				// erste Figur aus Startposition
+				this.beatFigure(fieldNumber, player.getAnyFigureFromStartPosition());
+			}
+			else
+			{
+				// es ist die eigene Figur!
+				this.setFigure2Field(player.getAnyFigureFromStartPosition(), fieldNumber);
+			}
+				
+		}
+		this.board.drawBoard();
+
+		
+		
+		// bei einer sechs darf er nochmal
+		// teil von unten hier auch durchführen...
+	}
+	
+	private void handleMoveOption(MoveOption mo)
+	{
+		switch(mo.getType())
+		{
+			case CanBeat:
+				this.beatFigure(mo.getNewFieldNumber(), mo.getFigure());
+				break;
+				
+			case Set:
+				this.setFigure2Field(mo.getFigure(), mo.getNewFieldNumber());
+				break;
+			
+			default:
+				throw new RuntimeException("Unbekannte Spielzugoption: " + mo.getType().toString());
+		}
+		this.board.drawBoard();
+
+		// bei einer Sechs darf er nochmal würfenl
+		
+		
+		// ansonsten nächster Spieler
 		
 	}
 	
@@ -537,13 +556,34 @@ public class Gamehandler implements Listener  {
 
 	@Override
 	public void fieldClicked(int fieldNumber) {
-		// TODO Auto-generated method stub
 		if(this.waitForUserInput)
 		{
+			boolean validMoveOption = false;
 			// Prüfen ob gültige Benutzereingabe
 			for(MoveOption mo : this.moveOptions)
 			{
 				// TODO: implementieren
+				if(mo.getNewFieldNumber() == fieldNumber)
+				{
+					validMoveOption = true;
+					// Führe den Zug aus
+					this.handleMoveOption(mo);
+					
+					// prüfe ob Spieler nochmal würfeln darf
+					
+					
+					
+					// wenn nicht nächsten Spieler ermitteln und würfeln...
+					
+					
+					
+				}
+			}
+			
+			if(!validMoveOption)
+			{
+				this.board.displayMessage("Ungültiger Spielzug!");
+				this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.!");
 			}
 		}
 		
