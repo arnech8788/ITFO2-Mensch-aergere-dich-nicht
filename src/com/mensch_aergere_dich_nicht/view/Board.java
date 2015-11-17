@@ -123,12 +123,12 @@ public class Board extends JFrame implements MouseListener{
     /*
      * Draw single field on gameboard.
      */
-    private void drawField(JLayeredPane pane, int fieldnumber, Color color, Color border){
+    private void drawField(JLayeredPane pane, int fieldnumber, Color color, Color border, String fieldtype){
     	int[] coordinates = this.getFieldCoordinates(fieldnumber);
     	int x = coordinates[0];
     	int y = coordinates[1];
 
-    	FieldPanel field = new FieldPanel(border, color, 40,40); 
+    	FieldPanel field = new FieldPanel(border, color, 40,40, fieldtype); 
     	field.setBounds(x,y,100,100); 
     	field.setOpaque(false); 
     	pane.add(field, new Integer(1));
@@ -153,7 +153,8 @@ public class Board extends JFrame implements MouseListener{
      */
     public void drawBoard(){
     	JLayeredPane pane = this.getBoardPane();
-    	 
+    	pane.removeAll();
+    	
     	// Board.
     	for(int i=0; i<=39; i++){
     	  Color color = Color.WHITE;
@@ -166,72 +167,77 @@ public class Board extends JFrame implements MouseListener{
     	    figureColor = figure.getFigureColor();
     	  }
     	  
-    	  switch(i){
-    	    case 0:
-    		  color = Color.BLACK;
-    		  break;
-    	    case 10:
-      		  color = Color.YELLOW;
-      		  break;
-    	    case 20:
-      		  color = Color.GREEN;
-      		  break;
-    	    case 30:
-      		  color = Color.RED;
-      		  break;
-      		default:
-      		  color = Color.WHITE;
-      		  break;
-    	  }
-    	  
+    	  	  
     	  if(figureColor != null){
-        	color = figureColor;
+    		  // Draw figure.
+        	  color = figureColor;
+        	  this.drawField(pane, i, color, Color.BLACK, "figure");
           }  
-    	  
-    	  this.drawField(pane, i, color, Color.BLACK);
+    	  else {
+    		  // Draw field.
+    		  switch(i){
+	      	    case 0:
+	      		  color = Color.BLACK;
+	      		  break;
+	      	    case 10:
+	        		  color = Color.YELLOW;
+	        		  break;
+	      	    case 20:
+	        		  color = Color.GREEN;
+	        		  break;
+	      	    case 30:
+	        		  color = Color.RED;
+	        		  break;
+	        		default:
+	        		  color = Color.WHITE;
+	        		  break;
+	      	  }
+    		  
+    	      this.drawField(pane, i, color, Color.BLACK, "field");
+    	  }
     	}
     	
     	// Houses.
-    	this.drawField(pane, 101, Color.BLACK, Color.BLACK);
-    	this.drawField(pane, 102, Color.BLACK, Color.BLACK);
-    	this.drawField(pane, 103, Color.BLACK, Color.BLACK);
-    	this.drawField(pane, 104, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 101, Color.BLACK, Color.BLACK, "field");
+    	this.drawField(pane, 102, Color.BLACK, Color.BLACK, "field");
+    	this.drawField(pane, 103, Color.BLACK, Color.BLACK, "field");
+    	this.drawField(pane, 104, Color.BLACK, Color.BLACK, "field");
     	
-    	this.drawField(pane, 201, Color.YELLOW, Color.BLACK);
-    	this.drawField(pane, 202, Color.YELLOW, Color.BLACK);
-    	this.drawField(pane, 203, Color.YELLOW, Color.BLACK);
-    	this.drawField(pane, 204, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 201, Color.YELLOW, Color.BLACK, "field");
+    	this.drawField(pane, 202, Color.YELLOW, Color.BLACK, "field");
+    	this.drawField(pane, 203, Color.YELLOW, Color.BLACK, "field");
+    	this.drawField(pane, 204, Color.YELLOW, Color.BLACK, "field");
     	
-    	this.drawField(pane, 301, Color.GREEN, Color.BLACK);
-    	this.drawField(pane, 302, Color.GREEN, Color.BLACK);
-    	this.drawField(pane, 303, Color.GREEN, Color.BLACK);
-    	this.drawField(pane, 304, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 301, Color.GREEN, Color.BLACK, "field");
+    	this.drawField(pane, 302, Color.GREEN, Color.BLACK, "field");
+    	this.drawField(pane, 303, Color.GREEN, Color.BLACK, "field");
+    	this.drawField(pane, 304, Color.GREEN, Color.BLACK, "field");
     	
-    	this.drawField(pane, 401, Color.RED, Color.BLACK);
-    	this.drawField(pane, 402, Color.RED, Color.BLACK);
-    	this.drawField(pane, 403, Color.RED, Color.BLACK);
-    	this.drawField(pane, 404, Color.RED, Color.BLACK);
+    	this.drawField(pane, 401, Color.RED, Color.BLACK, "field");
+    	this.drawField(pane, 402, Color.RED, Color.BLACK, "field");
+    	this.drawField(pane, 403, Color.RED, Color.BLACK, "field");
+    	this.drawField(pane, 404, Color.RED, Color.BLACK, "field");
     	
     	// Start.
-    	this.drawField(pane, 1001, Color.BLACK, Color.BLACK);
-    	this.drawField(pane, 1002, Color.BLACK, Color.BLACK);
-    	this.drawField(pane, 1003, Color.BLACK, Color.BLACK);
-    	this.drawField(pane, 1004, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "field");
+    	this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "field");
+    	this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
+    	this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "field");
     	
-    	this.drawField(pane, 2001, Color.YELLOW, Color.BLACK);
-    	this.drawField(pane, 2002, Color.YELLOW, Color.BLACK);
-    	this.drawField(pane, 2003, Color.YELLOW, Color.BLACK);
-    	this.drawField(pane, 2004, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "field");
+    	this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "field");
+    	this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "field");
+    	this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "field");
     	
-    	this.drawField(pane, 3001, Color.GREEN, Color.BLACK);
-    	this.drawField(pane, 3002, Color.GREEN, Color.BLACK);
-    	this.drawField(pane, 3003, Color.GREEN, Color.BLACK);
-    	this.drawField(pane, 3004, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "field");
+    	this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "field");
+    	this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "field");
+    	this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "field");
     	
-    	this.drawField(pane, 4001, Color.RED, Color.BLACK);
-    	this.drawField(pane, 4002, Color.RED, Color.BLACK);
-    	this.drawField(pane, 4003, Color.RED, Color.BLACK);
-    	this.drawField(pane, 4004, Color.RED, Color.BLACK);
+    	this.drawField(pane, 4001, Color.RED, Color.BLACK, "field");
+    	this.drawField(pane, 4002, Color.RED, Color.BLACK, "field");
+    	this.drawField(pane, 4003, Color.RED, Color.BLACK, "field");
+    	this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
     	
     	// Player names.
     	//this.drawText(pane, "XXX", 400, 250, 100, 100, Color.BLACK);
@@ -546,12 +552,14 @@ public class Board extends JFrame implements MouseListener{
 		Color border;
 		int posX;
 		int posY;
+		String fieldtype;
 		
-		public FieldPanel(Color b, Color c, int x, int y){
+		public FieldPanel(Color b, Color c, int x, int y, String ft){
 			this.border = b;
 			this.color = c;
 			this.posX = x;
 			this.posY = y;
+			this.fieldtype = ft;
 		}
 		
 		@Override
