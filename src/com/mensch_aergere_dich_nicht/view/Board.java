@@ -123,12 +123,12 @@ public class Board extends JFrame implements MouseListener{
     /*
      * Draw single field on gameboard.
      */
-    private void drawField(JLayeredPane pane, int fieldnumber, Color color){
+    private void drawField(JLayeredPane pane, int fieldnumber, Color color, Color border){
     	int[] coordinates = this.getFieldCoordinates(fieldnumber);
     	int x = coordinates[0];
     	int y = coordinates[1];
 
-    	FieldPanel field = new FieldPanel(color, 40,40); 
+    	FieldPanel field = new FieldPanel(border, color, 40,40); 
     	field.setBounds(x,y,100,100); 
     	field.setOpaque(false); 
     	pane.add(field, new Integer(1));
@@ -157,9 +157,14 @@ public class Board extends JFrame implements MouseListener{
     	// Board.
     	for(int i=0; i<=39; i++){
     	  Color color = Color.WHITE;
+    	  
     	  Field field = this.fields.get(i);
-    	  Figure figure = field.getFigure();
-    	  Color figureColor = figure.getFigureColor();
+    	  Color figureColor = null;
+    	  
+    	  if(!field.isFree()){
+    	    Figure figure = field.getFigure();
+    	    figureColor = figure.getFigureColor();
+    	  }
     	  
     	  switch(i){
     	    case 0:
@@ -183,50 +188,50 @@ public class Board extends JFrame implements MouseListener{
         	color = figureColor;
           }  
     	  
-    	  this.drawField(pane, i, color);
+    	  this.drawField(pane, i, color, Color.BLACK);
     	}
     	
     	// Houses.
-    	this.drawField(pane, 101, Color.BLACK);
-    	this.drawField(pane, 102, Color.BLACK);
-    	this.drawField(pane, 103, Color.BLACK);
-    	this.drawField(pane, 104, Color.BLACK);
+    	this.drawField(pane, 101, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 102, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 103, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 104, Color.BLACK, Color.BLACK);
     	
-    	this.drawField(pane, 201, Color.YELLOW);
-    	this.drawField(pane, 202, Color.YELLOW);
-    	this.drawField(pane, 203, Color.YELLOW);
-    	this.drawField(pane, 204, Color.YELLOW);
+    	this.drawField(pane, 201, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 202, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 203, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 204, Color.YELLOW, Color.BLACK);
     	
-    	this.drawField(pane, 301, Color.GREEN);
-    	this.drawField(pane, 302, Color.GREEN);
-    	this.drawField(pane, 303, Color.GREEN);
-    	this.drawField(pane, 304, Color.GREEN);
+    	this.drawField(pane, 301, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 302, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 303, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 304, Color.GREEN, Color.BLACK);
     	
-    	this.drawField(pane, 401, Color.RED);
-    	this.drawField(pane, 402, Color.RED);
-    	this.drawField(pane, 403, Color.RED);
-    	this.drawField(pane, 404, Color.RED);
+    	this.drawField(pane, 401, Color.RED, Color.BLACK);
+    	this.drawField(pane, 402, Color.RED, Color.BLACK);
+    	this.drawField(pane, 403, Color.RED, Color.BLACK);
+    	this.drawField(pane, 404, Color.RED, Color.BLACK);
     	
     	// Start.
-    	this.drawField(pane, 1001, Color.BLACK);
-    	this.drawField(pane, 1002, Color.BLACK);
-    	this.drawField(pane, 1003, Color.BLACK);
-    	this.drawField(pane, 1004, Color.BLACK);
+    	this.drawField(pane, 1001, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 1002, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 1003, Color.BLACK, Color.BLACK);
+    	this.drawField(pane, 1004, Color.BLACK, Color.BLACK);
     	
-    	this.drawField(pane, 2001, Color.YELLOW);
-    	this.drawField(pane, 2002, Color.YELLOW);
-    	this.drawField(pane, 2003, Color.YELLOW);
-    	this.drawField(pane, 2004, Color.YELLOW);
+    	this.drawField(pane, 2001, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 2002, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 2003, Color.YELLOW, Color.BLACK);
+    	this.drawField(pane, 2004, Color.YELLOW, Color.BLACK);
     	
-    	this.drawField(pane, 3001, Color.GREEN);
-    	this.drawField(pane, 3002, Color.GREEN);
-    	this.drawField(pane, 3003, Color.GREEN);
-    	this.drawField(pane, 3004, Color.GREEN);
+    	this.drawField(pane, 3001, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 3002, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 3003, Color.GREEN, Color.BLACK);
+    	this.drawField(pane, 3004, Color.GREEN, Color.BLACK);
     	
-    	this.drawField(pane, 4001, Color.RED);
-    	this.drawField(pane, 4002, Color.RED);
-    	this.drawField(pane, 4003, Color.RED);
-    	this.drawField(pane, 4004, Color.RED);
+    	this.drawField(pane, 4001, Color.RED, Color.BLACK);
+    	this.drawField(pane, 4002, Color.RED, Color.BLACK);
+    	this.drawField(pane, 4003, Color.RED, Color.BLACK);
+    	this.drawField(pane, 4004, Color.RED, Color.BLACK);
     	
     	// Player names.
     	//this.drawText(pane, "XXX", 400, 250, 100, 100, Color.BLACK);
@@ -392,14 +397,14 @@ public class Board extends JFrame implements MouseListener{
     }
     
     
-    private void drawPiece(Color color, int field){
-    	int[] coordinates = this.getFieldCoordinates(field);
-    	int posX = coordinates[0];
-    	int posY = coordinates[1];
-    	
-    	// Draw piece.
-    	this.drawField(boardPane, field, color);
-    }
+//    private void drawPiece(Color color, int field){
+//    	int[] coordinates = this.getFieldCoordinates(field);
+//    	int posX = coordinates[0];
+//    	int posY = coordinates[1];
+//    	
+//    	// Draw piece.
+//    	this.drawField(boardPane, field, color);
+//    }
     
     @Override
     public void mousePressed(MouseEvent e) {
@@ -439,7 +444,7 @@ public class Board extends JFrame implements MouseListener{
     }
     
     public static void main(String[] args) {
-    	//test();
+    	test();
     }
 
     private static void test(){
@@ -481,7 +486,7 @@ public class Board extends JFrame implements MouseListener{
 		
 		// Gamehandler
 		Options op = new Options();
-		
+
 		Gamehandler gh = new Gamehandler(op, 
 				new String[] {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"});
 		
@@ -538,10 +543,12 @@ public class Board extends JFrame implements MouseListener{
 	
 	class FieldPanel extends JPanel {
 		Color color;
+		Color border;
 		int posX;
 		int posY;
 		
-		public FieldPanel(Color c, int x, int y){
+		public FieldPanel(Color b, Color c, int x, int y){
+			this.border = b;
 			this.color = c;
 			this.posX = x;
 			this.posY = y;
@@ -552,7 +559,7 @@ public class Board extends JFrame implements MouseListener{
 			super.paintComponent(g);
 			g.setColor(this.color);
 			g.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
-			g.setColor(Color.BLACK);
+			g.setColor(this.border);
 			g.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
 		} 
 	}
