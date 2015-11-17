@@ -1,7 +1,6 @@
 package com.mensch_aergere_dich_nicht.models;
 
 import java.awt.*;
-import java.awt.List;
 import java.util.*;
 
 public class Player {
@@ -69,7 +68,9 @@ public class Player {
 	
 	
 	public void setFigureBack(Figure f){
-		f.setSteps(Figure.startPosition);
+		//f.setSteps(Figure.startPosition);
+		// TODO: Figur wieder ins Haus stellen?!
+		f.set2StartPosition();
 	}
 	public void setFiguresBack(){
 		for(Figure f : figures.values())

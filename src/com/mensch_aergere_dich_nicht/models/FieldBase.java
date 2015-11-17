@@ -24,6 +24,10 @@ public abstract class FieldBase {
 		this.number = number;
 	}
 	
+	public void clear()
+	{
+		this.figure = null;
+	}
 	
 	public boolean isFree()
 	{

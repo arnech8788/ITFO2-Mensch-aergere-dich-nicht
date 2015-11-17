@@ -5,7 +5,6 @@ import java.util.List;
 import java.awt.*;
 
 
-import com.mensch_aergere_dich_nicht.models.*;
 import com.mensch_aergere_dich_nicht.view.*;
 
 public class Gamehandler implements Listener  {
@@ -97,6 +96,7 @@ public class Gamehandler implements Listener  {
 			{
 				int thrownCubeNumber = player.throwCube();
 				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
 				gh.setMoveOptions(player, thrownCubeNumber);
 				
 				
@@ -111,6 +111,8 @@ public class Gamehandler implements Listener  {
 				}
 				else
 				{
+					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
 					// möglichkeiten an gui?
 					gh.waitForUserInput = true;
 					break;
@@ -187,17 +189,27 @@ public class Gamehandler implements Listener  {
 					{
 						this.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, fieldNumber, thrownCubeNumber));
 					}
-					break;
+					//break;
+					
 				}
-				
-				//-> Feld ist noch frei
-				this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));					}
+				else
+				{
+					//-> Feld ist noch frei
+					this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));					
+				}
+			}
+		}
+		
+		if(this.moveOptions.size() == 0)
+		{
+			this.board.displayMessage("Es gibt keine Spielzugmöglichkeit!");
+			
 		}
 	}
 	
 	private void handleCubeNumberSix(Player player)
 	{
-		this.board.displayMessage("Er darf eine Figur raussetzen.");
+		//this.board.displayMessage("Er darf eine Figur raussetzen.");
 		
 		// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
 		int fieldNumber = this.getFieldNumber(player.getOffset(), Figure.startField);
@@ -241,6 +253,7 @@ public class Gamehandler implements Listener  {
 				
 			case Set:
 				this.setFigure2Field(mo.getFigure(), mo.getNewFieldNumber());
+				mo.getFigure().setSteps(this.getSteps(this.getPlayer(mo.getFigure()).getOffset(),mo.getNewFieldNumber()));
 				break;
 			
 			default:
@@ -266,9 +279,14 @@ public class Gamehandler implements Listener  {
 		// TODO: testen
 		
 		// setze Figur des anderen Spielers wieder zurück
-		Figure fieldFigure = this.getFields().get(fieldNumber).getFigure();
-		this.setFigure2Field(fieldFigure, fieldNumber);
-		figure.set2StartPosition();
+		Field field = this.getFields().get(fieldNumber);
+		Figure fieldFigure = field.getFigure();
+		field.clear();
+		Player player = this.getPlayer(fieldFigure);
+		player.setFigureBack(fieldFigure);
+		fieldFigure.set2StartPosition();
+		//this.setFigure2Field(fieldFigure, fieldNumber);
+		
 		
 		// setze Figur auf das Feld
 		this.setFigure2Field(figure, fieldNumber);
@@ -494,7 +512,7 @@ public class Gamehandler implements Listener  {
 		int iOffset = 0;// Offset of Fieldposition
 		boolean bIsComputer = false; // Is Computer?
 		//String[] sPlayerName = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
-		Color[] colorArray = {Color.RED,Color.BLUE,Color.GREEN,Color.YELLOW };//Color of Players
+		Color[] colorArray = {Color.BLACK,Color.YELLOW,Color.GREEN,Color.RED };//Color of Players
 				
 		for (int i = 0; i < playerNames.length; i++)
 		{
@@ -531,6 +549,7 @@ public class Gamehandler implements Listener  {
 		// TODO: wenn Flednummer ein Haus ist,
 		// anders reagieren...
 		
+		Player p = this.getPlayer(figure);
 		
 		Field field = this.getFields().get(fieldNumber);
 		if(! field.isFree())
@@ -538,9 +557,11 @@ public class Gamehandler implements Listener  {
 			throw new RuntimeException("Die Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() + " kann nicht auf das Feld " + field.getNumber() + " setzen, da es von der Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() +  "  besetzt ist.")));
 		}
 		
-		//TODO: Figur von aktuellen Feld entfernen
+		// Figur von aktuellen Feld entfernen
+		int oldFieldNumber = this.getFieldNumber(this.getPlayer(figure).getOffset(), figure.getSteps());
+		this.getFields().get(oldFieldNumber).clear();;
 		
-		
+		// Figur auf neues Feld setzen
 		field.setFigure(figure);
 		
 		if(field.getType() == Field.Type.START)
