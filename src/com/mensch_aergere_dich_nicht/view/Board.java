@@ -502,6 +502,14 @@ public class Board extends JFrame implements MouseListener{
         // Draw.
         board.drawBoard();
         
+        // Test.
+//        Map<String, Player> play = gh.getPlayers();
+//        Player p1 = play.get("Anne Theke");
+//        Map<Integer, Figure> figures = p1.getFigures();
+//        Figure f1a = figures.get(1);
+//        f1a.setSteps(3);
+//        
+//        board.drawBoard();
     }
     
     class TextPanel extends JPanel {
@@ -569,6 +577,11 @@ public class Board extends JFrame implements MouseListener{
 			g.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
 			g.setColor(this.border);
 			g.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
+			
+			if(this.fieldtype == "figure"){
+				g.setColor(Color.BLACK);
+				g.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
+			}
 		} 
 	}
 }
