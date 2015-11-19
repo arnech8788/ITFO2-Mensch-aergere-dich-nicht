@@ -138,14 +138,11 @@ public class Board extends JFrame implements MouseListener{
      * Draw text on gameboard.
      */
     private void drawText(JLayeredPane pane, String text, int x, int y, int h, int w, Color c){
-    	TextPanel text_panel = new TextPanel(text, x, y, c);
-    	text_panel.setBounds(x,y,h,w); 
-    	text_panel.setOpaque(false);
-    	pane.add(text_panel, new Integer(1));
-//    	JLabel test = new JLabel(text);
-//		test.setLocation(x,y);
-//		test.setSize(w,h);
-//		pane.add(test);
+    	//TextPanel text = new TextPanel(text, x, y, c);
+    	TextLabel newtext = new TextLabel(text, x, y, c);
+    	newtext.setBounds(x,y,h,w); 
+    	newtext.setOpaque(false);
+    	pane.add(newtext, new Integer(1));
     }
     
     /*
@@ -240,7 +237,36 @@ public class Board extends JFrame implements MouseListener{
     	this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
     	
     	// Player names.
-    	//this.drawText(pane, "XXX", 400, 250, 100, 100, Color.BLACK);
+    	for (Map.Entry<String, Player> entry : this.players.entrySet()){
+    		Player player = entry.getValue();
+    		Color playerColor = player.getPlayerColor();
+    		String playerName = player.getPlayerName();
+    		int n = 0;
+    		
+    		if(playerColor == Color.YELLOW){ n = 1;};
+    		if(playerColor == Color.GREEN){ n = 2;};
+    		if(playerColor == Color.BLACK){ n = 3;};
+    		if(playerColor == Color.RED){ n = 4;};
+    		
+    		switch(n){
+    		  case 1:
+    			  // Yellow.
+    			  this.drawText(pane, playerName, 20, 120, 80, 20, Color.BLACK);
+    			break;
+    		  case 2:
+    			  // Green.
+    			  this.drawText(pane, playerName, 470, 120, 80, 20, Color.BLACK);
+      			break;
+    		  case 3:
+    			  // Black.
+    			  this.drawText(pane, playerName, 20, 570, 100, 20, Color.BLACK);
+      			break;
+    		  case 4:
+    			  // Red.
+    			  this.drawText(pane, playerName, 470, 570, 80, 20, Color.BLACK);
+      			break;
+    		}
+    	}
     }
     
     private int getOffsetX(){
@@ -512,13 +538,25 @@ public class Board extends JFrame implements MouseListener{
 //        board.drawBoard();
     }
     
-    class TextPanel extends JPanel {
+    class TextLabel extends JLabel {
+         public TextLabel(String s, int x, int y, Color c) {
+            super(s);
+            //this.setHorizontalAlignment(SwingConstants.CENTER);
+            this.setHorizontalAlignment(SwingConstants.LEFT);
+            this.setOpaque(true);
+ 
+            this.setBounds(x, y, 50, 50);
+        }
+    }
+ /*   
+    class TextPanelxx extends JPanel {
     	String text;
     	int posX;
     	int posY;
     	Color textColor;
     	
     	public TextPanel(String s, int x, int y, Color c){
+    	  super(true);
     	  this.text	= s;
     	  this.posX = x;
     	  this.posY = y;
@@ -529,13 +567,14 @@ public class Board extends JFrame implements MouseListener{
 		protected void paintComponent(Graphics g) {
     		super.paintComponent(g);
     		Graphics2D g2d = (Graphics2D)g;
+    		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     	    g2d.setPaint(Color.black);
     	    g2d.drawString(this.text, this.posX, this.posY);
     		//g.setColor(this.textColor);
     	    //g.drawString(this.text, this.posX, this.posY);
     	}
     }
-    
+*/    
 	class PiecePanel extends JPanel {
 		Color color;
 		int posX;
@@ -573,14 +612,16 @@ public class Board extends JFrame implements MouseListener{
 		@Override
 		protected void paintComponent(Graphics g) { 
 			super.paintComponent(g);
-			g.setColor(this.color);
-			g.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
-			g.setColor(this.border);
-			g.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
-			
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
+			g2d.setColor(this.color);
+			g2d.fillOval(this.posX/2, this.posY/2, this.posX, this.posY);
+			g2d.setColor(this.border);
+			g2d.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
+
 			if(this.fieldtype == "figure"){
-				g.setColor(Color.BLACK);
-				g.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
+				g2d.setColor(Color.BLACK);
+				g2d.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
 			}
 		} 
 	}
