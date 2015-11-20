@@ -9,7 +9,7 @@ public class MoveOption {
 	private int thrownCubeNumber;
 	
 	public enum eType{
-		CanBeat, Set;
+		CanBeat, Set, SetOut, SetOutAndBeat;
 	}
 	
 	public MoveOption(Figure f,

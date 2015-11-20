@@ -95,6 +95,7 @@ public class Gamehandler implements Listener  {
 			else
 			{
 				int thrownCubeNumber = player.throwCube();
+				
 				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 				gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
 				gh.setMoveOptions(player, thrownCubeNumber);
@@ -198,6 +199,23 @@ public class Gamehandler implements Listener  {
 					this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));					
 				}
 			}
+			else if(thrownCubeNumber == 6)
+			{
+				// Prüfen ob das Startfeld frei ist
+				// bzw. keine eigene Figur darauf steht
+				int fieldNumber = this.getFieldNumber(player.getOffset(), Figure.startField);
+				Field field = this.fields.get(fieldNumber);
+				
+				if(field.isFree())
+				{
+					this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOut, fieldNumber, thrownCubeNumber));
+				}
+				
+				else if(this.canBeatFigure(fieldNumber, f))
+				{
+					this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOutAndBeat, fieldNumber, thrownCubeNumber));
+				}
+			}
 		}
 		
 		if(this.moveOptions.size() == 0)
@@ -255,7 +273,16 @@ public class Gamehandler implements Listener  {
 				this.setFigure2Field(mo.getFigure(), mo.getNewFieldNumber());
 				mo.getFigure().setSteps(this.getSteps(this.getPlayer(mo.getFigure()).getOffset(),mo.getNewFieldNumber()));
 				break;
-			
+				
+			case SetOut:
+				Figure f = this.getPlayer(mo.getFigure()).setFigureOut();
+				this.setFigure2Field(f, mo.getNewFieldNumber());
+				break;
+				
+			case SetOutAndBeat:
+				this.beatFigure(mo.getNewFieldNumber(), mo.getFigure());
+				break;
+				
 			default:
 				throw new RuntimeException("Unbekannte Spielzugoption: " + mo.getType().toString());
 		}
