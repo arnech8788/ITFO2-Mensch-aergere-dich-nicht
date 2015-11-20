@@ -529,13 +529,14 @@ public class Board extends JFrame implements MouseListener{
         board.drawBoard();
         
         // Test.
-//        Map<String, Player> play = gh.getPlayers();
-//        Player p1 = play.get("Anne Theke");
-//        Map<Integer, Figure> figures = p1.getFigures();
-//        Figure f1a = figures.get(1);
-//        f1a.setSteps(3);
-//        
-//        board.drawBoard();
+        //Map<String, Player> play = gh.getPlayers();
+        //Player p1 = play.get("Anne Theke");
+        //System.out.println(play);
+        //Map<Integer, Figure> figures = p1.getFigures();
+        //Figure f1a = figures.get(1);
+        //f1a.setSteps(3);
+        
+        board.drawBoard();
     }
     
     class TextLabel extends JLabel {
@@ -620,7 +621,8 @@ public class Board extends JFrame implements MouseListener{
 			g2d.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
 
 			if(this.fieldtype == "figure"){
-				g2d.setColor(Color.BLACK);
+				//System.out.println("BAM");
+				g2d.setColor(this.border);
 				g2d.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
 			}
 		} 
