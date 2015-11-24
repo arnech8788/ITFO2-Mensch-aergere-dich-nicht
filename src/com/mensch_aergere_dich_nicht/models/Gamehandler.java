@@ -640,7 +640,7 @@ public class Gamehandler implements Listener  {
 		
 		
 		//	TODO: implementieren
-
+		
 	}
 	private void setFigure2Field(Figure figure,
 			 					 int fieldNumber)
