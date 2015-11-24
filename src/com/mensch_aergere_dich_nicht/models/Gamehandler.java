@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.List;
 import java.awt.*;
 
-
+import com.mensch_aergere_dich_nicht.models.MoveOption.ePriority;
 import com.mensch_aergere_dich_nicht.view.*;
 
 public class Gamehandler implements Listener  {
@@ -16,6 +16,12 @@ public class Gamehandler implements Listener  {
 	Map<String,Player> players;
 	
 	// TODO: Regeln beachten!
+	// TODO: KI implementieren
+	
+	// Tobias:
+	// TODO: evtl. mögliche Spielzüge markieren? (Feature)
+	// TODO: Figuren im Haus werden nicht angezeigt, obwohl die Objekte passen (Player & Co.)
+	
 	
 	private Options options;
 	//private MoveResult lastMoveResult;
@@ -60,10 +66,10 @@ public class Gamehandler implements Listener  {
 		Options op = new Options();
 		
 		Gamehandler gh = new Gamehandler(op, 
-				new String[] {"Gernhart Reinholzen",
-				  "Lassmiranda den si Villia",
-				  "Timo Beil",
-				  "Anne Theke"});
+				new String[] {"eins",
+				  "zwei",
+				  "drei",
+				  "vier"});
 		// AddPlayer()
 		
 		
@@ -95,16 +101,17 @@ public class Gamehandler implements Listener  {
 	
 	private void nextMoveOption(Player player)
 	{
-		do {
+		//do {
 			// TODO: bei 6 darf der Spieler nochmal würfeln
 		
 			this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
-					
+			int thrownCubeNumber = 0;
+			
 			if (player.canDriveThreeTimes())
 			{
 				for(int i = 0; i < 3; i++)
 				{
-					int thrownCubeNumber = player.throwCube();
+					thrownCubeNumber = player.throwCube();
 					this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 				
 					if(thrownCubeNumber == 6)
@@ -113,14 +120,19 @@ public class Gamehandler implements Listener  {
 						break;
 					}
 				}
+				
+				if(thrownCubeNumber != 6)
+				{
+					this.nextMoveOption(this.getNextPlayer(player));
+				}
 			}
 		
 			else
 			{
-				int thrownCubeNumber = player.throwCube();
+				thrownCubeNumber = player.throwCube();
 				
 				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-				this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
+				//this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
 				this.setMoveOptions(player, thrownCubeNumber);
 			
 						
@@ -133,13 +145,34 @@ public class Gamehandler implements Listener  {
 					// Führe den Spielzug aus
 					this.handleMoveOption(this.moveOptions.get(0));
 				}
-				else
+				else if(this.moveOptions.size() > 1)
 				{
+					
+					// TODO: nach Prioritäten sortieren
+					// wenn es von der höchsten nur eine gibt
+					// und die Regel gesetzt ist
+					// führe den Spielzug aus...
+					Collections.sort(this.moveOptions);
+					for(int i = this.moveOptions.size() - 1; i > 0; i--)
+					{
+						MoveOption curOption = this.moveOptions.get(i);
+						MoveOption nextOption = this.moveOptions.get(i - 1);
+						
+						// Prüfe ob das letzte Element die höchste Priorität hat
+						if(curOption.compareTo(nextOption) > 0)
+						{
+							// TODO: prüfe ob die Regel aktiviert ist...
+							
+						}
+					}
+					
+					
 					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
 					//möglichkeiten an gui?
+					this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
 					this.waitForUserInput = true;
-					break;
+					//break;
 				}
 						
 						
@@ -161,12 +194,17 @@ public class Gamehandler implements Listener  {
 						gh.setFigure2Field(f, fieldNumber);
 					}
 					**/
-					}
+			}
 		
+		/**
 		// nächsten Spieler holen
-		player = this.getNextPlayer(player);
-
-		}while(player != null);
+		if(thrownCubeNumber != 6)
+		{
+			player = this.getNextPlayer(player);
+		}
+		this.nextMoveOption(player);
+		**/
+		//}while(player != null);
 	}
 	
 	
@@ -183,60 +221,84 @@ public class Gamehandler implements Listener  {
 		// alle Figuren die draußen sind ermitteln
 		for(Figure f : player.getFigures().values())
 		{
+			MoveOption.eType moveType = MoveOption.eType.Unknown;
+			int newFieldNumber = 0;
+			EnumSet<ePriority> movePriority = null;
+			
 			if(f.isOnGameboard(true))
 			{
 				//-> Figur ist auf dem Spielfeld (auch Haus)
 				
 				// Prüfen wo die Figur bei setzen der geworfenen Würfel zahl stehen würde
-				int fieldNumber = this.getFieldNumber(player.getOffset(), f.getSteps() + thrownCubeNumber);
+				newFieldNumber = this.getFieldNumber(player.getOffset(), f.getSteps() + thrownCubeNumber);
 				//Field field = this.getFields().get(fieldNumber);
 				
+				
 				// Prüfen ob das neue Feld ein Haus wäre
-				if(fieldNumber >= Figure.firstHousePosition)
+				if(newFieldNumber >= Gamehandler.fieldCount)
 				{
-					if(this.canSetFigure2House(player, fieldNumber))
+					if(this.canSetFigure2House(player, newFieldNumber))
 					{
-						this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));
+						//this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, newFieldNumber, thrownCubeNumber));
+						moveType = MoveOption.eType.Set;
+						// TODO: setzen der Priorität
+						// movePriority = EnumSet.of(MoveOption.ePriority.?);
 					}
 				}
 				
-				else if(!this.isFieldFree(fieldNumber))
+				else if(!this.isFieldFree(newFieldNumber))
 				{
-					if(this.canBeatFigure(fieldNumber, f))
+					if(this.canBeatFigure(newFieldNumber, f))
 					{
-						this.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, fieldNumber, thrownCubeNumber));
+						//this.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, newFieldNumber, thrownCubeNumber));
+						moveType = MoveOption.eType.CanBeat;
+						// TODO: setzen der Priorität
+						// movePriority = EnumSet.of(MoveOption.ePriority.?);
 					}
 					//break;
-					
 				}
+				
 				else
 				{
 					//-> Feld ist noch frei
-					this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));					
+					//this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, newFieldNumber, thrownCubeNumber));
+					moveType = MoveOption.eType.Set;
+					// TODO: setzen der Priorität
+					// movePriority = EnumSet.of(MoveOption.ePriority.?);
 				}
 			}
 			else if(thrownCubeNumber == 6)
 			{
 				// Prüfen ob das Startfeld frei ist
 				// bzw. keine eigene Figur darauf steht
-				int fieldNumber = this.getFieldNumber(player.getOffset(), Figure.startField);
+				newFieldNumber = this.getFieldNumber(player.getOffset(), Figure.startField);
 				//Field field = this.fields.get(fieldNumber);
 				
-				if(this.isFieldFree(fieldNumber))
+				if(this.isFieldFree(newFieldNumber))
 				{
-					this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOut, fieldNumber, thrownCubeNumber));
+					//this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOut, newFieldNumber, thrownCubeNumber, MoveOption.ePriority.SixFigureOut));
+					moveType = MoveOption.eType.SetOut;
+					movePriority = EnumSet.of(MoveOption.ePriority.SixFigureOut);
 				}
 				
-				else if(this.canBeatFigure(fieldNumber, f))
+				else if(this.canBeatFigure(newFieldNumber, f))
 				{
-					this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOutAndBeat, fieldNumber, thrownCubeNumber));
+					//this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOutAndBeat, newFieldNumber, thrownCubeNumber, MoveOption.ePriority.SixFigureOut));
+					moveType = MoveOption.eType.SetOutAndBeat;
+					movePriority = EnumSet.of(MoveOption.ePriority.SixFigureOut,  MoveOption.ePriority.StrikeForPull);
 				}
+			}
+			
+			if(moveType != MoveOption.eType.Unknown)
+			{
+				this.moveOptions.add(new MoveOption(f, moveType, newFieldNumber, thrownCubeNumber, movePriority));
 			}
 		}
 		
 		if(this.moveOptions.size() == 0)
 		{
 			this.board.displayMessage("Es gibt keine Spielzugmöglichkeit!");
+			
 			
 		}
 	}
@@ -277,6 +339,7 @@ public class Gamehandler implements Listener  {
 		
 		// bei einer sechs darf er nochmal
 		// teil von unten hier auch durchführen...
+		this.nextMoveOption(player);
 	}
 	
 	private void handleMoveOption(MoveOption mo)
@@ -349,6 +412,11 @@ public class Gamehandler implements Listener  {
 	private int getSteps(int playerOffset,
 						 int fieldNumber)
 	{
+		if(fieldNumber >= Gamehandler.fieldCount)
+		{
+			return fieldNumber;
+		}
+		
 		int temp = fieldNumber - playerOffset;
 		if (temp < 0)
 		{
@@ -394,9 +462,11 @@ public class Gamehandler implements Listener  {
 							   int figureSteps)
 	{
 		// Prüfen ob man ins Haus läuft
-		if(figureSteps >= Figure.firstHousePosition)
+		if(figureSteps >= Gamehandler.fieldCount)
 		{
-			return figureSteps;
+			int houseNumber = figureSteps - Gamehandler.fieldCount + 1;
+			houseNumber += House.getHouseAdditionValue(playerOffSet);
+			return houseNumber;
 			//return figureSteps - Figure.firstHousePosition + 1;
 		}
 		
@@ -441,7 +511,8 @@ public class Gamehandler implements Listener  {
 	public boolean setNextMove()
 	{
 		// als Parameter figur?
-		return false;
+		throw new RuntimeException("function is not implemented!");
+		//return false;
 	}
 	
 	/**
@@ -583,10 +654,9 @@ public class Gamehandler implements Listener  {
 	
 	private void createFields(){
 		fields = new HashMap<Integer,Field>();
-		int iFieldCount = fieldCount; //Number of Fields ( without House )
 		Field.Type type;
 		
-		for (Integer i = 0; i < iFieldCount; i++)
+		for (Integer i = 0; i < fieldCount; i++)
 		{
 			if (i % 10 == 0) 
 			{ 
@@ -601,11 +671,18 @@ public class Gamehandler implements Listener  {
 	}
 	
 	private boolean canSetFigure2House(Player player,
-			                           int fieldNumber	)
+			                           int fieldNumber)
 	{
+		// prüfen ob gültiges Feld
+		if(fieldNumber >= Gamehandler.fieldCount && !House.isValidHouseNumber(fieldNumber))
+		{
+			return false;
+		}
+		
+		
 		// TODO: optimieren (returns)
 		
-		House house = player.getHouses().get(fieldNumber - Figure.firstHousePosition + 1); 
+		House house = player.getHouses().get(fieldNumber); 
 		// prüfen ob das Feld im Haus frei ist
 		boolean isValid = house.isFree();
 		
@@ -631,25 +708,32 @@ public class Gamehandler implements Listener  {
 	
 	private void setFigure2House(Player player,
 								 Figure figure,
-								 int fieldNumber)
+								 int houseNumber)
 	{
-		if(!this.canSetFigure2House(player, fieldNumber))
+		if(!this.canSetFigure2House(player, houseNumber))
 		{
 			throw new RuntimeException("Figur kann nicht in das Haus gestellt werden!");
 		}
 		
 		
-		//	TODO: implementieren
+		// Figur von aktuellen Feld entfernen
 		
+		// TODO: wenn das aktuelle Feld ein Haus ist, anders vorgehen...
+		this.clearField(figure);
+
+		House house = player.getHouses().get(houseNumber);
+		house.setFigure(figure);
+		board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird in das Haus gesetzt. (Nr.: '"+ String.valueOf(house.getNumber())+ "')");
+		//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird in das Haus gesetzt. (Nr.: '"+ String.valueOf(house.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+
 	}
 	private void setFigure2Field(Figure figure,
 			 					 int fieldNumber)
 	{
-		// TODO: wenn Flednummer ein Haus ist,
+		// wenn Flednummer ein Haus ist,
 		// anders reagieren...
-		
 		Player player = this.getPlayer(figure);
-		if(fieldNumber >= Figure.firstHousePosition)
+		if(fieldNumber >= Gamehandler.fieldCount)
 		{
 			this.setFigure2House(player, figure, fieldNumber);
 		}
@@ -662,61 +746,78 @@ public class Gamehandler implements Listener  {
 			}
 		
 			// Figur von aktuellen Feld entfernen
-			int oldFieldNumber = this.getFieldNumber(this.getPlayer(figure).getOffset(), figure.getSteps());
-			this.getFields().get(oldFieldNumber).clear();;
-		
+			this.clearField(figure);
+			
 			// Figur auf neues Feld setzen
 			field.setFigure(figure);
 		
 			if(field.getType() == Field.Type.START)
 			{
-				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+				//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "')");
 			}
 			else
 			{
-				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
+				//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
+				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
 			}
 		
 		}
+		
 
 	}
 	
-	
+	private void clearField(Figure figure)
+	{
+		this.getFields().get(this.getFieldNumber(this.getPlayer(figure).getOffset(), figure.getSteps())).clear();
+	}
 	
 
 	@Override
-	public void fieldClicked(int fieldNumber) {
-		if(this.waitForUserInput)
+	public void fieldClicked(int fieldNumber) 
+	{
+		try
 		{
-			boolean validMoveOption = false;
-			// Prüfen ob gültige Benutzereingabe
-			for(MoveOption mo : this.moveOptions)
+				
+			if(this.waitForUserInput)
 			{
-				// TODO: implementieren
-				if(mo.getNewFieldNumber() == fieldNumber)
+				boolean validMoveOption = false;
+				// Prüfen ob gültige Benutzereingabe
+				for(MoveOption mo : this.moveOptions)
 				{
-					validMoveOption = true;
-					// Führe den Zug aus
-					this.handleMoveOption(mo);
-					
-					// prüfe ob Spieler nochmal würfeln darf
-					
-					
-					
-					// wenn nicht nächsten Spieler ermitteln und würfeln...
-					
-					
-					
+					// TODO: implementieren
+					if(mo.getNewFieldNumber() == fieldNumber)
+					{
+						validMoveOption = true;
+						// Führe den Zug aus
+						this.handleMoveOption(mo);
+						
+						// prüfe ob Spieler nochmal würfeln darf
+						
+						
+						
+						// wenn nicht nächsten Spieler ermitteln und würfeln...
+						
+						
+						
+					}
+				}
+				
+				if(!validMoveOption)
+				{
+					this.board.displayMessage("Ungültiger Spielzug!");
+					this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.");
 				}
 			}
 			
-			if(!validMoveOption)
-			{
-				this.board.displayMessage("Ungültiger Spielzug!");
-				this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.!");
-			}
 		}
-		
+		catch (java.util.ConcurrentModificationException e)
+		{
+			System.out.println("Unbehandelte Ausnahme!");
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
 	}
 	
 	/**

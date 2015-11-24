@@ -12,7 +12,8 @@ public class Figure implements Comparable<Figure>
 
 	public static final int startPosition = -1;
 	public static final int startField = 0;
-	public static final int firstHousePosition = 40;
+	//public static final int firstHousePosition = 40;
+	//public static final int lastHousePosition = 43;
 	
 	private int number;
 	
@@ -66,7 +67,7 @@ public class Figure implements Comparable<Figure>
 	
 	public boolean isOnGameboard(boolean includeHouse)
 	{
-		if(getSteps() >= Figure.firstHousePosition && !includeHouse)
+		if(getSteps() >= Gamehandler.fieldCount && !includeHouse)
 		{
 			return false;
 		}

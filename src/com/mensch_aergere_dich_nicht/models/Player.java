@@ -2,6 +2,8 @@ package com.mensch_aergere_dich_nicht.models;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+import java.util.Collections.*;
 
 public class Player {
 	
@@ -12,11 +14,15 @@ public class Player {
 	private Map<Integer, Figure> figures;
 	private Map<Integer, House> houses;
 	
+	
 	/**
 	 * Creates a player with a color, offset and name
 	 * Creates 4 figures with player color
 	 **/
-	public Player(Color playerColor, boolean isComputer, int offset, String playerName){
+	public Player(Color playerColor, 
+			      boolean isComputer, 
+			      int offset, 
+			      String playerName){
 		
 		this.playerColor = playerColor;
 		this.isComputer = isComputer;
@@ -28,7 +34,9 @@ public class Player {
 		//create 4 figures
 		for(int i = 1 ; i <= 4 ; i++){
 			figures.put(i, new Figure(playerColor, i));
-			houses.put(i, new House(i));
+
+			int houseNumber = i + House.getHouseAdditionValue(offset);
+			houses.put(houseNumber, new House(houseNumber));
 		}
 	}
 	
@@ -42,7 +50,8 @@ public class Player {
 	
 	public Figure setFigureOut(){
 		// Prüfen ob es noch Figuren am Start gibt, falls nicht Fehler
-		if (!this.allFiguresAtStartPosition())
+		//if (!this.allFiguresAtStartPosition())
+		if(!this.anyFigureAtStartPosition())
 		{
 			throw new RuntimeException("In der Startposition gibt es keine Figuren mehr!");
 		}
@@ -142,10 +151,24 @@ public class Player {
 		}
 		
 		// Prüfe ob Figuren im Haus hintereinander sind
-		Figure[] homeFigures = (Figure[]) (this.getHouseFigures().values()).toArray();
+		Map<Integer, Figure> xy = this.getHouseFigures();
+		Collection<Figure> col = xy.values();
+		//Object[] arr = col.toArray();
+		Figure[] homeFigures = col.toArray(new Figure[0]);
 		Arrays.sort(homeFigures);
+		//java.util.Collections.sort((List<Figure>) col.toArray(a));
+		//Figure[] homeFigures = col.toArray( new Figure[0]);
 		
-		
+		for (int i = 0; i < homeFigures.length - 1; i ++)
+		{
+			
+			if(homeFigures[i].getSteps() -1 != homeFigures[i + 1].getSteps())
+			{
+				return false;
+			}
+		}
+
+		/**
 		for (int i = 0; i < homeFigures.length - 1; i ++)
 		{
 			if(homeFigures[i].getSteps() -1 != homeFigures[i + 1].getSteps())
@@ -153,6 +176,7 @@ public class Player {
 				return false;
 			}
 		}
+		**/
 		
 		return true;
 	}
@@ -229,7 +253,7 @@ public class Player {
 		Map<Integer, Figure> homeFigures = new HashMap<Integer, Figure>();
 		for(Figure f : this.getFigures().values())
 		{
-			if(f.getSteps() >= Figure.firstHousePosition)
+			if(f.getSteps() >= Gamehandler.fieldCount)
 			{
 				//homeFigures.add(f);
 				homeFigures.put(f.getNumber(), f);
