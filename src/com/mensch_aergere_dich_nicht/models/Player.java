@@ -142,7 +142,7 @@ public class Player {
 		}
 		
 		// Prüfe ob Figuren im Haus hintereinander sind
-		Figure[] homeFigures = this.getHouseFigures();
+		Figure[] homeFigures = (Figure[]) (this.getHouseFigures().values()).toArray();
 		Arrays.sort(homeFigures);
 		
 		
@@ -193,6 +193,18 @@ public class Player {
 		throw new RuntimeException("Es wurde keine Figur an der Startposition gefunden! (method 'anyFigureAtStartPosition' has any error)");
 	}
 	
+	public int getCountOfFiguresAtStartPiosition()
+	{
+		int result = 0;
+		for(Figure figure : figures.values())
+		{
+			if(figure.getSteps() == Figure.startPosition)
+			{
+				result ++;;
+			}
+		}
+		return result;
+	}
 	
 	/**
 	 * Gibt true zurück, wenn mindestens eine Figur im Haus ist
@@ -212,18 +224,20 @@ public class Player {
 	}**/
 
 	
-	private Figure[] getHouseFigures()
+	public Map<Integer, Figure> getHouseFigures()
 	{
-		ArrayList<Figure> homeFigures = new ArrayList<Figure>();
+		Map<Integer, Figure> homeFigures = new HashMap<Integer, Figure>();
 		for(Figure f : this.getFigures().values())
 		{
 			if(f.getSteps() >= Figure.firstHousePosition)
 			{
-				homeFigures.add(f);
+				//homeFigures.add(f);
+				homeFigures.put(f.getNumber(), f);
 			}
 		}
 		
-		return (Figure[]) homeFigures.toArray();
+		//return (Figure[]) homeFigures.toArray();
+		return homeFigures;
 	}	
 	
 	

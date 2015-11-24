@@ -15,6 +15,7 @@ public class Gamehandler implements Listener  {
 	Map<Integer,Field> fields;
 	Map<String,Player> players;
 	
+	// TODO: Regeln beachten!
 	
 	private Options options;
 	//private MoveResult lastMoveResult;
@@ -71,80 +72,8 @@ public class Gamehandler implements Listener  {
 		// Player getStartingPlayer (durch Würfeln ermitteln)
 		Player player = gh.getStartingPlayer(gh.getPlayers());
 		
-		
-		// TODO: bei 6 darf der Spieler nochmal würfeln
-		
-		do {
-			gh.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
-			
-			if (player.canDriveThreeTimes())
-			{
-				for(int i = 0; i < 3; i++)
-				{
-					int thrownCubeNumber = player.throwCube();
-					gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-					
-					if(thrownCubeNumber == 6)
-					{
-						gh.handleCubeNumberSix(player);
-						break;
-					}
-				}
-			}
-			
-			else
-			{
-				int thrownCubeNumber = player.throwCube();
-				
-				gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-				gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-				gh.setMoveOptions(player, thrownCubeNumber);
-				
-				
-				// Möglichkeiten der einzelnen Figuren prüfen
-				// - MoveOptions
-				// wenn es nur eine Spielzugmöglichkeit gibt,
-				// führe diese aus
-				if(gh.moveOptions.size() == 1)
-				{
-					// Führe den Spielzug aus
-					gh.handleMoveOption(gh.moveOptions.get(0));
-				}
-				else
-				{
-					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-					// möglichkeiten an gui?
-					gh.waitForUserInput = true;
-					break;
-				}
-				
-				
-				/**	
-				// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
-				int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
-				if(gh.isFieldFree(fieldNumber))
-				{
-					// figur kann gesetzt werden
-					
-				}
-				
-				//Figure f = player.setFigureOut();
-				int steps = 0;
-				//Figure f = null;
-				player.setPlayerFigure(f, steps);
-				
-				
-				gh.setFigure2Field(f, fieldNumber);
-			}
-			**/
-			}
-			
-			// nächsten Spieler holen
-			player = gh.getNextPlayer(player);
+		gh.nextMoveOption(player);
 
-			
-		}while(player != null);
 		
 		
 		// 	3x würfeln bis er eine sechs hat
@@ -162,6 +91,84 @@ public class Gamehandler implements Listener  {
 		//MoveResult result = gh.nextMove();
 		
 	}
+	
+	
+	private void nextMoveOption(Player player)
+	{
+		do {
+			// TODO: bei 6 darf der Spieler nochmal würfeln
+		
+			this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
+					
+			if (player.canDriveThreeTimes())
+			{
+				for(int i = 0; i < 3; i++)
+				{
+					int thrownCubeNumber = player.throwCube();
+					this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				
+					if(thrownCubeNumber == 6)
+					{
+						this.handleCubeNumberSix(player);
+						break;
+					}
+				}
+			}
+		
+			else
+			{
+				int thrownCubeNumber = player.throwCube();
+				
+				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
+				this.setMoveOptions(player, thrownCubeNumber);
+			
+						
+				// Möglichkeiten der einzelnen Figuren prüfen
+				// - MoveOptions
+				// wenn es nur eine Spielzugmöglichkeit gibt,
+				// führe diese aus
+				if(this.moveOptions.size() == 1)
+				{
+					// Führe den Spielzug aus
+					this.handleMoveOption(this.moveOptions.get(0));
+				}
+				else
+				{
+					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
+					//möglichkeiten an gui?
+					this.waitForUserInput = true;
+					break;
+				}
+						
+						
+			/**	
+						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
+							int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
+							if(gh.isFieldFree(fieldNumber))
+						{
+							// figur kann gesetzt werden
+							
+						}
+						
+						//Figure f = player.setFigureOut();
+						int steps = 0;
+						//Figure f = null;
+						player.setPlayerFigure(f, steps);
+						
+						
+						gh.setFigure2Field(f, fieldNumber);
+					}
+					**/
+					}
+		
+		// nächsten Spieler holen
+		player = this.getNextPlayer(player);
+
+		}while(player != null);
+	}
+	
 	
 	private void handleThrownCube(Player player)
 	{
@@ -182,9 +189,18 @@ public class Gamehandler implements Listener  {
 				
 				// Prüfen wo die Figur bei setzen der geworfenen Würfel zahl stehen würde
 				int fieldNumber = this.getFieldNumber(player.getOffset(), f.getSteps() + thrownCubeNumber);
-				Field field = this.getFields().get(fieldNumber);
+				//Field field = this.getFields().get(fieldNumber);
 				
-				if(!field.isFree())
+				// Prüfen ob das neue Feld ein Haus wäre
+				if(fieldNumber >= Figure.firstHousePosition)
+				{
+					if(this.canSetFigure2House(player, fieldNumber))
+					{
+						this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, fieldNumber, thrownCubeNumber));
+					}
+				}
+				
+				else if(!this.isFieldFree(fieldNumber))
 				{
 					if(this.canBeatFigure(fieldNumber, f))
 					{
@@ -204,9 +220,9 @@ public class Gamehandler implements Listener  {
 				// Prüfen ob das Startfeld frei ist
 				// bzw. keine eigene Figur darauf steht
 				int fieldNumber = this.getFieldNumber(player.getOffset(), Figure.startField);
-				Field field = this.fields.get(fieldNumber);
+				//Field field = this.fields.get(fieldNumber);
 				
-				if(field.isFree())
+				if(this.isFieldFree(fieldNumber))
 				{
 					this.moveOptions.add(new MoveOption(f, MoveOption.eType.SetOut, fieldNumber, thrownCubeNumber));
 				}
@@ -249,6 +265,8 @@ public class Gamehandler implements Listener  {
 			else
 			{
 				// es ist die eigene Figur!
+				// TODO: testen!
+				// Warum irgendeine Figur von Startposition?
 				this.setFigure2Field(player.getAnyFigureFromStartPosition(), fieldNumber);
 			}
 				
@@ -288,10 +306,15 @@ public class Gamehandler implements Listener  {
 		}
 		this.board.drawBoard();
 
-		// bei einer Sechs darf er nochmal würfenl
+		Player nextPlayer = this.getPlayer(mo.getFigure());
+		// bei einer Sechs darf er nochmal würfeln
+		// als bei keiner sehcs nächsten spieler ermitteln
+		if(mo.getThrownCubeNumber() != 6)
+		{
+			nextPlayer = this.getNextPlayer(nextPlayer);
+		}
 		
-		
-		// ansonsten nächster Spieler
+		this.nextMoveOption(nextPlayer);
 		
 	}
 	
@@ -370,6 +393,13 @@ public class Gamehandler implements Listener  {
 	private int getFieldNumber(int playerOffSet,
 							   int figureSteps)
 	{
+		// Prüfen ob man ins Haus läuft
+		if(figureSteps >= Figure.firstHousePosition)
+		{
+			return figureSteps;
+			//return figureSteps - Figure.firstHousePosition + 1;
+		}
+		
 		int temp = playerOffSet + figureSteps;
 		if (temp >= fieldCount){
 			temp -= fieldCount;
@@ -570,37 +600,89 @@ public class Gamehandler implements Listener  {
 		}
 	}
 	
+	private boolean canSetFigure2House(Player player,
+			                           int fieldNumber	)
+	{
+		// TODO: optimieren (returns)
+		
+		House house = player.getHouses().get(fieldNumber - Figure.firstHousePosition + 1); 
+		// prüfen ob das Feld im Haus frei ist
+		boolean isValid = house.isFree();
+		
+		// prüfen ob in den vorherigen Feldern im Haus
+		// eine Figur steht und ggf.
+		// die Regel beachten...
+		if(isValid && !this.options.isJumpInHouse())
+		{
+			for(House h : player.getHouses().values())
+			{
+				if(h.getNumber() < house.getNumber() && !h.isFree())
+				{
+					isValid = false;
+					break;
+				}
+			}
+		}
+		
+		// wenn alles ok
+		// füge Spielzug hinzu
+		return isValid;
+	}
+	
+	private void setFigure2House(Player player,
+								 Figure figure,
+								 int fieldNumber)
+	{
+		if(!this.canSetFigure2House(player, fieldNumber))
+		{
+			throw new RuntimeException("Figur kann nicht in das Haus gestellt werden!");
+		}
+		
+		
+		//	TODO: implementieren
+
+	}
 	private void setFigure2Field(Figure figure,
 			 					 int fieldNumber)
 	{
 		// TODO: wenn Flednummer ein Haus ist,
 		// anders reagieren...
 		
-		Player p = this.getPlayer(figure);
-		
-		Field field = this.getFields().get(fieldNumber);
-		if(! field.isFree())
+		Player player = this.getPlayer(figure);
+		if(fieldNumber >= Figure.firstHousePosition)
 		{
-			throw new RuntimeException("Die Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() + " kann nicht auf das Feld " + field.getNumber() + " setzen, da es von der Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() +  "  besetzt ist.")));
-		}
-		
-		// Figur von aktuellen Feld entfernen
-		int oldFieldNumber = this.getFieldNumber(this.getPlayer(figure).getOffset(), figure.getSteps());
-		this.getFields().get(oldFieldNumber).clear();;
-		
-		// Figur auf neues Feld setzen
-		field.setFigure(figure);
-		
-		if(field.getType() == Field.Type.START)
-		{
-			board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+			this.setFigure2House(player, figure, fieldNumber);
 		}
 		else
 		{
-			board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
-		}
+			Field field = this.getFields().get(fieldNumber);
+			if(! field.isFree())
+			{
+				throw new RuntimeException("Die Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() + " kann nicht auf das Feld " + field.getNumber() + " setzen, da es von der Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() +  "  besetzt ist.")));
+			}
 		
+			// Figur von aktuellen Feld entfernen
+			int oldFieldNumber = this.getFieldNumber(this.getPlayer(figure).getOffset(), figure.getSteps());
+			this.getFields().get(oldFieldNumber).clear();;
+		
+			// Figur auf neues Feld setzen
+			field.setFigure(figure);
+		
+			if(field.getType() == Field.Type.START)
+			{
+				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+			}
+			else
+			{
+				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
+			}
+		
+		}
+
 	}
+	
+	
+	
 
 	@Override
 	public void fieldClicked(int fieldNumber) {
