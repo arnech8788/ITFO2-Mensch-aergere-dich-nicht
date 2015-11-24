@@ -152,7 +152,7 @@ public class Board extends JFrame implements MouseListener{
     	JLayeredPane pane = this.getBoardPane();
     	pane.removeAll();
     	
-    	// Board.
+    	// Board: fields & figures.
     	for(int i=0; i<=39; i++){
     	  Color color = Color.WHITE;
     	  
@@ -195,6 +195,7 @@ public class Board extends JFrame implements MouseListener{
     	}
     	
     	// Houses.
+    	//@TODO: Setzen von Figuren im Haus.
     	this.drawField(pane, 101, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 102, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 103, Color.BLACK, Color.BLACK, "field");
@@ -216,6 +217,7 @@ public class Board extends JFrame implements MouseListener{
     	this.drawField(pane, 404, Color.RED, Color.BLACK, "field");
     	
     	// Start.
+    	//@TODO: Setzen von Figuren auf Startfeldern.
     	this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
@@ -613,6 +615,7 @@ public class Board extends JFrame implements MouseListener{
 		@Override
 		protected void paintComponent(Graphics g) { 
 			super.paintComponent(g);
+			
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
 			g2d.setColor(this.color);
@@ -621,9 +624,17 @@ public class Board extends JFrame implements MouseListener{
 			g2d.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
 
 			if(this.fieldtype == "figure"){
-				//System.out.println("BAM");
-				g2d.setColor(this.border);
-				g2d.drawOval(this.posX/2, this.posY/2, this.posX, this.posY);
+				if(this.color == Color.BLACK){
+					g2d.setColor(Color.WHITE);
+				}
+				else {
+					g2d.setColor(Color.BLACK);	
+				}
+				
+				g2d.fillOval(this.posX -10, this.posY -10, this.posX/2, this.posY/2);
+				g2d.setColor(this.color);
+				g2d.fillOval(this.posX -7, this.posY -7, this.posX/2 -4, this.posY/2 -4);
+				//g2d.fillOval(this.posX -8, this.posY -8, this.posX/2 -4, this.posY/2 -4);
 			}
 		} 
 	}
