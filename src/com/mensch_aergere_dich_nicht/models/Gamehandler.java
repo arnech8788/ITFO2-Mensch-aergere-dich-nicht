@@ -242,7 +242,7 @@ public class Gamehandler implements Listener  {
 						//this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, newFieldNumber, thrownCubeNumber));
 						moveType = MoveOption.eType.Set;
 						// TODO: setzen der Priorität
-						// movePriority = EnumSet.of(MoveOption.ePriority.?);
+						 movePriority = EnumSet.of(MoveOption.ePriority.Normal);
 					}
 				}
 				
@@ -253,7 +253,7 @@ public class Gamehandler implements Listener  {
 						//this.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, newFieldNumber, thrownCubeNumber));
 						moveType = MoveOption.eType.CanBeat;
 						// TODO: setzen der Priorität
-						// movePriority = EnumSet.of(MoveOption.ePriority.?);
+						movePriority = EnumSet.of(MoveOption.ePriority.Normal);
 					}
 					//break;
 				}
@@ -264,7 +264,7 @@ public class Gamehandler implements Listener  {
 					//this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, newFieldNumber, thrownCubeNumber));
 					moveType = MoveOption.eType.Set;
 					// TODO: setzen der Priorität
-					// movePriority = EnumSet.of(MoveOption.ePriority.?);
+					movePriority = EnumSet.of(MoveOption.ePriority.Normal);
 				}
 			}
 			else if(thrownCubeNumber == 6)
@@ -778,7 +778,7 @@ public class Gamehandler implements Listener  {
 	{
 		try
 		{
-				
+			// TODO: ? Priorität beachtet?
 			if(this.waitForUserInput)
 			{
 				boolean validMoveOption = false;

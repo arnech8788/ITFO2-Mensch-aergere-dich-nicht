@@ -19,7 +19,6 @@ public class MoveOption implements Comparable<MoveOption>
 		Unknown, CanBeat, Set, SetOut, SetOutAndBeat;
 	}
 	
-	/**
 	public enum ePriority{
 		Normal(1<<0), StrikeForPull(1<<1), SixFigureOut(1<<2);
 		
@@ -35,10 +34,9 @@ public class MoveOption implements Comparable<MoveOption>
 			return priorityValue;
 		}
 	}
-	**/
-	public enum ePriority{
+	/**public enum ePriority{
 		Normal, StrikeForPull, SixFigureOut;
-	}
+	}**/
 
 	
 	public MoveOption(Figure f,
