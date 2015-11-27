@@ -218,6 +218,26 @@ public class Board extends JFrame implements MouseListener{
     	
     	// Start.
     	//@TODO: Setzen von Figuren auf Startfeldern.
+    	for (Map.Entry<String, Player> player : players.entrySet()){
+    		//System.out.println(entry.getKey() + "/" + entry.getValue());
+    		int figuresAtStartPosition = player.getValue().getCountOfFiguresAtStartPosition();
+    		Color color = player.getValue().getPlayerColor();
+    		
+    		if(color == Color.BLACK){
+	
+    		}
+    		
+    		if(color == Color.YELLOW){
+      		}
+    		
+    		if(color == Color.RED){
+      		}
+    		
+    		if(color == Color.GREEN){
+      		}
+    	}
+
+
     	this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
