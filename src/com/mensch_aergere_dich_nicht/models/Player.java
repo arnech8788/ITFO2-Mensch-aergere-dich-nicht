@@ -217,7 +217,7 @@ public class Player {
 		throw new RuntimeException("Es wurde keine Figur an der Startposition gefunden! (method 'anyFigureAtStartPosition' has any error)");
 	}
 	
-	public int getCountOfFiguresAtStartPiosition()
+	public int getCountOfFiguresAtStartPosition()
 	{
 		int result = 0;
 		for(Figure figure : figures.values())
