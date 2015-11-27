@@ -224,7 +224,7 @@ public class Player {
 		{
 			if(figure.getSteps() == Figure.startPosition)
 			{
-				result ++;;
+				result ++;
 			}
 		}
 		return result;

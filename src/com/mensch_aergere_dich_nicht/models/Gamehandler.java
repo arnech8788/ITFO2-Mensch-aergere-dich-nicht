@@ -147,12 +147,14 @@ public class Gamehandler implements Listener  {
 				}
 				else if(this.moveOptions.size() > 1)
 				{
-					
+					this.printDebugMoveOPtions();
 					// TODO: nach Prioritäten sortieren
 					// wenn es von der höchsten nur eine gibt
 					// und die Regel gesetzt ist
 					// führe den Spielzug aus...
+
 					Collections.sort(this.moveOptions);
+					boolean handledMoveOption = false;
 					for(int i = this.moveOptions.size() - 1; i > 0; i--)
 					{
 						MoveOption curOption = this.moveOptions.get(i);
@@ -162,19 +164,23 @@ public class Gamehandler implements Listener  {
 						if(curOption.compareTo(nextOption) > 0)
 						{
 							// TODO: prüfe ob die Regel aktiviert ist...
-							
+							//...
+							this.handleMoveOption(curOption);
+							handledMoveOption = true;
+							break;
 						}
 					}
 					
-					
-					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-					//möglichkeiten an gui?
-					this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
-					this.waitForUserInput = true;
-					//break;
+					if(!handledMoveOption)
+					{
+						//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+						//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
+						//möglichkeiten an gui?
+						this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
+						this.waitForUserInput = true;
+						//break;
+					}
 				}
-						
 						
 			/**	
 						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
@@ -216,6 +222,8 @@ public class Gamehandler implements Listener  {
 	private void setMoveOptions(Player player,
 			int thrownCubeNumber)
 	{
+		// TODO: ForeignStartField && OwnStartField einbauen
+		
 		this.moveOptions.clear();
 		
 		// alle Figuren die draußen sind ermitteln
@@ -242,7 +250,7 @@ public class Gamehandler implements Listener  {
 						//this.moveOptions.add(new MoveOption(f, MoveOption.eType.Set, newFieldNumber, thrownCubeNumber));
 						moveType = MoveOption.eType.Set;
 						// TODO: setzen der Priorität
-						 movePriority = EnumSet.of(MoveOption.ePriority.Normal);
+						movePriority = EnumSet.of(MoveOption.ePriority.InHouse);
 					}
 				}
 				
@@ -253,7 +261,7 @@ public class Gamehandler implements Listener  {
 						//this.moveOptions.add(new MoveOption(f, MoveOption.eType.CanBeat, newFieldNumber, thrownCubeNumber));
 						moveType = MoveOption.eType.CanBeat;
 						// TODO: setzen der Priorität
-						movePriority = EnumSet.of(MoveOption.ePriority.Normal);
+						movePriority = EnumSet.of(MoveOption.ePriority.StrikeForPull);
 					}
 					//break;
 				}
@@ -267,7 +275,7 @@ public class Gamehandler implements Listener  {
 					movePriority = EnumSet.of(MoveOption.ePriority.Normal);
 				}
 			}
-			else if(thrownCubeNumber == 6)
+			else if(thrownCubeNumber == 6 && !this.containsMoveOptionsPriority(MoveOption.ePriority.SixFigureOut))
 			{
 				// Prüfen ob das Startfeld frei ist
 				// bzw. keine eigene Figur darauf steht
@@ -302,6 +310,41 @@ public class Gamehandler implements Listener  {
 			
 		}
 	}
+	
+	private boolean containsMoveOptionsPriority(MoveOption.ePriority priority)
+	{
+		for(MoveOption mo : this.moveOptions)
+		{
+			if(mo.getPriorityType().contains(priority))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void printDebugMoveOPtions()
+	{
+		System.out.println("Mögliche Spielzüge:");
+		for(MoveOption mo : this.moveOptions)
+		{
+			String output = "";
+			output += "FigurNr.: " + String.valueOf(mo.getFigure().getNumber());
+			output += "		";
+			output += "FeldNr.: " + String.valueOf(mo.getNewFieldNumber());
+			output += "		";
+			output += "Priorität: " + String.valueOf(mo.getPrioritySize());
+			output += "		";
+			output += "Prioräten: ";
+			for(MoveOption.ePriority p : mo.getPriorityType())
+			{
+				output += p.toString() + ", ";
+			}
+			
+			System.out.println(output);
+		}
+	}
+	
 	
 	private void handleCubeNumberSix(Player player)
 	{

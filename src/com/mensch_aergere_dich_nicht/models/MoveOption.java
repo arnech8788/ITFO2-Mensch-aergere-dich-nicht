@@ -20,7 +20,7 @@ public class MoveOption implements Comparable<MoveOption>
 	}
 	
 	public enum ePriority{
-		Normal(1<<0), StrikeForPull(1<<1), SixFigureOut(1<<2);
+		ForeignStartField(1<<0), Normal(1<<1), OwnStartField(1<<2), InHouse(1<<4), StrikeForPull(1<<2), SixFigureOut(1<<8);
 		
 		private final long priorityValue;
 		
