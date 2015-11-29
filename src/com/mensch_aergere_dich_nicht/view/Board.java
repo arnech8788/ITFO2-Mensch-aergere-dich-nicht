@@ -9,7 +9,7 @@ import com.mensch_aergere_dich_nicht.models.*;
 
 import java.awt.*;
 import java.util.*;
-
+import java.util.Map.Entry;
 //import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -18,6 +18,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
 public class Board extends JFrame implements MouseListener{
+	private static final boolean FALSE = false;
+	private static final boolean TRUE = false;
 	JLayeredPane boardPane;
 	JButton btnClose;
     JPanel mainPanel;
@@ -196,6 +198,7 @@ public class Board extends JFrame implements MouseListener{
     	
     	// Houses.
     	//@TODO: Setzen von Figuren im Haus.
+    	/*
     	this.drawField(pane, 101, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 102, Color.BLACK, Color.BLACK, "field");
     	this.drawField(pane, 103, Color.BLACK, Color.BLACK, "field");
@@ -215,49 +218,263 @@ public class Board extends JFrame implements MouseListener{
     	this.drawField(pane, 402, Color.RED, Color.BLACK, "field");
     	this.drawField(pane, 403, Color.RED, Color.BLACK, "field");
     	this.drawField(pane, 404, Color.RED, Color.BLACK, "field");
+    	*/
     	
     	// Start.
     	//@TODO: Setzen von Figuren auf Startfeldern.
-    	for (Map.Entry<String, Player> player : players.entrySet()){
-    		//System.out.println(entry.getKey() + "/" + entry.getValue());
-    		int figuresAtStartPosition = player.getValue().getCountOfFiguresAtStartPosition();
-    		Color color = player.getValue().getPlayerColor();
+    	for (Map.Entry<String, Player> entry : players.entrySet()){
+    		Player player = entry.getValue();
+    		int figuresAtStartPosition = player.getCountOfFiguresAtStartPosition();
+    		Map<Integer, Figure> houseFigures = player.getHouseFigures();
+    		Color color = player.getPlayerColor();
+    		String playerName = player.getPlayerName();
     		
+    		// Figures at house position.
+			Boolean[] house = {false,false,false,false,false};
+			//System.out.println(""+house[0]+" "+house[1]+" "+house[2]+" "+house[3]+" "+house[4]);
+			for(Entry<Integer, Figure> hf: houseFigures.entrySet()){
+    			int houseField = hf.getValue().getNumber();
+    			house [houseField] = true;        			
+    		}
+			
     		if(color == Color.BLACK){
-	
+    			// Player name.
+    			this.drawText(pane, playerName, 20, 570, 100, 20, Color.BLACK);
+    			
+    			// Figures at start position.
+    			if(figuresAtStartPosition == 0){
+    				this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "field");
+    				this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "field");
+    				this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
+    				this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 1){
+    				this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "field");
+    				this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
+    				this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 2){
+    				this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
+    				this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 3){
+    				this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 4){
+    				this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "figure");
+    				this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "figure");
+    			}
+    			
+    			// Figures at house position.
+    			if(house[1] == true){
+    			    this.drawField(pane, 101, Color.BLACK, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 101, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(house[2] == true){
+    			    this.drawField(pane, 102, Color.BLACK, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 102, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(house[3] == true){
+    			    this.drawField(pane, 103, Color.BLACK, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 103, Color.BLACK, Color.BLACK, "field");
+    			}
+    			if(house[4] == true){
+    			    this.drawField(pane, 104, Color.BLACK, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 104, Color.BLACK, Color.BLACK, "field");
+    			}
     		}
     		
     		if(color == Color.YELLOW){
-      		}
-    		
-    		if(color == Color.RED){
-      		}
+    			// Player name.
+    			this.drawText(pane, playerName, 20, 120, 80, 20, Color.BLACK);
+    			
+    			// Figures at start position.
+    			if(figuresAtStartPosition == 0){
+    				this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "field");
+    				this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "field");
+    				this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "field");
+    				this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 1){
+    				this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "field");
+    				this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "field");
+    				this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 2){
+    				this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "field");
+    				this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 3){
+    				this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 4){
+    				this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "figure");
+    				this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "figure");
+    			}
+    			
+    			// Figures at house position.
+    			if(house[1] == true){
+    			    this.drawField(pane, 201, Color.YELLOW, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 201, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(house[2] == true){
+    			    this.drawField(pane, 202, Color.YELLOW, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 202, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(house[3] == true){
+    			    this.drawField(pane, 203, Color.YELLOW, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 203, Color.YELLOW, Color.BLACK, "field");
+    			}
+    			if(house[4] == true){
+    			    this.drawField(pane, 204, Color.YELLOW, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 204, Color.YELLOW, Color.BLACK, "field");
+    			}
+    		}
     		
     		if(color == Color.GREEN){
-      		}
+    			// Player name.
+    			this.drawText(pane, playerName, 470, 120, 80, 20, Color.BLACK);
+    			
+    			// Figures at start position.
+    			if(figuresAtStartPosition == 0){
+    				this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "field");
+    				this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "field");
+    				this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "field");
+    				this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 1){
+    				this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "field");
+    				this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "field");
+    				this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 2){
+    				this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "field");
+    				this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 3){
+    				this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 4){
+    				this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "figure");
+    				this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "figure");
+    			}
+    			
+    			// Figures at house position.
+    			if(house[1] == true){
+    			    this.drawField(pane, 301, Color.GREEN, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 301, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(house[2] == true){
+    			    this.drawField(pane, 302, Color.GREEN, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 302, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(house[3] == true){
+    			    this.drawField(pane, 303, Color.GREEN, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 303, Color.GREEN, Color.BLACK, "field");
+    			}
+    			if(house[4] == true){
+    			    this.drawField(pane, 304, Color.GREEN, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 304, Color.GREEN, Color.BLACK, "field");
+    			}
+    		}
+    		
+    		if(color == Color.RED){
+    			// Player name.
+    			this.drawText(pane, playerName, 470, 570, 80, 20, Color.BLACK);
+    			
+    			// Figures at start position.
+    			if(figuresAtStartPosition == 0){
+    				this.drawField(pane, 4001, Color.RED, Color.BLACK, "field");
+    				this.drawField(pane, 4002, Color.RED, Color.BLACK, "field");
+    				this.drawField(pane, 4003, Color.RED, Color.BLACK, "field");
+    				this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 1){
+    				this.drawField(pane, 4001, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4002, Color.RED, Color.BLACK, "field");
+    				this.drawField(pane, 4003, Color.RED, Color.BLACK, "field");
+    				this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 2){
+    				this.drawField(pane, 4001, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4002, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4003, Color.RED, Color.BLACK, "field");
+    				this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 3){
+    				this.drawField(pane, 4001, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4002, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4003, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
+    			}
+    			if(figuresAtStartPosition == 4){
+    				this.drawField(pane, 4001, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4002, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4003, Color.RED, Color.BLACK, "figure");
+    				this.drawField(pane, 4004, Color.RED, Color.BLACK, "figure");
+    			}
+    			
+    			// Figures at house position.
+    			if(house[1] == true){
+    			    this.drawField(pane, 401, Color.RED, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 401, Color.RED, Color.BLACK, "field");
+    			}
+    			if(house[2] == true){
+    			    this.drawField(pane, 402, Color.RED, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 402, Color.RED, Color.BLACK, "field");
+    			}
+    			if(house[3] == true){
+    			    this.drawField(pane, 403, Color.RED, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 403, Color.RED, Color.BLACK, "field");
+    			}
+    			if(house[4] == true){
+    			    this.drawField(pane, 404, Color.RED, Color.BLACK, "figure");
+    			} else {
+    				this.drawField(pane, 404, Color.RED, Color.BLACK, "field");
+    			}
+    		}
     	}
-
-
-    	this.drawField(pane, 1001, Color.BLACK, Color.BLACK, "field");
-    	this.drawField(pane, 1002, Color.BLACK, Color.BLACK, "field");
-    	this.drawField(pane, 1003, Color.BLACK, Color.BLACK, "field");
-    	this.drawField(pane, 1004, Color.BLACK, Color.BLACK, "field");
     	
-    	this.drawField(pane, 2001, Color.YELLOW, Color.BLACK, "field");
-    	this.drawField(pane, 2002, Color.YELLOW, Color.BLACK, "field");
-    	this.drawField(pane, 2003, Color.YELLOW, Color.BLACK, "field");
-    	this.drawField(pane, 2004, Color.YELLOW, Color.BLACK, "field");
-    	
-    	this.drawField(pane, 3001, Color.GREEN, Color.BLACK, "field");
-    	this.drawField(pane, 3002, Color.GREEN, Color.BLACK, "field");
-    	this.drawField(pane, 3003, Color.GREEN, Color.BLACK, "field");
-    	this.drawField(pane, 3004, Color.GREEN, Color.BLACK, "field");
-    	
-    	this.drawField(pane, 4001, Color.RED, Color.BLACK, "field");
-    	this.drawField(pane, 4002, Color.RED, Color.BLACK, "field");
-    	this.drawField(pane, 4003, Color.RED, Color.BLACK, "field");
-    	this.drawField(pane, 4004, Color.RED, Color.BLACK, "field");
-    	
+    	/*
     	// Player names.
     	for (Map.Entry<String, Player> entry : this.players.entrySet()){
     		Player player = entry.getValue();
@@ -289,6 +506,7 @@ public class Board extends JFrame implements MouseListener{
       			break;
     		}
     	}
+    	*/
     }
     
     private int getOffsetX(){

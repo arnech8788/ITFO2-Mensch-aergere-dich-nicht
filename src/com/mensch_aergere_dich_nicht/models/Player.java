@@ -265,8 +265,6 @@ public class Player {
 	}	
 	
 	
-	
-	
 	/**
 	 * Gibt true zurück, wenn alle Figuren in der Startposition sind
 	 * @return
