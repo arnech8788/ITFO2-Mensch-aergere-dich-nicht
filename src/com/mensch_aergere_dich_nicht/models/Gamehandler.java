@@ -24,6 +24,23 @@ public class Gamehandler implements Listener  {
 	// TODO: Figuren im Haus werden nicht angezeigt, obwohl die Objekte passen (Player & Co.)
 	
 	
+	/**
+	 * 
+	 * 
+wer ist gerade dran? -> markieren
+
+wenn feld -1 dann ignorieren geklicked -> done
+Ausgabe der Feldnummern deaktivieren -> Tobias
+
+bei gelb (zwei) sind die housenummern falsch rum -> passen bei allen Spielern nicht so richtig...
+Fehler kann eigentlich nur bei Gui liegen
+
+werte der Prioritäten passen nicht (Enum als Flag...)
+	 * 
+	 * 
+	 */
+	
+	
 	private Options options;
 	//private MoveResult lastMoveResult;
 	private Board board;
