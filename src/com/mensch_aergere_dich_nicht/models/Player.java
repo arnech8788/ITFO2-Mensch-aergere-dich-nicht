@@ -117,6 +117,10 @@ public class Player {
 	}
 
 	
+	public void clearHouse(Figure figure)
+	{
+		this.houses.get(figure.getSteps()).clear();
+	}
 	
 	public boolean canDriveThreeTimes()
 	{
