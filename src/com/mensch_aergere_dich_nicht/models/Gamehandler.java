@@ -657,11 +657,15 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 			{
 				if(i == getPlayers().size() - 1)
 				{
-					return (Player) this.getPlayers().values().toArray()[0];
+					Player p = (Player) this.getPlayers().values().toArray()[0];
+					this.setCurrentPlayer(p);
+					return p;
 				}
 				else
 				{
-					return (Player) this.getPlayers().values().toArray()[i + 1];
+					Player p = (Player) this.getPlayers().values().toArray()[i + 1]; 
+					this.setCurrentPlayer(p);
+					return p;
 				}
 			}
 		}
@@ -669,6 +673,22 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		// option 'isCloseGameWhenPlayerWins' beachten
 		
 		throw new RuntimeException("Es wurde kein Spieler für den nächsten Spielzug gefunden!");
+	}
+	
+	
+	private void setCurrentPlayer(Player player)
+	{
+		for(Player p : this.getPlayers().values())
+		{
+			if(p.getPlayerColor() == player.getPlayerColor())
+			{
+				p.setActive(false);
+			}
+			else
+			{
+				p.setActive(true);
+			}
+		}
 	}
 	
 	private Player getStartingPlayer(Map<String, Player> players)

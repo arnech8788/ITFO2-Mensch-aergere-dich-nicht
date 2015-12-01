@@ -10,6 +10,17 @@ public class Player {
 	private Color playerColor;
 	private int offset;
 	private boolean isComputer;
+	private boolean isActive;
+	
+	public boolean isActive() 
+	{
+		return isActive;
+	}
+	public void setActive(boolean isActive) 
+	{
+		this.isActive = isActive;
+	}
+
 	private String playerName;
 	private Map<Integer, Figure> figures;
 	private Map<Integer, House> houses;
