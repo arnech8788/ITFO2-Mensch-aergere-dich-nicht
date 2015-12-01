@@ -19,8 +19,9 @@ public class MoveOption implements Comparable<MoveOption>
 		Unknown, CanBeat, Set, SetOut, SetOutAndBeat;
 	}
 	
+	/****/
 	public enum ePriority{
-		ForeignStartField(1<<0), Normal(1<<1), OwnStartField(1<<2), InHouse(1<<4), StrikeForPull(1<<2), SixFigureOut(1<<8);
+		ForeignStartField(1<<0), Normal(1<<1), OwnStartField(1<<2), InHouse(1<<4), StrikeForPull(1<<6), SixFigureOut(1<<8);
 		
 		private final long priorityValue;
 		
@@ -33,6 +34,18 @@ public class MoveOption implements Comparable<MoveOption>
 		{
 			return priorityValue;
 		}
+	}
+	/****/
+	
+	/**public enum ePriority 
+	{
+	    private int id;
+
+	    HAPPY(1), SAD(2), CALM(4), SLEEPY(8), OPTIMISTIC(16), PENSIVE(32), ENERGETIC(64);
+
+	    Mood( int id ) {
+	        this.id = id;
+	    }
 	}
 	/**public enum ePriority{
 		Normal, StrikeForPull, SixFigureOut;

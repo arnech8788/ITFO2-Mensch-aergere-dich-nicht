@@ -18,11 +18,11 @@ public class Gamehandler implements Listener  {
 	
 	// TODO: Regeln beachten!
 	// TODO: KI implementieren
+	// TODO: Prüfung ob ein Spieler gewonnen hat
 	
 	// Tobias:
 	// TODO: evtl. mögliche Spielzüge markieren? (Feature)
 	// TODO: Figuren im Haus werden nicht angezeigt, obwohl die Objekte passen (Player & Co.)
-	
 	
 	/**
 	 * 
@@ -49,7 +49,8 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	private List<MoveOption> moveOptions;
 	
 	public Gamehandler(Options options,
-					   String[] playerNames)
+					   String[] playerNames,
+					   MainGui gui)
 	{
 		//this.addObserver(gameboard);
 		this.options = options;
@@ -59,6 +60,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		this.board = new Board(fields, players, this);
 		this.board.drawBoard();
 		
+		this.nextMoveOption(this.getStartingPlayer(this.getPlayers()));
 	}
 	
 	public Map<Integer, Field> getFields() {
@@ -87,16 +89,16 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				new String[] {"eins",
 				  "zwei",
 				  "drei",
-				  "vier"});
+				  "vier"}, null);
 		// AddPlayer()
 		
 		
 		//gh.startGame();
 		
 		// Player getStartingPlayer (durch Würfeln ermitteln)
-		Player player = gh.getStartingPlayer(gh.getPlayers());
+		//Player player = gh.getStartingPlayer(gh.getPlayers());
 		
-		gh.nextMoveOption(player);
+		//gh.nextMoveOption(player);
 
 		
 		
