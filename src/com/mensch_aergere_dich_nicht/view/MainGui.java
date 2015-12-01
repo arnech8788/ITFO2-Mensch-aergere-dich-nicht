@@ -234,6 +234,9 @@ public class MainGui extends JFrame implements ActionListener{
 		else if(arg0.getSource() == btnStart)
 		{
 			if(isGameRunnable()){
+				if(handler != null){
+					handler = null;
+				}
 				handler = new Gamehandler(options,new String[] {txtPlayerOneName.getText(),
 						txtPlayerTwoName.getText(),
 						txtPlayerThreeName.getText(),

@@ -15,9 +15,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
-public class Board extends JFrame implements MouseListener{
+public class Board extends JFrame implements MouseListener, ActionListener{
 	private static final boolean FALSE = false;
 	private static final boolean TRUE = false;
 	JLayeredPane boardPane;
@@ -56,7 +58,7 @@ public class Board extends JFrame implements MouseListener{
       
       btnClose = new JButton("Spiel benden");
       btnClose.setPreferredSize(new Dimension(40, 20));
-      //btnClose.addActionListener(this);
+      btnClose.addActionListener(this);
       
       // Message box (10 rows, 40 columns).
       msgBox = new JTextArea(30,20);
@@ -147,6 +149,11 @@ public class Board extends JFrame implements MouseListener{
     	pane.add(newtext, new Integer(1));
     }
     
+    private void drawCube(JLayeredPane pane, int x, int y){
+    	CubeView cube = new CubeView(x, y);
+    	pane.add(cube, new Integer(1));
+    }
+    
     /*
      * Draw gameboard.
      */
@@ -228,6 +235,13 @@ public class Board extends JFrame implements MouseListener{
     		Map<Integer, Figure> houseFigures = player.getHouseFigures();
     		Color color = player.getPlayerColor();
     		String playerName = player.getPlayerName();
+    		
+    		// Cube.
+    		// yellow: 130, 20
+    		// green: 380, 20
+    		// red: 380, 480
+    		// black: 130, 480
+    		this.drawCube(pane, 130, 480);
     		
     		// Figures at house position.
 			Boolean[] house = {false,false,false,false,false};
@@ -709,7 +723,7 @@ public class Board extends JFrame implements MouseListener{
         //if(posX >= this.getOffsetX() && posX < 570 && posY >= this.getOffsetY() && posY < 575){
         if(posX >= this.getOffsetX() && posX < 600 && posY >= this.getOffsetY() && posY < 600){
           //this.displayMessage("Mouse clicked at x=" + posX + " y=" + posY +". Feld " + clickedField);
-          this.displayMessage("Feld " + clickedField);
+          //this.displayMessage("Feld " + clickedField);
           this.clickListener.fieldClicked(Integer.valueOf(clickedField));
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -875,5 +889,12 @@ public class Board extends JFrame implements MouseListener{
 				//g2d.fillOval(this.posX -8, this.posY -8, this.posX/2 -4, this.posY/2 -4);
 			}
 		} 
+	}
+	
+	// Close button action listener.
+	public void actionPerformed(ActionEvent ae) {
+		if(ae.getSource() == this.btnClose){
+			this.clickListener.closeGame();
+        }
 	}
 }
