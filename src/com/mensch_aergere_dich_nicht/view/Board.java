@@ -38,6 +38,7 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     Map<Integer, Field> fields;
     Map<String, Player> players;
     Listener clickListener;
+    CubeView cube;
     
     public Board(Map<Integer, Field> f, Map<String, Player> p, Listener l){
       super("Mensch ärgere dich nicht");
@@ -150,8 +151,12 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     }
     
     private void drawCube(JLayeredPane pane, int x, int y){
-    	CubeView cube = new CubeView(x, y);
+    	this.cube = new CubeView(x, y);
     	pane.add(cube, new Integer(1));
+    }
+    
+    public int getRoll(){
+    	return this.cube.getCubeNumber();
     }
     
     /*
@@ -227,6 +232,13 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     	this.drawField(pane, 404, Color.RED, Color.BLACK, "field");
     	*/
     	
+    	// Cube.
+		// yellow: 130, 20
+		// green: 380, 20
+		// red: 380, 480
+		// black: 130, 480
+		//this.drawCube(pane, 130, 480);
+		
     	// Start.
     	//@TODO: Setzen von Figuren auf Startfeldern.
     	for (Map.Entry<String, Player> entry : players.entrySet()){
@@ -235,14 +247,7 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     		Map<Integer, Figure> houseFigures = player.getHouseFigures();
     		Color color = player.getPlayerColor();
     		String playerName = player.getPlayerName();
-    		
-    		// Cube.
-    		// yellow: 130, 20
-    		// green: 380, 20
-    		// red: 380, 480
-    		// black: 130, 480
-    		this.drawCube(pane, 130, 480);
-    		
+    		    		
     		// Figures at house position.
 			Boolean[] house = {false,false,false,false,false};
 			//System.out.println(""+house[0]+" "+house[1]+" "+house[2]+" "+house[3]+" "+house[4]);
@@ -251,7 +256,15 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     			house [houseField] = true;        			
     		}
 			
+			// Get player status (active/not active)
+			Boolean activePlayer = player.isActive();
+			
     		if(color == Color.BLACK){
+    			// Cube.
+    			if(activePlayer == TRUE){
+    			  this.drawCube(pane, 130, 480);
+    			}
+    			
     			// Player name.
     			this.drawText(pane, playerName, 20, 570, 100, 20, Color.BLACK);
     			
@@ -311,6 +324,11 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     		}
     		
     		if(color == Color.YELLOW){
+    			// Cube.
+    			if(activePlayer == TRUE){
+    			  this.drawCube(pane, 130, 20);
+    			}
+    			
     			// Player name.
     			this.drawText(pane, playerName, 20, 120, 80, 20, Color.BLACK);
     			
@@ -370,6 +388,11 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     		}
     		
     		if(color == Color.GREEN){
+    			// Cube.
+    			if(activePlayer == TRUE){
+    			  this.drawCube(pane, 380, 20);
+    			}
+    			
     			// Player name.
     			this.drawText(pane, playerName, 470, 120, 80, 20, Color.BLACK);
     			
@@ -429,6 +452,15 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     		}
     		
     		if(color == Color.RED){
+    			// Cube.
+    			// yellow: 130, 20
+    			// green: 380, 20
+    			// red: 380, 480
+    			// black: 130, 480
+    			if(activePlayer == TRUE){
+    			  this.drawCube(pane, 380, 480);
+    			}
+    			
     			// Player name.
     			this.drawText(pane, playerName, 470, 570, 80, 20, Color.BLACK);
     			
@@ -774,7 +806,7 @@ public class Board extends JFrame implements MouseListener, ActionListener{
 		Options op = new Options();
 
 		Gamehandler gh = new Gamehandler(op, 
-				new String[] {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"});
+				new String[] {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"}, null);
 		
 		// Board
         Board board = new Board(fields, players, gh);
