@@ -19,6 +19,7 @@ public class Gamehandler implements Listener  {
 	// TODO: Regeln beachten!
 	// TODO: KI implementieren
 	// TODO: Prüfung ob ein Spieler gewonnen hat
+	// TODO: zwei aktive Spieler
 	
 	// Tobias:
 	// TODO: evtl. mögliche Spielzüge markieren? (Feature)
@@ -123,116 +124,85 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	
 	private void nextMoveOption(Player player)
 	{
-		//do {
-			// TODO: bei 6 darf der Spieler nochmal würfeln
+		this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
+		int thrownCubeNumber = 0;
 		
-			this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
-			int thrownCubeNumber = 0;
-			
-			if (player.canDriveThreeTimes())
+		if (player.canDriveThreeTimes())
+		{
+			for(int i = 0; i < 3; i++)
 			{
-				for(int i = 0; i < 3; i++)
+				//thrownCubeNumber = player.throwCube();
+				thrownCubeNumber = this.board.getRoll();
+				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+			
+				if(thrownCubeNumber == 6)
 				{
-					thrownCubeNumber = player.throwCube();
-					this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-				
-					if(thrownCubeNumber == 6)
+					this.handleCubeNumberSix(player);
+					break;
+				}
+			}
+			
+			if(thrownCubeNumber != 6)
+			{
+				this.nextMoveOption(this.getNextPlayer(player));
+			}
+		}
+	
+		else
+		{
+			thrownCubeNumber = this.board.getRoll(); //player.throwCube();
+			
+			this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+			//this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
+			this.setMoveOptions(player, thrownCubeNumber);
+		
+					
+			// Möglichkeiten der einzelnen Figuren prüfen
+			// - MoveOptions
+			// wenn es nur eine Spielzugmöglichkeit gibt,
+			// führe diese aus
+			if(this.moveOptions.size() == 1)
+			{
+				// Führe den Spielzug aus
+				this.handleMoveOption(this.moveOptions.get(0));
+			}
+			else if(this.moveOptions.size() > 1)
+			{
+				this.printDebugMoveOPtions();
+				// TODO: nach Prioritäten sortieren
+				// wenn es von der höchsten nur eine gibt
+				// und die Regel gesetzt ist
+				// führe den Spielzug aus...
+
+				Collections.sort(this.moveOptions);
+				boolean handledMoveOption = false;
+				for(int i = this.moveOptions.size() - 1; i > 0; i--)
+				{
+					MoveOption curOption = this.moveOptions.get(i);
+					MoveOption nextOption = this.moveOptions.get(i - 1);
+					
+					// Prüfe ob das letzte Element die höchste Priorität hat
+					if(curOption.compareTo(nextOption) > 0)
 					{
-						this.handleCubeNumberSix(player);
+						// TODO: prüfe ob die Regel aktiviert ist...
+						//...
+						this.handleMoveOption(curOption);
+						handledMoveOption = true;
 						break;
 					}
 				}
 				
-				if(thrownCubeNumber != 6)
+				if(!handledMoveOption)
 				{
-					this.nextMoveOption(this.getNextPlayer(player));
+					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
+					//möglichkeiten an gui?
+					this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
+					this.waitForUserInput = true;
+					//break;
 				}
 			}
-		
-			else
-			{
-				thrownCubeNumber = player.throwCube();
-				
-				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-				//this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-				this.setMoveOptions(player, thrownCubeNumber);
-			
-						
-				// Möglichkeiten der einzelnen Figuren prüfen
-				// - MoveOptions
-				// wenn es nur eine Spielzugmöglichkeit gibt,
-				// führe diese aus
-				if(this.moveOptions.size() == 1)
-				{
-					// Führe den Spielzug aus
-					this.handleMoveOption(this.moveOptions.get(0));
-				}
-				else if(this.moveOptions.size() > 1)
-				{
-					this.printDebugMoveOPtions();
-					// TODO: nach Prioritäten sortieren
-					// wenn es von der höchsten nur eine gibt
-					// und die Regel gesetzt ist
-					// führe den Spielzug aus...
-
-					Collections.sort(this.moveOptions);
-					boolean handledMoveOption = false;
-					for(int i = this.moveOptions.size() - 1; i > 0; i--)
-					{
-						MoveOption curOption = this.moveOptions.get(i);
-						MoveOption nextOption = this.moveOptions.get(i - 1);
-						
-						// Prüfe ob das letzte Element die höchste Priorität hat
-						if(curOption.compareTo(nextOption) > 0)
-						{
-							// TODO: prüfe ob die Regel aktiviert ist...
-							//...
-							this.handleMoveOption(curOption);
-							handledMoveOption = true;
-							break;
-						}
-					}
-					
-					if(!handledMoveOption)
-					{
-						//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-						//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-						//möglichkeiten an gui?
-						this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
-						this.waitForUserInput = true;
-						//break;
-					}
-				}
-						
-			/**	
-						// hier muss noch vorher geprüft werden ob schon eine Figur auf dem Feld steht
-							int fieldNumber = gh.getFieldNumber(player.getOffset(), Figure.startField);
-							if(gh.isFieldFree(fieldNumber))
-						{
-							// figur kann gesetzt werden
-							
-						}
-						
-						//Figure f = player.setFigureOut();
-						int steps = 0;
-						//Figure f = null;
-						player.setPlayerFigure(f, steps);
-						
-						
-						gh.setFigure2Field(f, fieldNumber);
-					}
-					**/
-			}
-		
-		/**
-		// nächsten Spieler holen
-		if(thrownCubeNumber != 6)
-		{
-			player = this.getNextPlayer(player);
 		}
-		this.nextMoveOption(player);
-		**/
-		//}while(player != null);
 	}
 	
 	
@@ -702,7 +672,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		
 		for(Map.Entry<String, Player> player : players.entrySet())
 		{
-			int threwCube = player.getValue().throwCube();
+			int threwCube = this.board.getRoll(); //player.getValue().throwCube();
 			if(threwCube > highestThrew) {
 				highestThrew = threwCube;
 				startingPlayer.clear();
@@ -970,6 +940,15 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		this.players.clear();
 		this.fields.clear();
 		this.mainGui.show();
+	}
+
+	@Override
+	public boolean cubeClicked(int thrownNumber) {
+		// TODO: Prüfen ob man würfeln darf
+		
+		// wenn man nicht würfeln darf
+		// reutrn false
+		return false;
 	}
 	
 	/**

@@ -4,4 +4,5 @@ public interface Listener {
 	
 	void fieldClicked(int fieldNumber);
 	void closeGame();
+	boolean cubeClicked(int thrownNumber);
 }

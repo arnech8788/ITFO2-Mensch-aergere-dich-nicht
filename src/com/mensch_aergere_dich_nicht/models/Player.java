@@ -2,8 +2,6 @@ package com.mensch_aergere_dich_nicht.models;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.Collections.*;
 
 public class Player {
 	
@@ -51,9 +49,11 @@ public class Player {
 		}
 	}
 	
+	/**
 	public int throwCube(){
 		return (int)((Math.random()) * 6 + 1);
 	}
+	**/
 	
 	public void setPlayerFigure(Figure f, int steps){
 		f.setSteps(steps);

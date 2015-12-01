@@ -2,8 +2,6 @@ package com.mensch_aergere_dich_nicht.models;
 
 import java.util.*;
 
-import com.mensch_aergere_dich_nicht.models.MoveOption.ePriority;
-
 
 public class MoveOption implements Comparable<MoveOption> 
 {
