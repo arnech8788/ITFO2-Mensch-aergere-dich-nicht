@@ -44,13 +44,14 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	private Options options;
 	//private MoveResult lastMoveResult;
 	private Board board;
+	private MainGui mainGui;
 	
 	private boolean waitForUserInput;
 	private List<MoveOption> moveOptions;
 	
 	public Gamehandler(Options options,
 					   String[] playerNames,
-					   MainGui gui)
+					   MainGui mainGui)
 	{
 		//this.addObserver(gameboard);
 		this.options = options;
@@ -59,6 +60,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		this.moveOptions = new  ArrayList<MoveOption>();
 		this.board = new Board(fields, players, this);
 		this.board.drawBoard();
+		this.mainGui = mainGui;
 		
 		this.nextMoveOption(this.getStartingPlayer(this.getPlayers()));
 	}
@@ -234,10 +236,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	}
 	
 	
-	private void handleThrownCube(Player player)
-	{
-		
-	}
+
 	
 	private void setMoveOptions(Player player,
 			int thrownCubeNumber)
@@ -940,6 +939,17 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		}
 		
 		throw new RuntimeException("Unknown Error: Es konnte kein Spielzug mit der Feldnummer gefunden werden!");
+	}
+
+	@Override
+	public void closeGame() {
+		// TODO Auto-generated method stub
+		this.board.dispose();
+		this.board = null;
+		this.options = null;
+		this.players.clear();
+		this.fields.clear();
+		this.mainGui.show();
 	}
 	
 	/**
