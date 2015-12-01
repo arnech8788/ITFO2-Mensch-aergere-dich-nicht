@@ -35,6 +35,7 @@ public class MainGui extends JFrame implements ActionListener{
 	JButton btnStart;
 	JButton btnClose;
 	JButton btnOptions;
+	JButton btnNetwork;
 	
 	JLabel lblColorPlayerOne;
 	JLabel lblColorPlayerTwo;
@@ -158,14 +159,20 @@ public class MainGui extends JFrame implements ActionListener{
 		btnStart = new JButton("Spiel starten");
 		btnStart.addActionListener(this);
 		btnStart.setSize(110,25);
-		btnStart.setLocation(180,280);
+		btnStart.setLocation(115,280);
 		this.add(btnStart);
 		
 		btnOptions = new JButton("Optionen");
 		btnOptions.addActionListener(this);
 		btnOptions.setSize(100,25);
-		btnOptions.setLocation(40,280);
+		btnOptions.setLocation(10,280);
 		this.add(btnOptions);
+		
+		btnNetwork = new JButton("Netzwerk");
+		btnNetwork.addActionListener(this);
+		btnNetwork.setSize(100, 25);
+		btnNetwork.setLocation(230, 280);
+		this.add(btnNetwork);
 		
 		//Set Textfields and Computer checkbox disabled
 		txtPlayerOneName.setEnabled(false);
@@ -230,7 +237,8 @@ public class MainGui extends JFrame implements ActionListener{
 				handler = new Gamehandler(options,new String[] {txtPlayerOneName.getText(),
 						txtPlayerTwoName.getText(),
 						txtPlayerThreeName.getText(),
-						txtPlayerOneName.getText()});
+						txtPlayerFourName.getText()},this);
+				this.hide();
 			}
 			else{
 				JOptionPane.showMessageDialog(new JFrame(),"Es muss mindestens 2 Spieler geben","Fehler Spielstart",JOptionPane.ERROR_MESSAGE);
