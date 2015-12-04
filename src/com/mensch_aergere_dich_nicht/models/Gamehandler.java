@@ -51,13 +51,13 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	private List<MoveOption> moveOptions;
 	
 	public Gamehandler(Options options,
-					   String[] playerNames,
+					   Map<String,Boolean> player,
 					   MainGui mainGui)
 	{
 		//this.addObserver(gameboard);
 		this.options = options;
 		this.createFields();
-		this.createPlayers(playerNames);
+		this.createPlayers(player);
 		this.moveOptions = new  ArrayList<MoveOption>();
 		this.board = new Board(fields, players, this);
 		this.board.drawBoard();
@@ -88,11 +88,14 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		// only testing methods
 		Options op = new Options();
 		
+		Map<String, Boolean> player = new HashMap<String, Boolean>();
+		player.put("eins", false);
+		player.put("zwei", false);
+		player.put("drei", false);
+		player.put("vier", false);
+		
 		Gamehandler gh = new Gamehandler(op, 
-				new String[] {"eins",
-				  "zwei",
-				  "drei",
-				  "vier"}, null);
+				player, null);
 		// AddPlayer()
 		
 		
@@ -672,7 +675,9 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		
 		for(Map.Entry<String, Player> player : players.entrySet())
 		{
-			int threwCube = this.board.getRoll(); //player.getValue().throwCube();
+			//int threwCube = this.board.getRoll(); //player.getValue().throwCube();
+			// TODO: StartingPlayer so umbauen, dass die Spieler würfeln...
+			int threwCube = (int)((Math.random()) * 6 + 1);
 			if(threwCube > highestThrew) {
 				highestThrew = threwCube;
 				startingPlayer.clear();
@@ -709,20 +714,22 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		}
 	}
 	
-	private void createPlayers(String[] playerNames)
+	private void createPlayers(Map<String,Boolean> player)
 	{
 		players = new HashMap<String,Player>();
 		
 		int iOffset = 0;// Offset of Fieldposition
-		boolean bIsComputer = false; // Is Computer?
+		//boolean bIsComputer = false; // Is Computer?
 		//String[] sPlayerName = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
 		Color[] colorArray = {Color.BLACK,Color.YELLOW,Color.GREEN,Color.RED };//Color of Players
 				
-		for (int i = 0; i < playerNames.length; i++)
+		int index = 0;
+		for (String playerName : player.keySet())
 		{
-			Player player = new Player(colorArray[i],bIsComputer,iOffset,playerNames[i]);
-			players.put(player.getPlayerColor().toString(), player);  // = new Player();
+			Player p = new Player(colorArray[index],player.get(playerName),iOffset,playerName);
+			players.put(p.getPlayerColor().toString(), p);  // = new Player();
 			iOffset += 10;
+			index += 1;
 		}
 	}
 	
