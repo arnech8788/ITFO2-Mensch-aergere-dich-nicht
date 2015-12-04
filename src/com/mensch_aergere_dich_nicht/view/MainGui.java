@@ -43,6 +43,7 @@ public class MainGui extends JFrame implements ActionListener{
 	JLabel lblColorPlayerFour;
 	
 	private JCheckBox [] cbBoxes = new JCheckBox[4];
+	private HashMap<String, Boolean> players = new HashMap();
 	private Options options;
 	private Option optionFrame;
 	private Gamehandler handler;
@@ -236,11 +237,14 @@ public class MainGui extends JFrame implements ActionListener{
 			if(isGameRunnable()){
 				if(handler != null){
 					handler = null;
+					players.clear();
 				}
-				handler = new Gamehandler(options,new String[] {txtPlayerOneName.getText(),
-						txtPlayerTwoName.getText(),
-						txtPlayerThreeName.getText(),
-						txtPlayerFourName.getText()},this);
+				players.put(txtPlayerOneName.getText(),cbPlayerOneIsComputer.isSelected());
+				players.put(txtPlayerTwoName.getText(),cbPlayerTwoIsComputer.isSelected());
+				players.put(txtPlayerThreeName.getText(),cbPlayerThreeIsComputer.isSelected());
+				players.put(txtPlayerFourName.getText(),cbPlayerFourIsComputer.isSelected());
+				
+				handler = new Gamehandler(options,players,this);
 				this.hide();
 			}
 			else{
