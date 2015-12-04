@@ -47,13 +47,17 @@ public class CubeView extends JPanel implements MouseListener{
 	 */
 	public CubeView(int positionX, int positionY){
 		cube = new Cube();
-		this.positionX = positionX;
-		this.positionY = positionY;	
 		cubeNumber = 1;
-		setLocation(positionX, positionY);
+		this.setCubePosition(positionX, positionY);
 		setSize(cubeSizeWidth, cubeSizeHeight);	
 		addMouseListener(this);
 		setLayout(null);
+	}
+	
+	public void setCubePosition(int positionX, int positionY){
+		this.positionX = positionX;
+		this.positionY = positionY;
+		setLocation(positionX, positionY);
 	}
 	
 	public Cube getCube(){

@@ -119,6 +119,11 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       this.setVisible(true);
       this.setResizable(false);
       this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+      
+      // Create cube object;
+      JLayeredPane pane = this.getBoardPane();
+      this.cube = new CubeView(0,0);
+  	  pane.add(cube, new Integer(1));
     }
     
     private JLayeredPane getBoardPane(){
@@ -151,8 +156,9 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     }
     
     private void drawCube(JLayeredPane pane, int x, int y){
-    	this.cube = new CubeView(x, y);
-    	pane.add(cube, new Integer(1));
+    	//this.cube = new CubeView(x, y);
+    	//pane.add(cube, new Integer(1));
+    	this.cube.setCubePosition(x, y);
     }
     
     public int getRoll(){
@@ -771,6 +777,7 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     }
 
     private static void test(){
+    	/*
     	// Players
     	String[] playerNames = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
     	
@@ -828,6 +835,7 @@ public class Board extends JFrame implements MouseListener, ActionListener{
         //f1a.setSteps(3);
         
         board.drawBoard();
+        */
     }
     
     class TextLabel extends JLabel {
