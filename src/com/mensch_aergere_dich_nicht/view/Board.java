@@ -156,6 +156,8 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     }
     
     public int getRoll(){
+    	this.cube.getCube().throwCube();
+    	this.drawBoard();
     	return this.cube.getCubeNumber();
     }
     
