@@ -64,7 +64,7 @@ public class CubeView extends JPanel implements MouseListener{
 	 * Setter-Method. Sets variable cubeNumber to 1-6
 	 * @param cubeNumber integer between 1-6
 	 */
-	private void setCubeNumber(int cubeNumber){
+	public void setCubeNumber(int cubeNumber){
 		this.cubeNumber = cubeNumber;
 	}
 	
