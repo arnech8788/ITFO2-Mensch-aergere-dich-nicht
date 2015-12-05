@@ -90,4 +90,15 @@ public class Figure implements Comparable<Figure>
 		return this.getSteps() - arg0.getSteps();
 	}
 	
+	
+	public String toString()
+	{
+		String temp = "";
+		temp += "Nr.: " + String.valueOf(this.getNumber());
+		temp += "	";
+		temp += "Farbe: " + this.getFigureColor().toString();
+		temp += "	";
+		temp += "Schritte: " + String.valueOf(this.getSteps());
+		return temp;
+	}
 }

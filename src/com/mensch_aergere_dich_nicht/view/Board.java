@@ -260,11 +260,16 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     		String playerName = player.getPlayerName();
     		    		
     		// Figures at house position.
-			Boolean[] house = {false,false,false,false,false};
-			//System.out.println(""+house[0]+" "+house[1]+" "+house[2]+" "+house[3]+" "+house[4]);
+			Boolean[] house = {false,false,false,false, false};
 			for(Entry<Integer, Figure> hf: houseFigures.entrySet()){
-    			int houseField = hf.getValue().getNumber();
-    			house [houseField] = true;        			
+    			// Tobias: int houseField = hf.getValue().getNumber();
+				// getNumber gibt die Nummer der Figur zurück
+				int houseNumber = hf.getKey();
+				if (!House.isValidHouseNumber(houseNumber)){
+					throw new RuntimeException("Ungültige HausNr: " + String.valueOf(houseNumber));
+				}
+				houseNumber = Integer.valueOf(String.valueOf(houseNumber).substring(2));
+    			house [houseNumber] = true;        			
     		}
 			
 			// Get player status (active/not active)

@@ -166,8 +166,7 @@ public class Player {
 		}
 		
 		// Prüfe ob Figuren im Haus hintereinander sind
-		Map<Integer, Figure> xy = this.getHouseFigures();
-		Collection<Figure> col = xy.values();
+		Collection<Figure> col = this.getHouseFigures().values();
 		//Object[] arr = col.toArray();
 		Figure[] homeFigures = col.toArray(new Figure[0]);
 		Arrays.sort(homeFigures);
@@ -262,7 +261,10 @@ public class Player {
 		return false;
 	}**/
 
-	
+	/**
+	 * @return
+	 * Key: HausNr
+	 */
 	public Map<Integer, Figure> getHouseFigures()
 	{
 		Map<Integer, Figure> homeFigures = new HashMap<Integer, Figure>();
@@ -271,7 +273,8 @@ public class Player {
 			if(f.getSteps() >= Gamehandler.fieldCount)
 			{
 				//homeFigures.add(f);
-				homeFigures.put(f.getNumber(), f);
+				//homeFigures.put(f.getNumber(), f);
+				homeFigures.put(f.getSteps(), f);
 			}
 		}
 		

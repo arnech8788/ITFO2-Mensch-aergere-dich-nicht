@@ -16,6 +16,7 @@ public class Gamehandler implements Listener  {
 	Map<Integer,Field> fields;
 	Map<String,Player> players;
 	
+	// TODO: Würfel wird nicht angezeigt...
 	// TODO: Regeln beachten!
 	// TODO: KI implementieren
 	// TODO: Prüfung ob ein Spieler gewonnen hat
@@ -836,8 +837,21 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				throw new RuntimeException("Die Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() + " kann nicht auf das Feld " + field.getNumber() + " setzen, da es von der Figur " + String.valueOf(figure.getNumber()+ " mit der Farbe " + figure.getFigureColor().toString() +  "  besetzt ist.")));
 			}
 		
+			/*
+			String temp= "";
+			temp += "Spieler: " + player.getPlayerName();
+			temp += "	";
+			temp += "Figur: " + figure.toString();
+			temp += "	";
+			temp += "FeldNr.: " + String.valueOf(fieldNumber);
+			System.out.println(temp);
+			*/
+			
 			// Figur von aktuellen Feld entfernen
-			this.clearField(figure);
+			if(figure.getSteps() != Figure.startField)
+			{
+				this.clearField(figure);
+			}
 			
 			// Figur auf neues Feld setzen
 			field.setFigure(figure);
