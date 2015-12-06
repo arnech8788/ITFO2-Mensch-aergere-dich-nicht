@@ -107,81 +107,82 @@ public class CubeView extends JPanel implements MouseListener{
 		super.paint(g);
 		
 		switch(cubeNumber){
-		case 1:{
-			g.drawOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
-		}break;
-		
-		case 2:{
-			g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+			case 1:{
+				g.drawOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
+			}break;
 			
-			g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-		}break;
-		
-		case 3:{
-			g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+			case 2:{
+				g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+			}break;
 			
-			g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+			case 3:{
+				g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
+			}break;
 			
-			g.drawOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
-		}break;
-		
-		case 4:{
-			g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+			case 4:{
+				g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+			}break;
 			
-			g.drawOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+			case 5:{
+				g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
+			} break;
 			
-			g.drawOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-		}break;
-		
-		case 5:{
-			g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p7.getX(), (int)p7.getY(), ovalWidth, ovalHeigth);
-		} break;
-		
-		case 6:{
-			g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p2.getX(), (int)p2.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p2.getX(), (int)p2.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p5.getX(), (int)p5.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p5.getX(), (int)p5.getY(), ovalWidth, ovalHeigth);
-			
-			g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
-			g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);		
-		}break;
+			case 6:{
+				g.drawOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p1.getX(), (int)p1.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p2.getX(), (int)p2.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p2.getX(), (int)p2.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p3.getX(), (int)p3.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p4.getX(), (int)p4.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p5.getX(), (int)p5.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p5.getX(), (int)p5.getY(), ovalWidth, ovalHeigth);
+				
+				g.drawOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);
+				g.fillOval((int)p6.getX(), (int)p6.getY(), ovalWidth, ovalHeigth);		
+			}break;
 		}
+		
 	}
 	
 	@Override
