@@ -10,6 +10,7 @@ import com.mensch_aergere_dich_nicht.view.*;
 public class Gamehandler implements Listener  {
 	public static final int fieldCount = 40;
 	public static final int errorField = -1;
+	public static final Color[] colors = {Color.BLACK,Color.YELLOW,Color.GREEN,Color.RED };
 	
 	// extends Observable
 	
@@ -365,6 +366,9 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				// es ist die eigene Figur!
 				// TODO: testen!
 				// Warum irgendeine Figur von Startposition?
+				
+				// TODO: wieder zeichnen entfernen -> nur test
+				this.board.drawBoard();
 				this.setFigure2Field(player.getAnyFigureFromStartPosition(), fieldNumber);
 			}
 				
@@ -656,11 +660,11 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		{
 			if(p.getPlayerColor() == player.getPlayerColor())
 			{
-				p.setActive(false);
+				p.setActive(true);
 			}
 			else
 			{
-				p.setActive(true);
+				p.setActive(false);
 			}
 		}
 	}
@@ -722,12 +726,11 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		int iOffset = 0;// Offset of Fieldposition
 		//boolean bIsComputer = false; // Is Computer?
 		//String[] sPlayerName = {"Gernhart Reinholzen","Lassmiranda den si Villia","Timo Beil","Anne Theke"};//Playernames
-		Color[] colorArray = {Color.BLACK,Color.YELLOW,Color.GREEN,Color.RED };//Color of Players
 				
 		int index = 0;
 		for (String playerName : player.keySet())
 		{
-			Player p = new Player(colorArray[index],player.get(playerName),iOffset,playerName);
+			Player p = new Player(colors[index],player.get(playerName),iOffset,playerName);
 			players.put(p.getPlayerColor().toString(), p);  // = new Player();
 			iOffset += 10;
 			index += 1;
@@ -848,7 +851,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 			*/
 			
 			// Figur von aktuellen Feld entfernen
-			if(figure.getSteps() != Figure.startField)
+			if(figure.getSteps() != Figure.startPosition)
 			{
 				this.clearField(figure);
 			}
@@ -874,7 +877,9 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	
 	private void clearField(Figure figure)
 	{
-		this.getFields().get(this.getFieldNumber(this.getPlayer(figure).getOffset(), figure.getSteps())).clear();
+		Player p = this.getPlayer(figure);
+		int fieldNumber = this.getFieldNumber(p.getOffset(), figure.getSteps());
+		this.getFields().get(fieldNumber).clear();
 	}
 	
 
