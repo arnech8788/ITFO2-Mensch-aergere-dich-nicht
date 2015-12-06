@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.mensch_aergere_dich_nicht.models.Cube;
+import com.mensch_aergere_dich_nicht.models.Listener;
 
 /**
  * Class represents a 2D Cube.
@@ -24,6 +25,7 @@ public class CubeView extends JPanel implements MouseListener{
 	private final int cubeSizeWidth = 80;
 	private Cube cube;
 	private int cubeNumber;
+	private Listener clickListener;
 	
 	//Cube attributes
 	private final int ovalWidth = 10;
@@ -45,9 +47,11 @@ public class CubeView extends JPanel implements MouseListener{
 	 * @param positionY
 	 * Position Y in Frame
 	 */
-	public CubeView(int positionX, int positionY){
+	public CubeView(int positionX, int positionY,
+			Listener l){
 		cube = new Cube();
 		cubeNumber = 1;
+		this.clickListener = l;
 		this.setCubePosition(positionX, positionY);
 		setSize(cubeSizeWidth, cubeSizeHeight);	
 		addMouseListener(this);
@@ -58,6 +62,7 @@ public class CubeView extends JPanel implements MouseListener{
 		this.positionX = positionX;
 		this.positionY = positionY;
 		setLocation(positionX, positionY);
+		this.repaint();
 	}
 	
 	public Cube getCube(){
@@ -70,6 +75,7 @@ public class CubeView extends JPanel implements MouseListener{
 	 */
 	public void setCubeNumber(int cubeNumber){
 		this.cubeNumber = cubeNumber;
+		this.repaint();
 	}
 	
 	/**
@@ -83,14 +89,12 @@ public class CubeView extends JPanel implements MouseListener{
 	
 	@Override
 	public void setSize(int width, int height) {
-		// TODO Auto-generated method stub
 		width = cubeSizeWidth;
 		height = cubeSizeHeight;
 		super.setSize(width, height);
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.drawRoundRect(0, 0, this.getBounds().width-1, this.getBounds().height-1, 10, 10);
@@ -100,7 +104,6 @@ public class CubeView extends JPanel implements MouseListener{
 	
 	@Override
 	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
 		super.paint(g);
 		
 		switch(cubeNumber){
@@ -180,34 +183,29 @@ public class CubeView extends JPanel implements MouseListener{
 		}break;
 		}
 	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		setCubeNumber(cube.throwCube());
-		this.repaint();
+		int cubeNumber = cube.throwCube();
+		if(this.clickListener.cubeClicked(cubeNumber))
+		{
+			this.setCubeNumber(cubeNumber);
+		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

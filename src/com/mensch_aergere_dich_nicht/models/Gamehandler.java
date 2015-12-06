@@ -9,7 +9,7 @@ import com.mensch_aergere_dich_nicht.view.*;
 
 public class Gamehandler implements Listener  {
 	public static final int fieldCount = 40;
-	public static final int errorField = -1;
+	public static final int errorField = -999;
 	public static final Color[] colors = {Color.BLACK,Color.YELLOW,Color.GREEN,Color.RED };
 	
 	// extends Observable
@@ -17,7 +17,6 @@ public class Gamehandler implements Listener  {
 	Map<Integer,Field> fields;
 	Map<String,Player> players;
 	
-	// TODO: Würfel wird nicht angezeigt...
 	// TODO: Regeln beachten!
 	// TODO: KI implementieren
 	// TODO: Prüfung ob ein Spieler gewonnen hat
@@ -49,7 +48,8 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	private Board board;
 	private MainGui mainGui;
 	
-	private boolean waitForUserInput;
+	private boolean waitForUserInput_Field;
+	private boolean waitForUserInput_Cube;
 	private List<MoveOption> moveOptions;
 	
 	public Gamehandler(Options options,
@@ -96,49 +96,25 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		player.put("drei", false);
 		player.put("vier", false);
 		
-		Gamehandler gh = new Gamehandler(op, 
-				player, null);
-		// AddPlayer()
-		
-		
-		//gh.startGame();
-		
-		// Player getStartingPlayer (durch Würfeln ermitteln)
-		//Player player = gh.getStartingPlayer(gh.getPlayers());
-		
-		//gh.nextMoveOption(player);
-
-		
-		
-		// 	3x würfeln bis er eine sechs hat
-		
-		
-		// moveOption getMoveOptions(Player) (welche Spieloptionen)
-		
-		// boolean setMove(moveOption) (setze Spieler)
-		
-		// getNextPlayer
-		
-		
-		
-		
-		//MoveResult result = gh.nextMove();
-		
+		new Gamehandler(op,player, null);
 	}
+	
 	
 	
 	private void nextMoveOption(Player player)
 	{
-		this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
+		//this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
+		System.out.println(player.getPlayerName() + " ist am Spielzug.");
 		int thrownCubeNumber = 0;
+		this.setCurrentPlayer(player);
 		
 		if (player.canDriveThreeTimes())
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				//thrownCubeNumber = player.throwCube();
 				thrownCubeNumber = this.board.getRoll();
-				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				//this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 			
 				if(thrownCubeNumber == 6)
 				{
@@ -157,7 +133,8 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		{
 			thrownCubeNumber = this.board.getRoll(); //player.throwCube();
 			
-			this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+			//this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+			System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 			//this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
 			this.setMoveOptions(player, thrownCubeNumber);
 		
@@ -199,12 +176,9 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				
 				if(!handledMoveOption)
 				{
-					//gh.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-					//gh.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-					//möglichkeiten an gui?
-					this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
-					this.waitForUserInput = true;
-					//break;
+					//this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
+					System.out.println("Bitte wählen Sie einen Spielzug aus.");
+					this.waitForUserInput_Field = true;
 				}
 			}
 		}
@@ -540,37 +514,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		}
 		return temp;
 	}
-	
-	public void addPlayer(String name,
-						  boolean isKI)
-	{
-		throw new RuntimeException("function is not implemented!");
-	}
-	
-	
-	/**
-	public void startGame()
-	{
-		// alle Figuren an Anfang setzen
-		resetPlayers();
-		
-		
-		
-		
-		// ersten Spielzug...
-		
-		
-		// solange Würfeln bis einer eine sechs hat
-		
-		// bis zu drei mal würfeln 
-		
-		// evtl spieler raussetzen
-		
-		
-		
-		
-	}**/
-	
+
 	
 	public boolean setNextMove()
 	{
@@ -579,51 +523,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		//return false;
 	}
 	
-	/**
-	public MoveOptions getNextMoveOptions()
-	{
-		// analyse und möglichkeiten ausgeben
-	}
-	**/
 	
-	/**
-	public MoveResult nextMove()
-	{
-		// checking last move
-		Player player = null;
-		if (lastMoveResult == null)
-		{
-			player = getStartingPlayer(this.Players);
-		}
-		else
-		{
-			player = getNextPlayer(lastMoveResult);
-		}
-		
-		
-		// ACHTUNG: bei 6 gleicher Spieler nochmal
-		// analysiere ob mind eine Figur draußen ist
-		if(player.canDriveThreeTimes())
-		{
-			// 3x würfen 
-			// -> bei sechs kann man die nächste Figur ziehen
-			
-		}
-		else
-		{
-			// 1x würfeln
-			// analyse was man machen kann
-			// ergebnis an Gui zurück
-			
-		}
-		
-		
-		// was ist, wenn der Spieler nochmal dran ist?
-		// also immer wieder eine sechs würfelt
-	}
-	**/
-	
-
 	
 	public Player getNextPlayer(Player lastPlayer)
 	{
@@ -667,6 +567,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				p.setActive(false);
 			}
 		}
+		this.board.drawBoard();
 	}
 	
 	private Player getStartingPlayer(Map<String, Player> players)
@@ -680,9 +581,9 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		
 		for(Map.Entry<String, Player> player : players.entrySet())
 		{
-			//int threwCube = this.board.getRoll(); //player.getValue().throwCube();
+			int threwCube = this.board.getRoll(); //player.getValue().throwCube();
 			// TODO: StartingPlayer so umbauen, dass die Spieler würfeln...
-			int threwCube = (int)((Math.random()) * 6 + 1);
+			//int threwCube = (int)((Math.random()) * 6 + 1);
 			if(threwCube > highestThrew) {
 				highestThrew = threwCube;
 				startingPlayer.clear();
@@ -889,29 +790,19 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		try
 		{
 			// TODO: ? Priorität beachtet?
-			if(this.waitForUserInput && fieldNumber != errorField)
+			if(this.waitForUserInput_Field && fieldNumber != errorField)
 			{
 				if(this.isValidMoveOption(fieldNumber))
 				{
-					MoveOption mo = this.getMoveOption4FieldNumber(fieldNumber);
-					
 					// Führe den Zug aus
-					this.handleMoveOption(mo);
-							
-					
-					
-					// prüfe ob Spieler nochmal würfeln darf
-							
-							
-							
-					// wenn nicht nächsten Spieler ermitteln und würfeln...
-							
-					
+					this.handleMoveOption(this.getMoveOption4FieldNumber(fieldNumber));
 				}
 				else
 				{
-					this.board.displayMessage("Ungültiger Spielzug!");
-					this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.");
+					//this.board.displayMessage("Ungültiger Spielzug!");
+					//this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.");
+					System.out.println("Ungültiger Spielzug!");
+					System.out.println("Bite wählen Sie ein anderes Feld aus.");
 				}
 			}
 			
@@ -957,15 +848,21 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		throw new RuntimeException("Unknown Error: Es konnte kein Spielzug mit der Feldnummer gefunden werden!");
 	}
 
+	
 	@Override
 	public void closeGame() {
 		// TODO Auto-generated method stub
 		this.board.dispose();
+		/*
 		this.board = null;
 		this.options = null;
 		this.players.clear();
 		this.fields.clear();
-		this.mainGui.show();
+		*/
+		if (this.mainGui != null)
+		{
+			this.mainGui.show();
+		}
 	}
 
 	@Override
@@ -973,17 +870,9 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		// TODO: Prüfen ob man würfeln darf
 		
 		// wenn man nicht würfeln darf
-		// reutrn false
+		// return false
 		return false;
 	}
 	
-	/**
-	private void setFigure2Field(Figure figure,
-								 int playerOffSet)
-	{
-		this.setFigure2Field(figure, getFieldNumber(playerOffSet, figure.getSteps()););
-	}**/
-
-	 
-
+	
 }

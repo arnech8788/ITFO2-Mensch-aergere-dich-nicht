@@ -55,13 +55,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       // Setup field grid.
       this.setupFieldGrid();
       
-      /*
-      try {                
-          image = ImageIO.read(getClass().getResource("board600.jpg"));
-       } catch (IOException ex) {
-            // Exception...
-       }  
-      */
       
       btnClose = new JButton("Spiel benden");
       btnClose.setPreferredSize(new Dimension(40, 20));
@@ -69,7 +62,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       
       // Message box (10 rows, 40 columns).
       msgBox = new JTextArea(30,20);
-      //msgBox.setText("");
       // Use line wrap (wrap at word boundries).
       msgBox.setLineWrap(true);
       msgBox.setWrapStyleWord(true);
@@ -82,29 +74,10 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       boardPane = new JLayeredPane();
       boardPane.setPreferredSize(new Dimension(600,600));
                         
-      // New boardPanel.
-      //boardPanel = new JPanel();
-      //boardPanel.add(new JLabel(new ImageIcon(image)));
       
-      //this.drawBoard();
       boardPane.addMouseListener(this);
       this.addMouseListener(this);
       
-      //boardPanel.addMouseListener(this);
-      //this.addMouseListener(this);
-      
-      // TEST new piecePanel.
-      //PiecePanel playerRed = new PiecePanel(Color.RED, 40,40);
-      
-      // Add panels to boardPane.
-      //boardPanel.setBounds(0,0,600,600);
-      //boardPane.add(boardPanel, new Integer(0));
-      //int[] coordinates = this.getFieldCoordinates(25);
-  	  //int x = coordinates[0];
-  	  //int y = coordinates[1];
-      //playerRed.setBounds(x-25,y-21,80,80);
-      //playerRed.setOpaque(false);
-      //boardPane.add(playerRed, new Integer(1));
       
       // New main panel.
       mainPanel = new JPanel();
@@ -119,16 +92,15 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       this.add(btnClose, BorderLayout.SOUTH);
 
       // Frame configuration.
-      //this.setLayout(new GridLayout());
       this.setSize(850, 650);
       this.setLocationRelativeTo(null);
       this.setVisible(true);
       this.setResizable(false);
-      this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+      this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
       
       // Create cube object;
       JLayeredPane pane = this.getBoardPane();
-      this.cube = new CubeView(0,0);
+      this.cube = new CubeView(0,0, this.clickListener);
   	  pane.add(cube, new Integer(1));
     }
     
@@ -225,7 +197,13 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     		throw new RuntimeException("Unbekannte Spielerfarbe: " + p.getPlayerColor().toString());
     	}
 
-    	this.cube.setCubePosition(x, y);
+    	//this.cube.setCubePosition(x, y);
+    	int cubeNumber = cube.getCubeNumber();
+    	pane.remove(cube);
+    	this.cube= null;
+    	this.cube = new CubeView(x,y, this.clickListener);
+    	pane.add(cube, new Integer(1));
+    	this.cube.setCubeNumber(cubeNumber);
     }
     
     public int getRoll(){
