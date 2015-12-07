@@ -16,6 +16,7 @@ public class MainGui extends JFrame implements ActionListener{
 	JCheckBox cbPlayerTwoIsEnabled; 
 	JCheckBox cbPlayerThreeIsEnabled; 
 	JCheckBox cbPlayerFourIsEnabled; 
+	JCheckBox cbDebug; 
 	
 	JLabel lblPlayerOneNameInfo;
 	JLabel lblPlayerTwoNameInfo;
@@ -43,7 +44,8 @@ public class MainGui extends JFrame implements ActionListener{
 	JLabel lblColorPlayerFour;
 	
 	private JCheckBox [] cbBoxes = new JCheckBox[4];
-	private HashMap<String, Boolean> players = new HashMap();
+	private JTextField [] txtPlayerNames = new JTextField[4];
+	//private HashMap<String, Boolean> players = new HashMap();
 	private Options options;
 	private Option optionFrame;
 	private Gamehandler handler;
@@ -56,24 +58,33 @@ public class MainGui extends JFrame implements ActionListener{
 		optionFrame.setVisible(false);
 		this.setLayout(null);
 
+		// Debug
+		cbDebug = new JCheckBox("Debug-Modus");
+		cbDebug.setSize(110,30);
+		cbDebug.setLocation(230,2);
+		cbDebug.addActionListener(this);
+		this.add(cbDebug);
+		
+
+		
 //------------------ Player controls -------------------------
 		// Player One
 		lblPlayerOneNameInfo = new JLabel("Spieler Eins:");
 		lblPlayerOneNameInfo.setLocation(10,20);
 		lblPlayerOneNameInfo.setSize(80, 30);
 		cbPlayerOneIsEnabled = new JCheckBox("aktivieren");
-		cbPlayerOneIsEnabled.setLocation(80, 20);
+		cbPlayerOneIsEnabled.setLocation(82, 20);
 		cbPlayerOneIsEnabled.setSize(90,30);
 		cbPlayerOneIsEnabled.addActionListener(this);
 		cbPlayerOneIsComputer = new JCheckBox("KI");
 		cbPlayerOneIsComputer.setLocation(170, 20);
-		cbPlayerOneIsComputer.setSize(120,30);
+		cbPlayerOneIsComputer.setSize(60,30);
 		txtPlayerOneName = new JTextField();
 		txtPlayerOneName.setLocation(85, 50);
 		txtPlayerOneName.setSize(220,20);
 		lblColorPlayerOne = new JLabel("");
 		lblColorPlayerOne.setOpaque(true);
-		lblColorPlayerOne.setBackground(Color.blue);
+		lblColorPlayerOne.setBackground(Gamehandler.colors[0]);
 		lblColorPlayerOne.setSize(15,15);
 		lblColorPlayerOne.setLocation(52,52);
 		this.add(lblPlayerOneNameInfo);
@@ -92,7 +103,7 @@ public class MainGui extends JFrame implements ActionListener{
 		cbPlayerTwoIsEnabled.addActionListener(this);
 		cbPlayerTwoIsComputer = new JCheckBox("KI");
 		cbPlayerTwoIsComputer.setLocation(170, 80);
-		cbPlayerTwoIsComputer.setSize(120,30);
+		cbPlayerTwoIsComputer.setSize(60,30);
 		txtPlayerTwoName = new JTextField();
 		txtPlayerTwoName.setLocation(85, 110);
 		txtPlayerTwoName.setSize(220,20);
@@ -100,7 +111,7 @@ public class MainGui extends JFrame implements ActionListener{
 		lblColorPlayerTwo.setSize(15,15);
 		lblColorPlayerTwo.setLocation(52,110);
 		lblColorPlayerTwo.setOpaque(true);
-		lblColorPlayerTwo.setBackground(Color.green);
+		lblColorPlayerTwo.setBackground(Gamehandler.colors[1]);
 		this.add(lblPlayerTwoNameInfo);
 		this.add(cbPlayerTwoIsEnabled);
 		this.add(cbPlayerTwoIsComputer);
@@ -117,7 +128,7 @@ public class MainGui extends JFrame implements ActionListener{
 		cbPlayerThreeIsEnabled.addActionListener(this);
 		cbPlayerThreeIsComputer = new JCheckBox("KI");
 		cbPlayerThreeIsComputer.setLocation(170, 140);
-		cbPlayerThreeIsComputer.setSize(120,30);
+		cbPlayerThreeIsComputer.setSize(60,30);
 		txtPlayerThreeName = new JTextField();
 		txtPlayerThreeName.setSize(220,20);
 		txtPlayerThreeName.setLocation(85,170);
@@ -125,7 +136,7 @@ public class MainGui extends JFrame implements ActionListener{
 		lblColorPlayerThree.setSize(15,15);
 		lblColorPlayerThree.setLocation(52,170);
 		lblColorPlayerThree.setOpaque(true);
-		lblColorPlayerThree.setBackground(Color.red);
+		lblColorPlayerThree.setBackground(Gamehandler.colors[2]);
 		this.add(lblPlayerThreeNameInfo);
 		this.add(cbPlayerThreeIsEnabled);
 		this.add(cbPlayerThreeIsComputer);
@@ -141,7 +152,7 @@ public class MainGui extends JFrame implements ActionListener{
 		cbPlayerFourIsEnabled.addActionListener(this);
 		cbPlayerFourIsComputer = new JCheckBox("KI");
 		cbPlayerFourIsComputer.setLocation(170,200);
-		cbPlayerFourIsComputer.setSize(120, 30);
+		cbPlayerFourIsComputer.setSize(60, 30);
 		txtPlayerFourName = new JTextField();
 		txtPlayerFourName.setSize(220,20);
 		txtPlayerFourName.setLocation(85,230);
@@ -149,7 +160,7 @@ public class MainGui extends JFrame implements ActionListener{
 		lblColorPlayerFour.setSize(15,15);
 		lblColorPlayerFour.setLocation(52, 230);
 		lblColorPlayerFour.setOpaque(true);
-		lblColorPlayerFour.setBackground(Color.yellow);
+		lblColorPlayerFour.setBackground(Gamehandler.colors[3]);
 		this.add(lblPlayerFourNameInfo);
 		this.add(cbPlayerFourIsEnabled);
 		this.add(cbPlayerFourIsComputer);
@@ -186,6 +197,7 @@ public class MainGui extends JFrame implements ActionListener{
 		cbPlayerThreeIsComputer.setEnabled(false);
 		cbPlayerFourIsComputer.setEnabled(false);
 		
+		
 		/*
 		 * Put player checkbox controls in cbBoxes
 		 * for checking if min 2 players are selected for starting game
@@ -194,6 +206,11 @@ public class MainGui extends JFrame implements ActionListener{
 		cbBoxes[1] = cbPlayerTwoIsEnabled;
 		cbBoxes[2] = cbPlayerThreeIsEnabled;
 		cbBoxes[3] = cbPlayerFourIsEnabled;
+		
+		txtPlayerNames[0] = txtPlayerOneName;
+		txtPlayerNames[1] = txtPlayerTwoName;
+		txtPlayerNames[2] = txtPlayerThreeName;
+		txtPlayerNames[3] = txtPlayerFourName;
 //-----------------------------------------------------------			
 		//Frame
 		this.setSize(350,350);
@@ -205,7 +222,7 @@ public class MainGui extends JFrame implements ActionListener{
 	
 	public static void main(String args[])
 	{
-			MainGui gb = new MainGui();
+			new MainGui();
 	}
 	
 	//Check if min two players are selected
@@ -213,7 +230,8 @@ public class MainGui extends JFrame implements ActionListener{
 		int countOfSelectedPlayers = 0; 
 		
 		for(int i = 0; i<4; i++){
-			if(cbBoxes[i].isSelected()== true){
+			if(cbBoxes[i].isSelected() && !txtPlayerNames[i].getText().equals(""))
+			{
 				countOfSelectedPlayers++;
 			}
 		}
@@ -235,20 +253,35 @@ public class MainGui extends JFrame implements ActionListener{
 		else if(arg0.getSource() == btnStart)
 		{
 			if(isGameRunnable()){
+				
 				if(handler != null){
 					handler = null;
-					players.clear();
 				}
-				players.put(txtPlayerOneName.getText(),cbPlayerOneIsComputer.isSelected());
-				players.put(txtPlayerTwoName.getText(),cbPlayerTwoIsComputer.isSelected());
-				players.put(txtPlayerThreeName.getText(),cbPlayerThreeIsComputer.isSelected());
-				players.put(txtPlayerFourName.getText(),cbPlayerFourIsComputer.isSelected());
 				
-				handler = new Gamehandler(options,players,this);
+				handler = new Gamehandler(this, cbDebug.isSelected());
+				handler.setAllFiguresBack();
+				handler.getPlayers().clear();
+				
+				// TODO: testen ob die Spieloptionen bei Änderungen auch übernommen werden...
+				
+				/*
+				HashMap<String, Boolean> players = new HashMap<String, Boolean>();
+
+				players.put(txtPlayerOneName.getText(), cbPlayerOneIsComputer.isSelected());
+				players.put(txtPlayerTwoName.getText(), cbPlayerTwoIsComputer.isSelected());
+				players.put(txtPlayerThreeName.getText(), cbPlayerThreeIsComputer.isSelected());
+				players.put(txtPlayerFourName.getText(), cbPlayerFourIsComputer.isSelected());
+				*/
+				
+				handler.addPlayer(txtPlayerOneName.getText(), cbPlayerOneIsComputer.isSelected());
+				handler.addPlayer(txtPlayerTwoName.getText(), cbPlayerTwoIsComputer.isSelected());
+				handler.addPlayer(txtPlayerThreeName.getText(), cbPlayerThreeIsComputer.isSelected());
+				handler.addPlayer(txtPlayerFourName.getText(), cbPlayerFourIsComputer.isSelected());
 				this.hide();
+				handler.startGame(this.options);
 			}
 			else{
-				JOptionPane.showMessageDialog(new JFrame(),"Es muss mindestens 2 Spieler geben","Fehler Spielstart",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(new JFrame(),"Es muss mindestens 2 gültige Spieler geben!","Fehler Spielstart",JOptionPane.ERROR_MESSAGE);
 			}
 		}		
 		//CheckBox events
@@ -258,6 +291,7 @@ public class MainGui extends JFrame implements ActionListener{
 				cbPlayerOneIsComputer.setEnabled(true);
 			}
 			else{
+				txtPlayerOneName.setText("");
 				txtPlayerOneName.setEnabled(false);
 				cbPlayerOneIsComputer.setEnabled(false);
 			}
@@ -268,6 +302,7 @@ public class MainGui extends JFrame implements ActionListener{
 				cbPlayerTwoIsComputer.setEnabled(true);
 			}
 			else{
+				txtPlayerTwoName.setText("");
 				txtPlayerTwoName.setEnabled(false);
 				cbPlayerTwoIsComputer.setEnabled(false);
 			}
@@ -278,6 +313,7 @@ public class MainGui extends JFrame implements ActionListener{
 				cbPlayerThreeIsComputer.setEnabled(true);
 			}
 			else{
+				txtPlayerThreeName.setText("");
 				txtPlayerThreeName.setEnabled(false);
 				cbPlayerThreeIsComputer.setEnabled(false);
 			}
@@ -288,6 +324,7 @@ public class MainGui extends JFrame implements ActionListener{
 				cbPlayerFourIsComputer.setEnabled(true);
 			}
 			else{
+				txtPlayerFourName.setText("");
 				txtPlayerFourName.setEnabled(false);
 				cbPlayerFourIsComputer.setEnabled(false);
 			}

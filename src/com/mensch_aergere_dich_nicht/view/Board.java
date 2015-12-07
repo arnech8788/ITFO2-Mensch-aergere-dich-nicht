@@ -12,7 +12,11 @@ import java.util.*;
 import java.util.Map.Entry;
 //import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
+import org.omg.CORBA.portable.InvokeHandler;
+
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
@@ -46,11 +50,15 @@ public class Board extends JFrame implements MouseListener, ActionListener{
 		Figure, Field
 	}
     
-    public Board(Map<Integer, Field> f, Map<String, Player> p, Listener l){
+	private boolean showMsgbox = false;
+	
+    public Board(Map<Integer, Field> f, Map<String, Player> p, Listener l,
+    		boolean showMsgbox){
       super("Mensch ärgere dich nicht");
       this.fields = f;
       this.players = p;
       this.clickListener = l;
+      this.showMsgbox = showMsgbox;
       
       // Setup field grid.
       this.setupFieldGrid();
@@ -61,14 +69,18 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       btnClose.addActionListener(this);
       
       // Message box (10 rows, 40 columns).
-      msgBox = new JTextArea(30,20);
-      // Use line wrap (wrap at word boundries).
-      msgBox.setLineWrap(true);
-      msgBox.setWrapStyleWord(true);
+      if(this.showMsgbox)
+      {
+	      msgBox = new JTextArea(30,20);
+	      // Use line wrap (wrap at word boundries).
+	      msgBox.setLineWrap(true);
+	      msgBox.setWrapStyleWord(true);
+	      
+	      // Add scrollbar.
+	      scrollPane = new JScrollPane(msgBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+	            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	  }
       
-      // Add scrollbar.
-      scrollPane = new JScrollPane(msgBox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       
       // New boardPane.
       boardPane = new JLayeredPane();
@@ -83,7 +95,10 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       mainPanel = new JPanel();
       
       // Add elements to main panel.
-      mainPanel.add(scrollPane);
+      if(scrollPane != null)
+      {
+    	  mainPanel.add(scrollPane);
+      }
       
       // Add components to Gameboard.
       this.add(boardPane, BorderLayout.WEST);
@@ -92,7 +107,14 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       this.add(btnClose, BorderLayout.SOUTH);
 
       // Frame configuration.
-      this.setSize(850, 650);
+      if(this.showMsgbox)
+      {
+          this.setSize(850, 650);
+      }
+      else
+      {
+    	  this.setSize(600, 650);
+      }
       this.setLocationRelativeTo(null);
       this.setVisible(true);
       this.setResizable(false);
@@ -162,7 +184,12 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     	}
     	
     	
-    	TextLabel newtext = new TextLabel(p.getPlayerName(), x, y, Color.BLACK);
+    	String playerName = p.getPlayerName();
+    	if(p.isComputer())
+    	{
+    		playerName = "KI: "+ playerName;
+    	}
+    	TextLabel newtext = new TextLabel(playerName, x, y, Color.BLACK);
     	newtext.setBounds(x,y,h,20); 
     	newtext.setOpaque(false);
     	pane.add(newtext, new Integer(1));
@@ -296,16 +323,14 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     	
 		
     	// Setzen von Figuren auf Startfeldern.
-    	for (Map.Entry<String, Player> entry : players.entrySet()){
+    	for (Map.Entry<String, Player> entry : players.entrySet())
+    	{
     		Player player = entry.getValue();
     		int figuresAtStartPosition = player.getCountOfFiguresAtStartPosition();
-    		Color color = player.getPlayerColor();
     		    		
     		// Figures at house position.
 			Boolean[] house = {false,false,false,false};
 			for(Entry<Integer, Figure> hf: player.getHouseFigures().entrySet()){
-    			// Tobias: int houseField = hf.getValue().getNumber();
-				// getNumber gibt die Nummer der Figur zurück
 				int houseNumber = hf.getKey();
 				if (!House.isValidHouseNumber(houseNumber)){
 					throw new RuntimeException("Ungültige HausNr: " + String.valueOf(houseNumber));
@@ -363,8 +388,15 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     }
     
     public void displayMessage(String msg){
-      this.msgBox.append("\n" + msg);
-      this.msgBox.setCaretPosition(this.msgBox.getDocument().getLength());
+    	if(this.showMsgbox)
+    	{
+    	      this.msgBox.append("\n" + msg);
+    	      this.msgBox.setCaretPosition(this.msgBox.getDocument().getLength());
+    	}
+    	else
+    	{
+  	      System.out.println(msg);
+    	}
     }
     
     private void setupFieldCoordinates(int fieldnumber, String position){

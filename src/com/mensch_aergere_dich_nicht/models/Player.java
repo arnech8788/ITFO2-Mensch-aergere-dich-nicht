@@ -40,12 +40,17 @@ public class Player {
 		
 		this.figures = new HashMap<Integer, Figure>();
 		this.houses = new HashMap<Integer, House>();
-		//create 4 figures
-		for(int i = 1 ; i <= 4 ; i++){
-			figures.put(i, new Figure(playerColor, i));
-
-			int houseNumber = i + House.getHouseAdditionValue(offset);
-			houses.put(houseNumber, new House(houseNumber));
+		
+		if(this.isPlaying())
+		{
+			//create 4 figures
+			for(int i = 1 ; i <= 4 ; i++)
+			{
+				figures.put(i, new Figure(playerColor, i));
+	
+				int houseNumber = i + House.getHouseAdditionValue(offset);
+				houses.put(houseNumber, new House(houseNumber));
+			}
 		}
 	}
 	
@@ -54,6 +59,11 @@ public class Player {
 		return (int)((Math.random()) * 6 + 1);
 	}
 	**/
+	
+	public boolean isPlaying()
+	{
+		return !this.getPlayerName().equals("");
+	}
 	
 	public void setPlayerFigure(Figure f, int steps){
 		f.setSteps(steps);

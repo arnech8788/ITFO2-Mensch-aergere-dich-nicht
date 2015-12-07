@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.List;
 import java.awt.*;
 
+import javax.swing.JFrame;
+
 import com.mensch_aergere_dich_nicht.models.MoveOption.ePriority;
 import com.mensch_aergere_dich_nicht.view.*;
 
@@ -11,11 +13,12 @@ public class Gamehandler implements Listener  {
 	public static final int fieldCount = 40;
 	public static final int errorField = -999;
 	public static final Color[] colors = {Color.BLACK,Color.YELLOW,Color.GREEN,Color.RED };
+	private static final int[] offSet = {0, 10, 20, 30}; 
 	
 	// extends Observable
 	
 	Map<Integer,Field> fields;
-	Map<String,Player> players;
+	Map<String,Player> player;
 	
 	// TODO: Regeln beachten!
 	// TODO: KI implementieren
@@ -46,47 +49,57 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	private Options options;
 	//private MoveResult lastMoveResult;
 	private Board board;
-	private MainGui mainGui;
+	private JFrame mainGui;
 	
 	private boolean waitForUserInput_Field;
 	private boolean waitForUserInput_Cube;
 	private List<MoveOption> moveOptions;
 	
-	public Gamehandler(Options options,
-					   Map<String,Boolean> player,
-					   MainGui mainGui)
+	public Gamehandler(JFrame mainGui, boolean showMsgbox)
 	{
 		//this.addObserver(gameboard);
-		this.options = options;
 		this.createFields();
-		this.createPlayers(player);
+		//this.createPlayers(player);
+		this.player = new HashMap<String,Player>();
 		this.moveOptions = new  ArrayList<MoveOption>();
-		this.board = new Board(fields, players, this);
-		this.board.drawBoard();
+		
+		this.board = new Board(fields, this.getPlayers(), this, showMsgbox);
+		//this.board.drawBoard();
 		this.mainGui = mainGui;
 		
-		this.nextMoveOption(this.getStartingPlayer(this.getPlayers()));
+		//this.nextMoveOption(this.getStartingPlayer(this.getPlayers()));
 	}
 	
 	public Map<Integer, Field> getFields() {
 		return fields;
 	}
 
-	/**public void setFields(Map<String, Field> fields) {
-		Fields = fields;
-	}**/
-
 	public Map<String, Player> getPlayers() {
-		return players;
+		return this.player;
+	}
+	
+	
+	public void addPlayer(String playerName, boolean isKI)
+	{
+		int countOfPlayer = this.getPlayers().size();
+		if (countOfPlayer == 4)
+		{
+			throw new RuntimeException("Sie haben die maximale Spieleranzahl erreicht!");
+		}
+			
+		this.player.put(colors[countOfPlayer].toString(), new Player(colors[countOfPlayer], isKI, offSet[countOfPlayer],playerName));  
 	}
 
-	/**public void setPlayers(Map<String, Player> players) {
-		Players = players;
-	}**/
-
+	public void startGame(Options options)
+	{
+		this.options = options;
+		this.board.drawBoard();
+		this.nextMoveOption(this.getStartingPlayer(this.getPlayers()));
+	}
 	
 	public static void main(String[] args)
 	{
+		/*
 		// only testing methods
 		Options op = new Options();
 		
@@ -96,15 +109,15 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		player.put("drei", false);
 		player.put("vier", false);
 		
-		new Gamehandler(op,player, null);
+		new Gamehandler(op, null);
+		*/
 	}
 	
 	
 	
 	private void nextMoveOption(Player player)
 	{
-		//this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
-		System.out.println(player.getPlayerName() + " ist am Spielzug.");
+		this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
 		int thrownCubeNumber = 0;
 		this.setCurrentPlayer(player);
 		
@@ -113,8 +126,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 			for(int i = 0; i < 3; i++)
 			{
 				thrownCubeNumber = this.board.getRoll();
-				//this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-				System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
 			
 				if(thrownCubeNumber == 6)
 				{
@@ -133,12 +145,22 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		{
 			thrownCubeNumber = this.board.getRoll(); //player.throwCube();
 			
-			//this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-			System.out.println(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-			//this.board.displayMessage("(Farbe: " + player.getPlayerColor().toString());
-			this.setMoveOptions(player, thrownCubeNumber);
-		
-					
+			this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+			if(this.setMoveOptions(player, thrownCubeNumber))
+			{
+				if(player.isComputer())
+				{
+					this.handleMoveOption(this.getBestMoveOption());
+				}
+				else
+				{
+					this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
+					this.waitForUserInput_Field = true;
+				}
+			}
+			
+			/*
+			
 			// Möglichkeiten der einzelnen Figuren prüfen
 			// - MoveOptions
 			// wenn es nur eine Spielzugmöglichkeit gibt,
@@ -181,13 +203,52 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 					this.waitForUserInput_Field = true;
 				}
 			}
+			*/
 		}
 	}
 	
 	
+	private MoveOption getBestMoveOption()
+	{
+		if(this.moveOptions.size() == 0)
+		{
+			throw new RuntimeException("Es gibt keine Spielzugmöglichkeiten!");
+		}
+		
+		if(this.moveOptions.size() == 1)
+		{
+			return this.moveOptions.get(0);
+		}
+		
+		this.printDebugMoveOPtions();
+		// TODO: nach Prioritäten sortieren
+		// wenn es von der höchsten nur eine gibt
+		// und die Regel gesetzt ist
+		// führe den Spielzug aus...
 
+		Collections.sort(this.moveOptions);
+		for(int i = this.moveOptions.size() - 1; i > 0; i--)
+		{
+			MoveOption curOption = this.moveOptions.get(i);
+			MoveOption nextOption = this.moveOptions.get(i - 1);
+			
+			// Prüfe ob das letzte Element die höchste Priorität hat
+			if(curOption.compareTo(nextOption) > 0)
+			{
+				// TODO: prüfe ob die Regel aktiviert ist...
+				//...
+				
+				return curOption;
+			}
+		}
+		
+		this.board.displayMessage("Es wurde kein Spielzug mit einer höchsten Priorität gefunden...");
+		this.board.displayMessage("Also gib den einen mit höchster Priorität zurück.");
+		return this.moveOptions.get(this.moveOptions.size() - 1);
+	}
 	
-	private void setMoveOptions(Player player,
+	
+	private boolean setMoveOptions(Player player,
 			int thrownCubeNumber)
 	{
 		// TODO: ForeignStartField && OwnStartField einbauen
@@ -274,9 +335,11 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		if(this.moveOptions.size() == 0)
 		{
 			this.board.displayMessage("Es gibt keine Spielzugmöglichkeit!");
-			
-			
+			this.nextMoveOption(this.getNextPlayer(player));
+			return false;
 		}
+		
+		return true;
 	}
 	
 	private boolean containsMoveOptionsPriority(MoveOption.ePriority priority)
@@ -516,16 +579,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	}
 
 	
-	public boolean setNextMove()
-	{
-		// als Parameter figur?
-		throw new RuntimeException("function is not implemented!");
-		//return false;
-	}
-	
-	
-	
-	public Player getNextPlayer(Player lastPlayer)
+	private Player getNextPlayer(Player lastPlayer)
 	{
 		// anhand des letzten Spielzugs den nächsten Spieler ermitteln
 		for(int i = 0; i < this.getPlayers().size(); i++)
@@ -536,14 +590,23 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				if(i == getPlayers().size() - 1)
 				{
 					Player p = (Player) this.getPlayers().values().toArray()[0];
-					this.setCurrentPlayer(p);
-					return p;
+					if(p.isPlaying())
+					{
+						this.setCurrentPlayer(p);
+						return p;
+					}
+					return getNextPlayer(p);
+					
 				}
 				else
 				{
-					Player p = (Player) this.getPlayers().values().toArray()[i + 1]; 
-					this.setCurrentPlayer(p);
-					return p;
+					Player p = (Player) this.getPlayers().values().toArray()[i + 1];
+					if(p.isPlaying())
+					{
+						this.setCurrentPlayer(p);
+						return p;
+					}
+					return getNextPlayer(p);
 				}
 			}
 		}
@@ -581,17 +644,20 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		
 		for(Map.Entry<String, Player> player : players.entrySet())
 		{
-			int threwCube = this.board.getRoll(); //player.getValue().throwCube();
-			// TODO: StartingPlayer so umbauen, dass die Spieler würfeln...
-			//int threwCube = (int)((Math.random()) * 6 + 1);
-			if(threwCube > highestThrew) {
-				highestThrew = threwCube;
-				startingPlayer.clear();
-				startingPlayer.put(player.getKey(), player.getValue());
-			}
-			else if(threwCube == highestThrew)
+			if(player.getValue().isPlaying())
 			{
-				startingPlayer.put(player.getKey(), player.getValue());
+				int threwCube = this.board.getRoll(); //player.getValue().throwCube();
+				// TODO: StartingPlayer so umbauen, dass die Spieler würfeln...
+				//int threwCube = (int)((Math.random()) * 6 + 1);
+				if(threwCube > highestThrew) {
+					highestThrew = threwCube;
+					startingPlayer.clear();
+					startingPlayer.put(player.getKey(), player.getValue());
+				}
+				else if(threwCube == highestThrew)
+				{
+					startingPlayer.put(player.getKey(), player.getValue());
+				}
 			}
 		}
 		
@@ -614,15 +680,17 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	 */
 	public void setAllFiguresBack()
 	{
-		for(Player p : this.players.values())
+		for(Player p : this.getPlayers().values())
 		{
 			p.setFiguresBack();
 		}
 	}
 	
+	
+	/*
 	private void createPlayers(Map<String,Boolean> player)
 	{
-		players = new HashMap<String,Player>();
+		this.player = new HashMap<String,Player>();
 		
 		int iOffset = 0;// Offset of Fieldposition
 		//boolean bIsComputer = false; // Is Computer?
@@ -632,12 +700,12 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		for (String playerName : player.keySet())
 		{
 			Player p = new Player(colors[index],player.get(playerName),iOffset,playerName);
-			players.put(p.getPlayerColor().toString(), p);  // = new Player();
+			this.player.put(p.getPlayerColor().toString(), p);  // = new Player();
 			iOffset += 10;
 			index += 1;
 		}
 	}
-	
+	*/
 
 	
 	private void createFields(){
@@ -719,8 +787,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		House house = player.getHouses().get(houseNumber);
 		figure.setSteps(houseNumber);
 		house.setFigure(figure);
-		board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird in das Haus gesetzt. (Nr.: '"+ String.valueOf(house.getNumber())+ "')");
-		//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird in das Haus gesetzt. (Nr.: '"+ String.valueOf(house.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
+		this.board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird in das Haus gesetzt. (Nr.: '"+ String.valueOf(house.getNumber())+ "')");
 
 	}
 	private void setFigure2Field(Figure figure,
@@ -762,14 +829,11 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		
 			if(field.getType() == Field.Type.START)
 			{
-				//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "') von Spieler " + figure.getFigureColor().toString());
-				board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "')");
+				this.board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Startfeld gesetzt. (Feld '"+ String.valueOf(field.getNumber())+ "')");
 			}
 			else
 			{
-				//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " von Spieler " + figure.getFigureColor().toString() +" gesetzt");
-				//board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
-				System.out.println("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
+				this.board.displayMessage("Figur " + String.valueOf(figure.getNumber()) + " wird auf das Feld " + String.valueOf(field.getNumber())+ " gesetzt.");
 			}
 		
 		}
@@ -800,18 +864,17 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				}
 				else
 				{
-					//this.board.displayMessage("Ungültiger Spielzug!");
-					//this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.");
-					System.out.println("Ungültiger Spielzug!");
-					System.out.println("Bite wählen Sie ein anderes Feld aus.");
+					this.board.displayMessage("Ungültiger Spielzug!");
+					this.board.displayMessage("Bite wählen Sie ein anderes Feld aus.");
 				}
 			}
 			
 		}
 		catch (java.util.ConcurrentModificationException e)
 		{
-			System.out.println("Unbehandelte Ausnahme!");
-			System.out.println(e.getMessage());
+			this.board.displayMessage("Unbehandelte Ausnahme!");
+			this.board.displayMessage(e.getMessage());
+			this.board.displayMessage(e.getStackTrace().toString());
 			e.printStackTrace();
 		}
 
