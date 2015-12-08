@@ -10,7 +10,6 @@ import com.mensch_aergere_dich_nicht.models.*;
 import java.awt.*;
 import java.util.*;
 import java.util.Map.Entry;
-//import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -63,7 +62,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       // Setup field grid.
       this.setupFieldGrid();
       
-      
       btnClose = new JButton("Spiel benden");
       btnClose.setPreferredSize(new Dimension(40, 20));
       btnClose.addActionListener(this);
@@ -102,7 +100,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       
       // Add components to Gameboard.
       this.add(boardPane, BorderLayout.WEST);
-      //this.add(boardPanel, BorderLayout.WEST);
       this.add(mainPanel, BorderLayout.EAST);
       this.add(btnClose, BorderLayout.SOUTH);
 
@@ -516,8 +513,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     	  fieldY -= 1;
       }
       
-      //System.out.println(((x - this.getOffsetX()) / 50) + "/" + (y - this.getOffsetY()) / 50);
-      //System.out.println(((x - this.getOffsetX()) % 50) + "/" + (y - this.getOffsetY()) % 50);
       String position = fieldX + "-" + fieldY;
       
       if(this.fieldGrid.containsKey(position) == true){
@@ -527,12 +522,9 @@ public class Board extends JFrame implements MouseListener, ActionListener{
         //System.out.println(""+pos[0]+"/"+pos[1]);
         
         // Ignore click if clicked too far beyond field limits.
-        //if((x - this.getOffsetX()) % 50 > 44 || (y - this.getOffsetY()) % 50 > 44){ 
         int posx = pos[0];
         int posy = pos[1];
-        // Folgenden Vergleich erweitern: && x >= posx <= posx+50 && y >= posy <= posy+50
-        
-        //if((x - this.getOffsetX()) % 50 < 20 || (y - this.getOffsetY()) % 50 < 20){
+
         if(x < posx || x > posx+60 || y < posy || y > posy+60){
           fieldnumber = -1;
         }
@@ -544,16 +536,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
       
       return "-1";
     }
-    
-    
-//    private void drawPiece(Color color, int field){
-//    	int[] coordinates = this.getFieldCoordinates(field);
-//    	int posX = coordinates[0];
-//    	int posY = coordinates[1];
-//    	
-//    	// Draw piece.
-//    	this.drawField(boardPane, field, color);
-//    }
     
     @Override
     public void mousePressed(MouseEvent e) {
@@ -583,7 +565,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
         String clickedField = this.getClickedField(posX, posY);
         
         // Ignore clicks beyond gameboard limits.
-        //if(posX >= this.getOffsetX() && posX < 570 && posY >= this.getOffsetY() && posY < 575){
         if(posX >= this.getOffsetX() && posX < 600 && posY >= this.getOffsetY() && posY < 600){
           //this.displayMessage("Mouse clicked at x=" + posX + " y=" + posY +". Feld " + clickedField);
           //this.displayMessage("Feld " + clickedField);
@@ -593,7 +574,7 @@ public class Board extends JFrame implements MouseListener, ActionListener{
     }
     
     public static void main(String[] args) {
-    	test();
+    	//test();
     }
 
     private static void test(){
@@ -668,34 +649,8 @@ public class Board extends JFrame implements MouseListener, ActionListener{
             this.setBounds(x, y, 50, 50);
         }
     }
- /*   
-    class TextPanelxx extends JPanel {
-    	String text;
-    	int posX;
-    	int posY;
-    	Color textColor;
-    	
-    	public TextPanel(String s, int x, int y, Color c){
-    	  super(true);
-    	  this.text	= s;
-    	  this.posX = x;
-    	  this.posY = y;
-    	  this.textColor = c;
-    	}
-    	
-    	@Override
-		protected void paintComponent(Graphics g) {
-    		super.paintComponent(g);
-    		Graphics2D g2d = (Graphics2D)g;
-    		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    	    g2d.setPaint(Color.black);
-    	    g2d.drawString(this.text, this.posX, this.posY);
-    		//g.setColor(this.textColor);
-    	    //g.drawString(this.text, this.posX, this.posY);
-    	}
-    }
-*/    
-	class PiecePanel extends JPanel {
+
+    class PiecePanel extends JPanel {
 		Color color;
 		int posX;
 		int posY;
@@ -721,10 +676,6 @@ public class Board extends JFrame implements MouseListener, ActionListener{
 		int posY;
 		eFieldType fieldtype;
 		
-		
-	
-		
-				
 		public FieldPanel(Color b, Color c, int x, int y, eFieldType ft){
 			this.border = b;
 			this.color = c;
