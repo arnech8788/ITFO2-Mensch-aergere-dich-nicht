@@ -117,93 +117,61 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	
 	private void nextMoveOption(Player player)
 	{
-		this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
-		int thrownCubeNumber = 0;
-		this.setCurrentPlayer(player);
+		// TODO: prüfen ob Spieler gewonnen hat
 		
-		if (player.canDriveThreeTimes())
-		{
-			for(int i = 0; i < 3; i++)
-			{
-				thrownCubeNumber = this.board.getRoll();
-				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-			
-				if(thrownCubeNumber == 6)
-				{
-					this.handleCubeNumberSix(player);
-					break;
-				}
-			}
-			
-			if(thrownCubeNumber != 6)
-			{
-				this.nextMoveOption(this.getNextPlayer(player));
-			}
-		}
+		// wenn alle Spieler fertig sind (bis auf einen) - ende
 	
+		
+		// wenn fertig und Regel aktiv auch ende...
+		
+		if(player.isReady() )
+		{
+			this.nextMoveOption(this.getNextPlayer(player));
+		}
 		else
 		{
-			thrownCubeNumber = this.board.getRoll(); //player.throwCube();
+			this.board.displayMessage(player.getPlayerName() + " ist am Spielzug.");
+			int thrownCubeNumber = 0;
+			this.setCurrentPlayer(player);
 			
-			this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
-			if(this.setMoveOptions(player, thrownCubeNumber))
+			if (player.canDriveThreeTimes())
 			{
-				if(player.isComputer())
+				for(int i = 0; i < 3; i++)
 				{
-					this.handleMoveOption(this.getBestMoveOption());
-				}
-				else
-				{
-					this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
-					this.waitForUserInput_Field = true;
-				}
-			}
-			
-			/*
-			
-			// Möglichkeiten der einzelnen Figuren prüfen
-			// - MoveOptions
-			// wenn es nur eine Spielzugmöglichkeit gibt,
-			// führe diese aus
-			if(this.moveOptions.size() == 1)
-			{
-				// Führe den Spielzug aus
-				this.handleMoveOption(this.moveOptions.get(0));
-			}
-			else if(this.moveOptions.size() > 1)
-			{
-				this.printDebugMoveOPtions();
-				// TODO: nach Prioritäten sortieren
-				// wenn es von der höchsten nur eine gibt
-				// und die Regel gesetzt ist
-				// führe den Spielzug aus...
-
-				Collections.sort(this.moveOptions);
-				boolean handledMoveOption = false;
-				for(int i = this.moveOptions.size() - 1; i > 0; i--)
-				{
-					MoveOption curOption = this.moveOptions.get(i);
-					MoveOption nextOption = this.moveOptions.get(i - 1);
-					
-					// Prüfe ob das letzte Element die höchste Priorität hat
-					if(curOption.compareTo(nextOption) > 0)
+					thrownCubeNumber = this.board.getRoll();
+					this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				
+					if(thrownCubeNumber == 6)
 					{
-						// TODO: prüfe ob die Regel aktiviert ist...
-						//...
-						this.handleMoveOption(curOption);
-						handledMoveOption = true;
+						this.handleCubeNumberSix(player);
 						break;
 					}
 				}
 				
-				if(!handledMoveOption)
+				if(thrownCubeNumber != 6)
 				{
-					//this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
-					System.out.println("Bitte wählen Sie einen Spielzug aus.");
-					this.waitForUserInput_Field = true;
+					this.nextMoveOption(this.getNextPlayer(player));
 				}
 			}
-			*/
+		
+			else
+			{
+				thrownCubeNumber = this.board.getRoll(); //player.throwCube();
+				
+				this.board.displayMessage(player.getPlayerName() + " würfelt eine " + String.valueOf(thrownCubeNumber));
+				if(this.setMoveOptions(player, thrownCubeNumber))
+				{
+					if(player.isComputer())
+					{
+						this.handleMoveOption(this.getBestMoveOption());
+					}
+					else
+					{
+						this.board.displayMessage("Bitte wählen Sie einen Spielzug aus.");
+						this.waitForUserInput_Field = true;
+					}
+				}
+			}
 		}
 	}
 	
@@ -581,6 +549,8 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 	
 	private Player getNextPlayer(Player lastPlayer)
 	{
+		// TODO: Spieler die gewonenn haben ignorieren
+		
 		// anhand des letzten Spielzugs den nächsten Spieler ermitteln
 		for(int i = 0; i < this.getPlayers().size(); i++)
 		{
@@ -590,7 +560,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				if(i == getPlayers().size() - 1)
 				{
 					Player p = (Player) this.getPlayers().values().toArray()[0];
-					if(p.isPlaying())
+					if(p.isPlaying() && !p.isReady())
 					{
 						this.setCurrentPlayer(p);
 						return p;
@@ -601,7 +571,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 				else
 				{
 					Player p = (Player) this.getPlayers().values().toArray()[i + 1];
-					if(p.isPlaying())
+					if(p.isPlaying()  && !p.isReady())
 					{
 						this.setCurrentPlayer(p);
 						return p;
@@ -749,7 +719,7 @@ werte der Prioritäten passen nicht (Enum als Flag...)
 		{
 			for(House h : player.getHouses().values())
 			{
-				if(h.getNumber() > house.getNumber() && !h.isFree())
+				if(h.getNumber() < house.getNumber() && !h.isFree() && h.getFigure().getNumber() != house.getFigure().getNumber())
 				{
 					isValid = false;
 					break;

@@ -60,6 +60,11 @@ public class Player {
 	}
 	**/
 	
+	public boolean isReady()
+	{
+		return this.getHouseFigures().size() == 4;
+	}
+	
 	public boolean isPlaying()
 	{
 		return !this.getPlayerName().equals("");
